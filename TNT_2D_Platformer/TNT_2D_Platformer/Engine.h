@@ -25,6 +25,6 @@ public:
 	void Render();
 	void Clean();
 	int Run();
-	bool IsKeyDown(SDL_Scancode in_code);
+	bool IsKeyDown(SDL_Scancode scancode);
 };
 
