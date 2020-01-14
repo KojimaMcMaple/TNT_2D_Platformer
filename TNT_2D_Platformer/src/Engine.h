@@ -17,6 +17,9 @@ private:
 public:
 	Engine();
 	~Engine();
+
+	void CreateGameObjects();
+
 	bool Init(const char* window_title, int window_xpos, int window_ypos, int window_width, int window_height, int window_flags);
 	void Wake();
 	void Sleep();
@@ -26,5 +29,7 @@ public:
 	void Clean();
 	int Run();
 	bool IsKeyDown(SDL_Scancode scancode);
+
+	static Engine& Instance();
 };
 

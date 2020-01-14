@@ -9,8 +9,12 @@ Engine::Engine():is_engine_running(false) {}
 
 Engine::~Engine(){}
 
+void Engine::CreateGameObjects() {
+
+}
+
 bool Engine::Init(const char* in_win_title, int in_win_xpos, int in_win_ypos, int in_win_width, int in_win_height, int in_win_flags) {
-	std::cout << "Initializing game." << std::endl;
+	std::cout << "Initializing game..." << std::endl;
 	// Attempt to initialize SDL.
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
 		// Create the window.
@@ -29,7 +33,7 @@ bool Engine::Init(const char* in_win_title, int in_win_xpos, int in_win_ypos, in
 	keystates = SDL_GetKeyboardState(nullptr);
 
 	is_engine_running = true; // Everything is okay, start the engine.
-	std::cout << "Success!" << std::endl;
+	std::cout << "Initializing complete." << std::endl;
 	return true;
 }
 
@@ -90,14 +94,18 @@ void Engine::Render() {
 }
 
 void Engine::Clean() {
-	std::cout << "Cleaning game." << std::endl;
+	std::cout << "Cleaning game..." << std::endl;
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(main_window);
 	SDL_Quit();
+	std::cout << "Cleaning complete." << std::endl;
 }
 
 int Engine::Run() {
-	if (Engine::Init("Main_Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0) == false) {
+	if (is_engine_running) {
+		return -1;
+	}
+	if (Engine::Init("TNT_Main_Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0) == false) {
 		return 1;
 	}
 	while (is_engine_running) {
@@ -112,4 +120,9 @@ int Engine::Run() {
 	Clean();
 
 	return 0;
+}
+
+Engine& Engine::Instance() { //static method
+	static Engine instance;
+	return instance;
 }
