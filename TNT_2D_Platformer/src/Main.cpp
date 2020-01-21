@@ -1,8 +1,7 @@
 #include "Engine.h"
 
 // Main function.
-int main(int argc, char* args[]) // Main MUST have these parameters for SDL.
-{
+int main(int argc, char* args[]) {
 	//Engine engine_obj;
 	//return engine_obj.Run();
 

@@ -126,3 +126,7 @@ Engine& Engine::Instance() { //static method
 	static Engine instance;
 	return instance;
 }
+
+SDL_Renderer* Engine::GetRenderer() {
+	return renderer;
+}

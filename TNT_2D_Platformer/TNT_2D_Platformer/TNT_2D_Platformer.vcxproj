@@ -20,12 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Engine.cpp" />
+    <ClCompile Include="..\src\GameObject.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="..\src\State.cpp" />
+    <ClCompile Include="..\src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Engine.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="..\src\GameObject.h" />
+    <ClInclude Include="..\src\State.h" />
+    <ClInclude Include="..\src\TextureManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

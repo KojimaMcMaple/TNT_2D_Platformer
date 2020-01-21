@@ -1,4 +1,6 @@
 #pragma once
+#ifndef __Engine__
+#define __Engine__
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
@@ -30,6 +32,10 @@ public:
 	int Run();
 	bool IsKeyDown(SDL_Scancode scancode);
 
+	SDL_Renderer* GetRenderer();
 	static Engine& Instance();
 };
 
+typedef Engine TheEngine;
+
+#endif
