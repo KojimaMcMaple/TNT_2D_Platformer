@@ -5,7 +5,9 @@
 // Core Libraries
 #include <iostream>
 #include <string>
-#include <map>
+#include <map> 
+
+#include <glm\vec2.hpp>
 
 // SDL Libraries
 #include<SDL.h>
@@ -16,34 +18,42 @@ class TextureManager {
 public:
 	static TextureManager* Instance()
 	{
-		if (sInstance == 0)
+		if (s_pInstance == 0)
 		{
-			sInstance = new TextureManager();
-			return sInstance;
+			s_pInstance = new TextureManager();
+			return s_pInstance;
 		}
 
-		return sInstance;
+		return s_pInstance;
 	}
 	
 
-	bool LoadTexture(std::string file_name, std::string id, SDL_Renderer* renderer_ptr);
+	bool load(std::string fileName, std::string id, SDL_Renderer* pRenderer);
 
-	void Render(std::string id, int x, int y, int width, int height, SDL_Renderer* renderer_ptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
-	void Render(std::string id, int x, int y, SDL_Renderer* renderer_ptr, bool is_centered = false, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void draw(std::string id, int x, int y, int width, int height, SDL_Renderer* pRenderer, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void draw(std::string id, int x, int y, SDL_Renderer* pRenderer, bool centered = false, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void draw(std::string id, int x, int y, int width, int height, SDL_Renderer* pRenderer, double angle, int alpha, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void draw(std::string id, int x, int y, SDL_Renderer* pRenderer, double angle, int alpha, bool centered = false, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
-	void RenderFrame(std::string id, int x, int y, int width, int height, int current_row, int current_frame, SDL_Renderer* renderer_ptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
-	void RenderFrame(std::string id, int x, int y, int current_row, int current_frame, SDL_Renderer* renderer_ptr, bool is_centered = false, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void drawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer* pRenderer, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void drawFrame(std::string id, int x, int y, int currentRow, int currentFrame, SDL_Renderer* pRenderer, bool centered = false, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void drawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer* pRenderer, double angle, int alpha, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	void drawFrame(std::string id, int x, int y, int currentRow, int currentFrame, SDL_Renderer* pRenderer, double angle, int alpha, bool centered = false, SDL_RendererFlip flip = SDL_FLIP_NONE);
+	
+	glm::vec2 getTextureSize(std::string id);
 
-	void SetAlpha(std::string id, Uint8 new_alpha);
+	void setAlpha(std::string id, Uint8 newAlpha);
+
+	void setColour(std::string id, Uint8 red, Uint8 green, Uint8 blue);
 
 private:
 
 	TextureManager();
 	~TextureManager();
 
-	std::map<std::string, SDL_Texture*> texture_map;
+	std::map<std::string, SDL_Texture*> m_textureMap;
 
-	static TextureManager* sInstance;
+	static TextureManager* s_pInstance;
 };
 
 typedef TextureManager TheTextureManager;

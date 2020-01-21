@@ -1,42 +1,106 @@
 #include "GameObject.h"
 
-SDL_Rect* GameObject::GetSrcPosition() {
-	return &src;
-}
-int GameObject::GetSrcPositionX() {
-	return src.x;
-}
-int GameObject::GetSrcPositionY() {
-	return src.y;
-}
-void GameObject::SetSrcPosition(int in_x, int in_y) {
-	src.x = in_x;
-	src.y = in_y;
+GameObject::GameObject()
+{
+	m_position = glm::vec2(0, 0);
+	m_rotation = glm::vec2(0, 0);
+	m_scale = glm::vec2(1.0f, 1.0f);
+	m_velocity = glm::vec2(0, 0);
+	m_acceleration = glm::vec2(0, 0);
 }
 
-// DST ACCESSOR MUTATOR
-SDL_Rect* GameObject::GetDstPosition() {
-	return &dst;
-}
-int GameObject::GetDstPositionX() {
-	return dst.x;
-}
-int GameObject::GetDstPositionY() {
-	return dst.y;
-}
-void GameObject::SetDstPosition(int in_x, int in_y) {
-	dst.x = in_x;
-	dst.y = in_y;
+GameObject::~GameObject()
+{
 }
 
-// TEXTURE ACCESSOR MUTATOR
-SDL_Texture* GameObject::GetTexturePointer() {
-	return texture;
+
+glm::vec2 GameObject::getPosition()
+{
+	return m_position;
 }
 
-int GameObject::GetSpeed() {
-	return speed;
+glm::vec2 GameObject::getRotation()
+{
+	return m_rotation;
 }
-void GameObject::SetSpeed(int in_speed) {
-	speed = in_speed;
+
+glm::vec2 GameObject::getScale()
+{
+	return m_scale;
+}
+
+glm::vec2 GameObject::getVelocity()
+{
+	return m_velocity;
+}
+
+glm::vec2 GameObject::getAcceleration()
+{
+	return m_acceleration;
+}
+
+int GameObject::getWidth()
+{
+	return m_width;
+}
+
+int GameObject::getHeight()
+{
+	return m_height;
+}
+
+bool GameObject::getIsColliding()
+{
+	return m_isColliding;
+}
+
+GameObjectType GameObject::getType()
+{
+	return m_type;
+}
+
+SteeringState GameObject::getSteeringState()
+{
+	return m_state;
+}
+
+
+void GameObject::setPosition(glm::vec2 newPosition)
+{
+	m_position = newPosition;
+}
+
+void GameObject::setWidth(int newWidth)
+{
+	m_width = newWidth;
+}
+
+void GameObject::setHeight(int newHeight)
+{
+	m_height = newHeight;
+}
+
+void GameObject::setVelocity(glm::vec2 newVelocity)
+{
+	m_velocity = newVelocity;
+}
+
+void GameObject::setIsColliding(bool collision)
+{
+	m_isColliding = collision;
+}
+
+void GameObject::setType(GameObjectType newType)
+{
+	m_type = newType;
+}
+
+void GameObject::setSteeringState(SteeringState newState)
+{
+	m_state = newState;
+}
+
+void GameObject::setAcceleration(glm::vec2 newAcceleration)
+{
+	m_acceleration = newAcceleration;
 }
