@@ -5,7 +5,7 @@ Game* Game::s_pInstance = 0;
 
 glm::vec2 Game::getTargetPosition()
 {
-	return m_pTarget->getPosition();
+	return glm::vec2(0,0);
 }
 
 SDL_Renderer * Game::getRenderer()
@@ -28,10 +28,12 @@ Game::~Game()
 
 void Game::createGameObjects()
 {
-	m_pShip = new ship();
-	m_pShip->setMaxSpeed(5.0f);
+	player_ptr_ = new Player();
+}
 
-	m_pTarget = new Target();
+void Game::destroyGameObjects()
+{
+	// CALL CLEAN METHODS FROM OBJS, THEY SHOULD HAVE Mix_FreeChunk and SDL_DestroyTexture
 }
 
 bool Game::init(const char* title, int xpos, int ypos, int height, int width, bool fullscreen)
@@ -82,7 +84,8 @@ bool Game::init(const char* title, int xpos, int ypos, int height, int width, bo
 		std::cout << "SDL init failure" << std::endl;
 		return false; //SDL could not intialize
 	}
-
+	key_states_ = SDL_GetKeyboardState(nullptr);
+	
 	std::cout << "init success" << std::endl;
 	m_bRunning = true; // everything initialized successfully - start the main loop
 
@@ -93,8 +96,7 @@ void Game::render()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to the draw colour
 
-	m_pTarget->draw();
-	m_pShip->draw();
+	player_ptr_->draw();
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
@@ -105,16 +107,33 @@ void Game::update()
 
 	
 	
-	m_pShip->update();
+	/*m_pShip->update();
 
-	m_pTarget->update();
+	m_pTarget->update();*/
 
+}
+
+bool Game::isKeyDown(SDL_Scancode keyboard_code)
+{
+	if (key_states_ != nullptr) {
+		if (key_states_[keyboard_code]) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		return false;
+	}
 }
 
 void Game::clean()
 {
 	std::cout << "cleaning game" << std::endl;
 
+	Mix_CloseAudio();
+	destroyGameObjects();
 	SDL_DestroyRenderer(m_pRenderer);
 	SDL_DestroyWindow(m_pWindow);
 	SDL_Quit();
@@ -139,71 +158,8 @@ void Game::handleEvents()
 				case SDLK_ESCAPE:
 					m_bRunning = false;
 					break;
-				case SDLK_w:
-					m_pTarget->setVelocity(glm::vec2(m_pTarget->getVelocity().x, -1.0f));
-					break;
-				case SDLK_s:
-					m_pTarget->setVelocity(glm::vec2(m_pTarget->getVelocity().x, 1.0f));
-					break;
-				
-				case SDLK_a:
-					m_pTarget->setVelocity(glm::vec2(-1.0f, m_pTarget->getVelocity().y));
-					break;
-				case SDLK_d:
-					m_pTarget->setVelocity(glm::vec2(1.0f, m_pTarget->getVelocity().y));
-					break;
-				case SDLK_0:
-					m_pShip->setSteeringState(SteeringState::IDLE);
-					break;
-				case SDLK_1:
-					m_pShip->setSteeringState(SteeringState::SEEK);
-					m_pShip->setTarget(m_pTarget->getPosition());
-					break;
-				case SDLK_2:
-					m_pShip->setSteeringState(SteeringState::ARRIVE);
-					break;
-				case SDLK_3:
-					m_pShip->setSteeringState(SteeringState::AVOID);
-					break;
-				case SDLK_4:
-					m_pShip->setSteeringState(SteeringState::FLEE);
-					break;
-				case SDLK_RIGHT:
-					m_pShip->turnRight();
-					break;
-				case SDLK_LEFT:
-					m_pShip->turnLeft();
-					break;
-
 			}
 			break;
-		case SDL_KEYUP:
-			switch (event.key.keysym.sym) {
-				case SDLK_w:
-					if (m_pTarget->getVelocity().y < 0.0f) {
-						m_pTarget->setVelocity(glm::vec2(m_pTarget->getVelocity().x, 0.0f));
-					}
-					break;
-				
-				case SDLK_s:
-					if (m_pTarget->getVelocity().y > 0.0f) {
-						m_pTarget->setVelocity(glm::vec2(m_pTarget->getVelocity().x, 0.0f));
-					}
-					break;
-				
-				case SDLK_a:
-					if (m_pTarget->getVelocity().x < 0.0f) {
-						m_pTarget->setVelocity(glm::vec2(0.0f, m_pTarget->getVelocity().y));
-					}
-					break;
-				case SDLK_d:
-					if (m_pTarget->getVelocity().x > 0.0f) {
-						m_pTarget->setVelocity(glm::vec2(0.0f, m_pTarget->getVelocity().y));
-					}
-					break;
-				
-			}
-			
 		default:
 			break;
 		}

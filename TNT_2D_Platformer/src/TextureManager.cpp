@@ -32,6 +32,12 @@ bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer * p
 	return false;
 }
 
+void TextureManager::draw(SDL_Renderer* pRenderer, std::string id, SDL_Rect* src, SDL_Rect* dst, double angle,
+	bool centered, SDL_RendererFlip flip)
+{
+	SDL_RenderCopyEx(pRenderer, m_textureMap[id], src, dst, angle, 0, flip);
+}
+
 void TextureManager::draw(std::string id, int x, int y, int width, int height, SDL_Renderer * pRenderer, SDL_RendererFlip flip)
 {
 	SDL_Rect srcRect;

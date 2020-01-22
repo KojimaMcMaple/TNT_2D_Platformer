@@ -14,6 +14,21 @@ GameObject::~GameObject()
 }
 
 
+SDL_Rect* GameObject::getSrc()
+{
+	return &src_;
+}
+
+SDL_Rect* GameObject::getDst()
+{
+	return &dst_;
+}
+
+SDL_Rect* GameObject::getCollideBox()
+{
+	return &collide_box_;
+}
+
 glm::vec2 GameObject::getPosition()
 {
 	return m_position;
@@ -62,6 +77,21 @@ GameObjectType GameObject::getType()
 SteeringState GameObject::getSteeringState()
 {
 	return m_state;
+}
+
+void GameObject::setSrc(int x, int y, int w, int h)
+{
+	src_ = { x,y,w,h };
+}
+
+void GameObject::setDst(int x, int y, int w, int h)
+{
+	dst_ = { x,y,w,h };
+}
+
+void GameObject::setCollideBox(int x, int y, int w, int h)
+{
+	collide_box_ = { x,y,w,h };
 }
 
 

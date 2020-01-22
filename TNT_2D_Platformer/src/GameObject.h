@@ -4,11 +4,10 @@
 
 #include <glm\vec2.hpp>
 #include <string>
+#include <SDL.h>
 
 #include "GameObjectType.h"
 #include "SteeringState.h"
-
-
 
 class GameObject {
 public:
@@ -25,6 +24,9 @@ public:
 	virtual void clean() = 0;
 
 	// getters for common variables
+	SDL_Rect* getSrc();
+	SDL_Rect* getDst();
+	SDL_Rect* getCollideBox();
 	glm::vec2 getPosition();
 	glm::vec2 getRotation();
 	glm::vec2 getScale();
@@ -37,6 +39,9 @@ public:
 	SteeringState getSteeringState();
 
 	// setters for common variables
+	void setSrc(int x, int y, int w, int h);
+	void setDst(int x, int y, int w, int h);
+	void setCollideBox(int x, int y, int w, int h);
 	void setPosition(glm::vec2 newPosition);
 	void setWidth(int newWidth);
 	void setHeight(int newHeight);
@@ -48,6 +53,9 @@ public:
 
 
 private:
+	SDL_Rect src_, dst_;
+	SDL_Rect collide_box_;
+	
 	// transform variables
 	glm::vec2 m_position;
 	glm::vec2 m_rotation;
@@ -68,6 +76,7 @@ private:
 	std::string m_textureID;
 
 	// collision variables
+	bool is_collide_visible = false;
 	bool m_isColliding;
 	GameObjectType m_type;
 	SteeringState m_state;

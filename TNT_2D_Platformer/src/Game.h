@@ -15,17 +15,10 @@
 
 // Game Objects
 #include "Player.h"
-#include "Island.h"
-#include "Ocean.h"
-#include "Cloud.h"
-#include "ship.h"
-#include "Target.h"
 
 class Game
 {
 public:
-	
-
 	static Game* Instance()
 	{
 		if (s_pInstance == 0)
@@ -33,7 +26,6 @@ public:
 			s_pInstance = new Game();
 			return s_pInstance;
 		}
-
 		return s_pInstance;
 	}
 
@@ -45,6 +37,7 @@ public:
 	// public functions
 	void render();
 	void update();
+	bool isKeyDown(SDL_Scancode keyboard_code);
 	void handleEvents();
 	void clean();
 
@@ -53,7 +46,6 @@ public:
 
 	glm::vec2 getTargetPosition();
 	
-
 	// getters
 	SDL_Renderer* getRenderer();
 	glm::vec2 getMousePosition();
@@ -72,20 +64,13 @@ private:
 	static Game* s_pInstance;
 
 	// GameObjects
-	Player* m_pPlayer;
-	Island* m_pIsland;
-	Ocean* m_pOcean;
-	ship* m_pShip;
-	Target* m_pTarget;
-
-	// cloud game objects
-	int m_cloudNum = 3;
-	std::vector<Cloud*> m_pClouds;
+	Player* player_ptr_;
 
 	void createGameObjects();
+	void destroyGameObjects();
 
 	glm::vec2 m_mousePosition;
-
+	const Uint8* key_states_ = nullptr;
 };
 
 typedef Game TheGame;
