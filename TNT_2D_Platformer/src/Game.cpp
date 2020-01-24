@@ -29,11 +29,13 @@ Game::~Game()
 void Game::createGameObjects()
 {
 	player_ptr_ = new Player();
+	//std::cout << TheTextureManager::Instance();
 }
 
 void Game::destroyGameObjects()
 {
 	// CALL CLEAN METHODS FROM OBJS, THEY SHOULD HAVE Mix_FreeChunk and SDL_DestroyTexture
+	TheTextureManager::Instance()->destroyAllTextures();
 }
 
 bool Game::init(const char* title, int xpos, int ypos, int height, int width, bool fullscreen)

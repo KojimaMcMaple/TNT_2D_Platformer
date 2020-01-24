@@ -10,7 +10,7 @@ TextureManager::~TextureManager()
 {
 }
 
-bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer * pRenderer)
+bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pRenderer)
 {
 	SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
 
@@ -32,8 +32,19 @@ bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer * p
 	return false;
 }
 
+void TextureManager::destroyAllTextures()
+{
+	//std::cout << sizeof(s_pInstance->m_textureMap.size());
+	std::map<std::string, SDL_Texture*>::iterator it = s_pInstance->m_textureMap.begin();
+
+	for (std::pair<std::string, SDL_Texture*> elem : s_pInstance->m_textureMap)
+	{
+		SDL_DestroyTexture(elem.second);
+	}
+}
+
 void TextureManager::draw(SDL_Renderer* pRenderer, std::string id, SDL_Rect* src, SDL_Rect* dst, double angle,
-	bool centered, SDL_RendererFlip flip)
+                          bool centered, SDL_RendererFlip flip)
 {
 	SDL_RenderCopyEx(pRenderer, m_textureMap[id], src, dst, angle, 0, flip);
 }
@@ -234,4 +245,16 @@ void TextureManager::setColour(std::string id, Uint8 red, Uint8 green, Uint8 blu
 {
 	SDL_Texture* pTexture = m_textureMap[id];
 	SDL_SetTextureColorMod(pTexture, red, green, blue);
+}
+
+std::ostream& operator<<(std::ostream& out, TextureManager* manager_ptr)
+{
+	std::map<std::string, SDL_Texture*>::iterator it = manager_ptr->m_textureMap.begin();
+
+	for(std::pair<std::string, SDL_Texture*> elem: manager_ptr->m_textureMap)
+	{
+		out << elem.first << "\t" << elem.second << std::endl;
+	}
+
+	return out;
 }

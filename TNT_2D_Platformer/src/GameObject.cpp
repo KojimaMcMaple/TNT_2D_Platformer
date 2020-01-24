@@ -29,6 +29,11 @@ SDL_Rect* GameObject::getCollideBox()
 	return &collide_box_;
 }
 
+std::string GameObject::getTextureId()
+{
+	return texture_id_;
+}
+
 glm::vec2 GameObject::getPosition()
 {
 	return m_position;
@@ -94,6 +99,10 @@ void GameObject::setCollideBox(int x, int y, int w, int h)
 	collide_box_ = { x,y,w,h };
 }
 
+void GameObject::setTextureId(std::string id)
+{
+	texture_id_ = id;
+}
 
 void GameObject::setPosition(glm::vec2 newPosition)
 {

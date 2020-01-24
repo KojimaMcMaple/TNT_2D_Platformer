@@ -27,8 +27,8 @@ public:
 		return s_pInstance;
 	}
 	
-
 	bool load(std::string fileName, std::string id, SDL_Renderer* pRenderer);
+	void destroyAllTextures();
 
 	void draw(SDL_Renderer* pRenderer, std::string id, SDL_Rect* src, SDL_Rect* dst, double angle, bool centered = false, SDL_RendererFlip flip = SDL_FLIP_NONE);
 	void draw(std::string id, int x, int y, int width, int height, SDL_Renderer* pRenderer, SDL_RendererFlip flip = SDL_FLIP_NONE);
@@ -44,17 +44,16 @@ public:
 	glm::vec2 getTextureSize(std::string id);
 
 	void setAlpha(std::string id, Uint8 newAlpha);
-
 	void setColour(std::string id, Uint8 red, Uint8 green, Uint8 blue);
 
-private:
+	friend std::ostream& operator<<(std::ostream& out, TextureManager* manager_ptr);
 
+private:
 	TextureManager();
 	~TextureManager();
-
-	std::map<std::string, SDL_Texture*> m_textureMap;
-
 	static TextureManager* s_pInstance;
+	
+	std::map<std::string, SDL_Texture*> m_textureMap;
 };
 
 typedef TextureManager TheTextureManager;

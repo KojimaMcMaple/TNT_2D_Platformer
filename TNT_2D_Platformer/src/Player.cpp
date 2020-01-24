@@ -3,7 +3,8 @@
 
 Player::Player()
 {
-	TheTextureManager::Instance()->load("../Assets/textures/adventurer-v1.5-Sheet.png", "player", TheGame::Instance()->getRenderer());
+	setTextureId("player");
+	TheTextureManager::Instance()->load("../Assets/textures/adventurer-v1.5-Sheet.png", getTextureId(), TheGame::Instance()->getRenderer());
 	setSrc(0, 0, 55, 37);
 	setDst(0, 0, 55*3, 37*3);
 	setCollideBox(0, 0, 55, 37);
@@ -47,4 +48,5 @@ void Player::update()
 
 void Player::clean()
 {
+	
 }

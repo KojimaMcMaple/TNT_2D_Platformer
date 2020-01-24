@@ -27,6 +27,7 @@ public:
 	SDL_Rect* getSrc();
 	SDL_Rect* getDst();
 	SDL_Rect* getCollideBox();
+	std::string getTextureId();
 	glm::vec2 getPosition();
 	glm::vec2 getRotation();
 	glm::vec2 getScale();
@@ -42,6 +43,7 @@ public:
 	void setSrc(int x, int y, int w, int h);
 	void setDst(int x, int y, int w, int h);
 	void setCollideBox(int x, int y, int w, int h);
+	void setTextureId(std::string id);
 	void setPosition(glm::vec2 newPosition);
 	void setWidth(int newWidth);
 	void setHeight(int newHeight);
@@ -51,10 +53,9 @@ public:
 	void setSteeringState(SteeringState newState);
 	void setAcceleration(glm::vec2 newAcceleration);
 
-
 private:
+	// rendering variables
 	SDL_Rect src_, dst_;
-	SDL_Rect collide_box_;
 	
 	// transform variables
 	glm::vec2 m_position;
@@ -73,9 +74,10 @@ private:
 	int m_currentRow;
 	int m_currentFrame;
 	int m_numFrames;
-	std::string m_textureID;
+	std::string texture_id_;
 
 	// collision variables
+	SDL_Rect collide_box_;
 	bool is_collide_visible = false;
 	bool m_isColliding;
 	GameObjectType m_type;
