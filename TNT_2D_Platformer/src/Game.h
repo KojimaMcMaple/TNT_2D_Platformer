@@ -44,11 +44,18 @@ public:
 	// a function to access the private running variable
 	bool running() { return m_bRunning; }
 
-	glm::vec2 getTargetPosition();
-	
 	// getters
 	SDL_Renderer* getRenderer();
+	int GetWindowWidth();
+	int GetWindowHeight();
+
+	//setters
+	void SetWindowWidth(int width);
+	void SetWindowHeight(int height);
+
+	// REDUNDANT
 	glm::vec2 getMousePosition();
+	glm::vec2 getTargetPosition();
 
 private:
 	Game();
@@ -57,20 +64,19 @@ private:
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
 
-	int m_currentFrame;
-
-	bool m_bRunning;
-
 	static Game* s_pInstance;
+	int m_currentFrame;
+	bool m_bRunning;
+	const Uint8* key_states_ = nullptr;
+	int window_width;
+	int window_height;
 
 	// GameObjects
 	Player* player_ptr_;
-
 	void createGameObjects();
-	void destroyGameObjects();
 
+	// REDUNDANT
 	glm::vec2 m_mousePosition;
-	const Uint8* key_states_ = nullptr;
 };
 
 typedef Game TheGame;

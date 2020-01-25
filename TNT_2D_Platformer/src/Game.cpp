@@ -3,6 +3,14 @@
 
 Game* Game::s_pInstance = 0;
 
+Game::Game()
+{
+}
+
+Game::~Game()
+{
+}
+
 glm::vec2 Game::getTargetPosition()
 {
 	return glm::vec2(0,0);
@@ -13,17 +21,29 @@ SDL_Renderer * Game::getRenderer()
 	return m_pRenderer;
 }
 
+int Game::GetWindowWidth()
+{
+	return window_width;
+}
+
+int Game::GetWindowHeight()
+{
+	return window_height;
+}
+
+void Game::SetWindowWidth(int width)
+{
+	window_width = width;
+}
+
+void Game::SetWindowHeight(int height)
+{
+	window_height = height;
+}
+
 glm::vec2 Game::getMousePosition()
 {
 	return m_mousePosition;
-}
-
-Game::Game()
-{
-}
-
-Game::~Game()
-{
 }
 
 void Game::createGameObjects()
@@ -32,13 +52,7 @@ void Game::createGameObjects()
 	//std::cout << TheTextureManager::Instance();
 }
 
-void Game::destroyGameObjects()
-{
-	// CALL CLEAN METHODS FROM OBJS, THEY SHOULD HAVE Mix_FreeChunk and SDL_DestroyTexture
-	TheTextureManager::Instance()->destroyAllTextures();
-}
-
-bool Game::init(const char* title, int xpos, int ypos, int height, int width, bool fullscreen)
+bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	int flags = 0;
 
@@ -53,7 +67,7 @@ bool Game::init(const char* title, int xpos, int ypos, int height, int width, bo
 		std::cout << "SDL Init success" << std::endl;
 
 		// if succeeded create our window
-		m_pWindow = SDL_CreateWindow(title, xpos, ypos, height, width, flags);
+		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
 
 		// if window creation successful create our renderer
 		if (m_pWindow != 0)
@@ -134,8 +148,8 @@ void Game::clean()
 {
 	std::cout << "cleaning game" << std::endl;
 
-	Mix_CloseAudio();
-	destroyGameObjects();
+	TheSoundManager::Instance()->freeAllSounds();
+	TheTextureManager::Instance()->destroyAllTextures();
 	SDL_DestroyRenderer(m_pRenderer);
 	SDL_DestroyWindow(m_pWindow);
 	SDL_Quit();

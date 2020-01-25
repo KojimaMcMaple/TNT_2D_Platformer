@@ -4,7 +4,7 @@ SoundManager* SoundManager::s_pInstance;
 
 SoundManager::SoundManager()
 {
-	Mix_OpenAudio(22050, AUDIO_S16, 2, (4096 / 2));
+	Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 2048);
 }
 
 SoundManager::~SoundManager()
@@ -39,6 +39,21 @@ bool SoundManager::load(std::string fileName, std::string id, sound_type type)
 		return true;
 	}
 	return false;
+}
+
+void SoundManager::freeAllSounds()
+{
+	std::map<std::string, Mix_Chunk*>::iterator it_sfx = s_pInstance->m_sfxs.begin();
+	for (std::pair<std::string, Mix_Chunk*> elem_sfx : s_pInstance->m_sfxs)
+	{
+		Mix_FreeChunk(elem_sfx.second);
+	}
+
+	std::map<std::string, Mix_Music*>::iterator it_music = s_pInstance->m_music.begin();
+	for (std::pair<std::string, Mix_Music*> elem_music : s_pInstance->m_music)
+	{
+		Mix_FreeMusic(elem_music.second);
+	}
 }
 
 void SoundManager::playMusic(std::string id, int loop)

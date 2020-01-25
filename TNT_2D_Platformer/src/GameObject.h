@@ -4,6 +4,7 @@
 
 #include <glm\vec2.hpp>
 #include <string>
+#include <vector>
 #include <SDL.h>
 
 #include "GameObjectType.h"
@@ -43,7 +44,8 @@ public:
 	void setSrc(int x, int y, int w, int h);
 	void setDst(int x, int y, int w, int h);
 	void setCollideBox(int x, int y, int w, int h);
-	void setTextureId(std::string id);
+	void setTextureId(std::string id); //cleanup is done by manager
+	void addSfxId(std::string id); //cleanup is done by manager
 	void setPosition(glm::vec2 newPosition);
 	void setWidth(int newWidth);
 	void setHeight(int newHeight);
@@ -56,6 +58,8 @@ public:
 private:
 	// rendering variables
 	SDL_Rect src_, dst_;
+	std::string texture_id_;
+	std::vector<std::string> sfx_id_list_;
 	
 	// transform variables
 	glm::vec2 m_position;
@@ -74,7 +78,6 @@ private:
 	int m_currentRow;
 	int m_currentFrame;
 	int m_numFrames;
-	std::string texture_id_;
 
 	// collision variables
 	SDL_Rect collide_box_;

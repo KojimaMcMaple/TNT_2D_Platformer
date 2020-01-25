@@ -28,18 +28,19 @@ public:
 	}
 
 	bool load(std::string fileName, std::string id, sound_type type);
+	void freeAllSounds();
+
 	void playSound(std::string id, int loop);
 	void playMusic(std::string id, int loop);
 private:
+	SoundManager();
+	~SoundManager();
+	SoundManager(const SoundManager&);
+
 	static SoundManager* s_pInstance;
 
 	std::map<std::string, Mix_Chunk*> m_sfxs;
 	std::map<std::string, Mix_Music*> m_music;
-
-	SoundManager();
-	~SoundManager();
-
-	SoundManager(const SoundManager&);
 };
 
 typedef SoundManager TheSoundManager;

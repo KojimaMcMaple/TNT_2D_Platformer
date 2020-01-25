@@ -12,13 +12,13 @@ public:
 	~Player();
 
 	// Draw the object
-	void draw();
+	void draw() override;
 
 	// Update the object
-	void update();
+	void update() override;
 
 	// remove anything that needs to be deleted
-	void clean();
+	void clean() override;
 private:
 
 };

@@ -104,6 +104,11 @@ void GameObject::setTextureId(std::string id)
 	texture_id_ = id;
 }
 
+void GameObject::addSfxId(std::string id)
+{
+	sfx_id_list_.push_back(id);
+}
+
 void GameObject::setPosition(glm::vec2 newPosition)
 {
 	m_position = newPosition;
