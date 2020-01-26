@@ -7,20 +7,15 @@
 #include "SoundManager.h"
 
 class Player : public GameObject {
+private:
+
 public:
 	Player();
 	~Player();
 
-	// Draw the object
-	void draw() override;
-
-	// Update the object
 	void update() override;
-
-	// remove anything that needs to be deleted
+	void draw() override;
 	void clean() override;
-private:
-
 };
 
 

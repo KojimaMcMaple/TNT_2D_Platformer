@@ -17,12 +17,11 @@
 #include <glm\vec3.hpp>
 #include <glm\gtx\color_space.hpp>
 
-
-#include "TextureManager.h"
+#include "Globals.h"
 #include "Game.h"
 
-const int FPS = 60;
-const int DELAY_TIME = 1000.0f / FPS;
+//const int FPS = 60;
+//const int DELAY_TIME = 1000.0f / FPS;
 
 int main(int argc, char * args[])
 {
@@ -35,7 +34,7 @@ int main(int argc, char * args[])
 	freopen("CON", "w", stdout);
 
 
-	TheGame::Instance()->init("TNT - Rush: Onslaught", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1024, 768, false);
+	TheGame::Instance()->init("TNT - Rush: Onslaught", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Globals::sWindowWidth, Globals::sWindowHeight, false);
 
 	while (TheGame::Instance()->running())
 	{
@@ -46,9 +45,9 @@ int main(int argc, char * args[])
 		TheGame::Instance()->render();
 
 		frameTime = SDL_GetTicks() - frameStart;
-		if (frameTime< DELAY_TIME)
+		if (frameTime < Globals::sDelayTime)
 		{
-			SDL_Delay((int)(DELAY_TIME - frameTime));
+			SDL_Delay((int)(Globals::sDelayTime - frameTime));
 		}
 
 	}

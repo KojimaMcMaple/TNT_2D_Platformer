@@ -6,25 +6,26 @@
 #include "GameObject.h"
 #include "TextureManager.h"
 #include "SoundManager.h"
-#include "Game.h"
+#include "Globals.h"
 
 class Level : public GameObject {
 private:
-	std::string level_source;
-	int width;
-	int height;
-	int tile_width;
-	int tile_height;
-	int cam_pos_x;
-	int cam_pos_y;
+	std::string level_raw_str_;
+	int width_;
+	int height_;
+	int tile_width_;
+	int tile_height_;
+	int cam_pos_x_;
+	int cam_pos_y_;
 public:
 	Level();
 	~Level();
 
-	void draw() override;
 	void update() override;
+	void draw() override;
 	void clean() override;
 
+	void LoadLevel(std::string in_str);
 	int GetLevelWidth();
 	int GetLevelHeight();
 	int GetTileWidth();

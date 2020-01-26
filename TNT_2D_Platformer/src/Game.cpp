@@ -21,26 +21,6 @@ SDL_Renderer * Game::getRenderer()
 	return m_pRenderer;
 }
 
-int Game::GetWindowWidth()
-{
-	return window_width;
-}
-
-int Game::GetWindowHeight()
-{
-	return window_height;
-}
-
-void Game::SetWindowWidth(int width)
-{
-	window_width = width;
-}
-
-void Game::SetWindowHeight(int height)
-{
-	window_height = height;
-}
-
 glm::vec2 Game::getMousePosition()
 {
 	return m_mousePosition;
@@ -48,6 +28,28 @@ glm::vec2 Game::getMousePosition()
 
 void Game::createGameObjects()
 {
+	level_ptr_ = new Level();
+	level_ptr_->SetLevelWidth(64);
+	level_ptr_->SetLevelHeight(16);
+	std::string level_raw_str = "";
+	level_raw_str += "................................................................";
+	level_raw_str += "................................................................";
+	level_raw_str += ".......ooooo....................................................";
+	level_raw_str += "........ooo.....................................................";
+	level_raw_str += ".......................########.................................";
+	level_raw_str += ".....BB?BBBB?BB.......###..............#.#......................";
+	level_raw_str += "....................###................#.#......................";
+	level_raw_str += "...................####.........................................";
+	level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG.##############.....########";
+	level_raw_str += "...................................#.#...............###........";
+	level_raw_str += "........................############.#............###...........";
+	level_raw_str += "........................#............#.........###..............";
+	level_raw_str += "........................#.############......###.................";
+	level_raw_str += "........................#................###....................";
+	level_raw_str += "........................#################.......................";
+	level_raw_str += "................................................................";
+	level_ptr_->LoadLevel(level_raw_str);
+
 	player_ptr_ = new Player();
 	//std::cout << TheTextureManager::Instance();
 }
@@ -119,7 +121,19 @@ void Game::render()
 
 void Game::update()
 {
-	
+	// PROCESSING, HAPPENS WHEN KEYS ARE HELD DOWN
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_W) || s_pInstance->isKeyDown(SDL_SCANCODE_UP)) {
+		player_ptr_->setDstY(player_ptr_->getDstY() - player_ptr_->getVelocity());
+	}
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_S) || s_pInstance->isKeyDown(SDL_SCANCODE_DOWN)) {
+		player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocity());
+	}
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
+		player_ptr_->setDstX(player_ptr_->getDstX() - player_ptr_->getVelocity());
+	}
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
+		player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocity());
+	}
 
 	
 	

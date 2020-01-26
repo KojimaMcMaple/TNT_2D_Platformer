@@ -24,14 +24,34 @@ SDL_Rect* GameObject::getDst()
 	return &dst_;
 }
 
+int GameObject::getDstX()
+{
+	return dst_.x;
+}
+
+int GameObject::getDstY()
+{
+	return dst_.y;
+}
+
 SDL_Rect* GameObject::getCollideBox()
 {
 	return &collide_box_;
 }
 
+bool GameObject::isCollideBoxVisible()
+{
+	return is_collide_visible;
+}
+
 std::string GameObject::getTextureId()
 {
 	return texture_id_;
+}
+
+int GameObject::getVelocity()
+{
+	return velocity_;
 }
 
 glm::vec2 GameObject::getPosition()
@@ -49,7 +69,7 @@ glm::vec2 GameObject::getScale()
 	return m_scale;
 }
 
-glm::vec2 GameObject::getVelocity()
+glm::vec2 GameObject::getVelocityVect()
 {
 	return m_velocity;
 }
@@ -94,9 +114,24 @@ void GameObject::setDst(int x, int y, int w, int h)
 	dst_ = { x,y,w,h };
 }
 
+void GameObject::setDstX(int x)
+{
+	dst_.x = x;
+}
+
+void GameObject::setDstY(int y)
+{
+	dst_.y = y;
+}
+
 void GameObject::setCollideBox(int x, int y, int w, int h)
 {
 	collide_box_ = { x,y,w,h };
+}
+
+void GameObject::setCollideBoxVisibility(bool toggle)
+{
+	is_collide_visible = toggle;
 }
 
 void GameObject::setTextureId(std::string id)
@@ -107,6 +142,11 @@ void GameObject::setTextureId(std::string id)
 void GameObject::addSfxId(std::string id)
 {
 	sfx_id_list_.push_back(id);
+}
+
+void GameObject::setVelocity(int velocity)
+{
+	velocity_ = velocity;
 }
 
 void GameObject::setPosition(glm::vec2 newPosition)
@@ -124,7 +164,7 @@ void GameObject::setHeight(int newHeight)
 	m_height = newHeight;
 }
 
-void GameObject::setVelocity(glm::vec2 newVelocity)
+void GameObject::setVelocityVect(glm::vec2 newVelocity)
 {
 	m_velocity = newVelocity;
 }

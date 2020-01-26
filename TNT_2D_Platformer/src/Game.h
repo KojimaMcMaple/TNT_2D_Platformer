@@ -14,6 +14,7 @@
 #include "CollisionManager.h"
 
 // Game Objects
+#include "Level.h"
 #include "Player.h"
 
 class Game
@@ -46,12 +47,6 @@ public:
 
 	// getters
 	SDL_Renderer* getRenderer();
-	int GetWindowWidth();
-	int GetWindowHeight();
-
-	//setters
-	void SetWindowWidth(int width);
-	void SetWindowHeight(int height);
 
 	// REDUNDANT
 	glm::vec2 getMousePosition();
@@ -68,10 +63,9 @@ private:
 	int m_currentFrame;
 	bool m_bRunning;
 	const Uint8* key_states_ = nullptr;
-	int window_width;
-	int window_height;
 
 	// GameObjects
+	Level* level_ptr_;
 	Player* player_ptr_;
 	void createGameObjects();
 

@@ -15,11 +15,11 @@ public:
 	GameObject();
 	~GameObject();
 
-	// Draw the object
-	virtual void draw() = 0;
-
 	// Update the object
 	virtual void update() = 0;
+
+	// Draw the object
+	virtual void draw() = 0;
 
 	// remove anything that needs to be deleted
 	virtual void clean() = 0;
@@ -27,40 +27,61 @@ public:
 	// getters for common variables
 	SDL_Rect* getSrc();
 	SDL_Rect* getDst();
+	int getDstX();
+	int getDstY();
 	SDL_Rect* getCollideBox();
+	bool isCollideBoxVisible();
+	bool getIsColliding();
 	std::string getTextureId();
+	int getVelocity();
+	GameObjectType getType();
+	SteeringState getSteeringState();
 	glm::vec2 getPosition();
 	glm::vec2 getRotation();
 	glm::vec2 getScale();
-	glm::vec2 getVelocity();
+	glm::vec2 getVelocityVect();
 	glm::vec2 getAcceleration();
 	int getWidth();
 	int getHeight();
-	bool getIsColliding();
-	GameObjectType getType();
-	SteeringState getSteeringState();
 
 	// setters for common variables
 	void setSrc(int x, int y, int w, int h);
 	void setDst(int x, int y, int w, int h);
+	void setDstX(int x);
+	void setDstY(int y);
 	void setCollideBox(int x, int y, int w, int h);
+	void setCollideBoxVisibility(bool toggle);
+	void setIsColliding(bool collision);
 	void setTextureId(std::string id); //cleanup is done by manager
 	void addSfxId(std::string id); //cleanup is done by manager
-	void setPosition(glm::vec2 newPosition);
-	void setWidth(int newWidth);
-	void setHeight(int newHeight);
-	void setVelocity(glm::vec2 newVelocity);
-	void setIsColliding(bool collision);
+	void setVelocity(int velocity);
 	void setType(GameObjectType newType);
 	void setSteeringState(SteeringState newState);
 	void setAcceleration(glm::vec2 newAcceleration);
+	void setPosition(glm::vec2 newPosition);
+	void setWidth(int newWidth);
+	void setHeight(int newHeight);
+	void setVelocityVect(glm::vec2 newVelocity);
 
 private:
-	// rendering variables
+	// RENDERING
 	SDL_Rect src_, dst_;
 	std::string texture_id_;
+
+	// SOUND
 	std::vector<std::string> sfx_id_list_;
 	
+	// PHYSICS
+	int velocity_;
+
+	// collision variables
+	SDL_Rect collide_box_;
+	bool is_collide_visible = false;
+	bool m_isColliding;
+	GameObjectType m_type;
+	SteeringState m_state;
+
+	// LEGACY
 	// transform variables
 	glm::vec2 m_position;
 	glm::vec2 m_rotation;
@@ -78,13 +99,6 @@ private:
 	int m_currentRow;
 	int m_currentFrame;
 	int m_numFrames;
-
-	// collision variables
-	SDL_Rect collide_box_;
-	bool is_collide_visible = false;
-	bool m_isColliding;
-	GameObjectType m_type;
-	SteeringState m_state;
 };
 
 #endif
