@@ -16,7 +16,7 @@ glm::vec2 Game::getTargetPosition()
 	return glm::vec2(0,0);
 }
 
-SDL_Renderer * Game::getRenderer()
+SDL_Renderer* Game::getRenderer()
 {
 	return m_pRenderer;
 }
@@ -28,7 +28,7 @@ glm::vec2 Game::getMousePosition()
 
 void Game::createGameObjects()
 {
-	level_ptr_ = new Level();
+	level_ptr_ = new Level(getRenderer());
 	level_ptr_->SetLevelWidth(64);
 	level_ptr_->SetLevelHeight(16);
 	std::string level_raw_str = "";
@@ -50,7 +50,7 @@ void Game::createGameObjects()
 	level_raw_str += "................................................................";
 	level_ptr_->LoadLevel(level_raw_str);
 
-	player_ptr_ = new Player();
+	player_ptr_ = new Player(getRenderer());
 	//std::cout << TheTextureManager::Instance();
 }
 
@@ -114,7 +114,9 @@ void Game::render()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to the draw colour
 
-	player_ptr_->draw();
+	level_ptr_->draw(getRenderer());
+	player_ptr_->draw(getRenderer());
+	
 
 	SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
@@ -124,23 +126,20 @@ void Game::update()
 	// PROCESSING, HAPPENS WHEN KEYS ARE HELD DOWN
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_W) || s_pInstance->isKeyDown(SDL_SCANCODE_UP)) {
 		player_ptr_->setDstY(player_ptr_->getDstY() - player_ptr_->getVelocity());
+		level_ptr_->SetCamPosY(player_ptr_->getDstY());
 	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_S) || s_pInstance->isKeyDown(SDL_SCANCODE_DOWN)) {
 		player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocity());
+		level_ptr_->SetCamPosY(player_ptr_->getDstY());
 	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
 		player_ptr_->setDstX(player_ptr_->getDstX() - player_ptr_->getVelocity());
+		level_ptr_->SetCamPosX(player_ptr_->getDstX());
 	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
 		player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocity());
+		level_ptr_->SetCamPosX(player_ptr_->getDstX());
 	}
-
-	
-	
-	/*m_pShip->update();
-
-	m_pTarget->update();*/
-
 }
 
 bool Game::isKeyDown(SDL_Scancode keyboard_code)

@@ -45,6 +45,7 @@ public:
 	int getHeight();
 
 	// setters for common variables
+	void setSrc(SDL_Rect src_ptr);
 	void setSrc(int x, int y, int w, int h);
 	void setDst(int x, int y, int w, int h);
 	void setDstX(int x);

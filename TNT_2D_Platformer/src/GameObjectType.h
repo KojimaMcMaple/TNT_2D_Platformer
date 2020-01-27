@@ -3,14 +3,11 @@
 #define __GAME_OBJECT_TYPE__
 
 enum GameObjectType {
-	ISLAND,
+	LEVEL,
+	TILESET,
+	TILE,
 	PLAYER,
-	CLOUD,
-	BULLET,
 	ENEMY,
-	OCEAN,
-	SHIP,
-	TARGET,
 	NUM_OF_TYPES
 };
 

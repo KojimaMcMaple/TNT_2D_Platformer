@@ -4,6 +4,7 @@ TextureManager* TextureManager::s_pInstance = 0;
 
 TextureManager::TextureManager()
 {
+	//if (IMG_Init(IMG_INIT_PNG) != 0) {
 }
 
 TextureManager::~TextureManager()

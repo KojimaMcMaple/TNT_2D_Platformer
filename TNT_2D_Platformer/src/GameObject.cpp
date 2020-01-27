@@ -104,6 +104,11 @@ SteeringState GameObject::getSteeringState()
 	return m_state;
 }
 
+void GameObject::setSrc(SDL_Rect src_rect)
+{
+	src_ = { src_rect.x,src_rect.y,src_rect.w,src_rect.h };
+}
+
 void GameObject::setSrc(int x, int y, int w, int h)
 {
 	src_ = { x,y,w,h };

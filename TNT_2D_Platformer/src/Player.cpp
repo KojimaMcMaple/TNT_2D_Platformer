@@ -1,12 +1,19 @@
 #include "Player.h"
-#include "Game.h"
 
 Player::Player()
 {
+}
+
+Player::~Player()
+{
+}
+
+Player::Player(SDL_Renderer* renderer)
+{
 	setTextureId("player");
-	TheTextureManager::Instance()->load("../Assets/textures/adventurer-v1.5-Sheet.png", getTextureId(), TheGame::Instance()->getRenderer());
+	TheTextureManager::Instance()->load("../Assets/textures/adventurer-v1.5-Sheet.png", getTextureId(), renderer);
 	setSrc(0, 0, 55, 37);
-	setDst(0, 0, 55*3, 37*3);
+	setDst(0, 0, 55 * 3, 37 * 3);
 	setCollideBox(0, 0, 55, 37);
 	setIsColliding(true);
 	setVelocity(10);
@@ -18,9 +25,6 @@ Player::Player()
 	TheSoundManager::Instance()->playMusic("engine", -1);*/
 }
 
-Player::~Player()
-{
-}
 
 void Player::update()
 {
@@ -32,7 +36,11 @@ void Player::update()
 
 void Player::draw()
 {
-	TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), "player", getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
+}
+
+void Player::draw(SDL_Renderer* renderer)
+{
+	TheTextureManager::Instance()->draw(renderer, "player", getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
 }
 
 void Player::clean()

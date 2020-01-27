@@ -25,16 +25,6 @@ bool CollisionManager::squaredRadiusCheck(GameObject * object1, GameObject * obj
 			object2->setIsColliding(true);
 
 			switch (object2->getType()) {
-			case ISLAND:
-				std::cout << "Collision with Island!" << std::endl;
-				TheSoundManager::Instance()->playSound("yay", 0);
-				break;
-			case CLOUD:
-				std::cout << "Collision with Cloud!" << std::endl;
-				TheSoundManager::Instance()->playSound("thunder", 0);
-				break;
-			case BULLET:
-				break;
 			case ENEMY:
 				break;
 			default:
