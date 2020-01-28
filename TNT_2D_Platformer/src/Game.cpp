@@ -202,9 +202,9 @@ void Game::update()
 
 	level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
 	level_ptr_->SetCamPosY(player_ptr_->getDstY() - Globals::sWindowHeight / 2 + player_ptr_->getDstH() / 2);
-	///*std::cout << player_ptr_->getDstX() << std::endl;
-	//std::cout << player_ptr_->getDstY() << std::endl;*/
-	//std::cout << "OFFSET X = " << level_ptr_->GetLevelOffsetX() << std::endl;
+	std::cout << "PLAYER X = " << player_ptr_->getDstX() << std::endl;
+	std::cout << "CAM X = " << level_ptr_->GetCamPosX() << std::endl;
+	std::cout << "TILEOFFSET X = " << level_ptr_->GetTileOffsetX() << std::endl;
 	//std::cout << "OFFSET Y = " << level_ptr_->GetLevelOffsetY() << std::endl;
 }
 
