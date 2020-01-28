@@ -56,7 +56,7 @@ void Level::draw(SDL_Renderer* renderer)
 			index = (y+1) * GetNumVisibleTilesX() + (x+1);
 			visible_tile_dst_list_[index].x = x * GetTileWidth() - GetTileOffsetX();
 			visible_tile_dst_list_[index].y = y * GetTileHeight() - GetTileOffsetY();
-			tile_char = GetTileChar((int)(x + GetCamPosX() / GetTileWidth()), (int)(y + GetCamPosY() / GetTileHeight()));
+			tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
 			switch (tile_char)
 			{
 			case 'G':
@@ -165,7 +165,7 @@ int Level::GetNumVisibleTilesY()
 int Level::GetTileOffsetX()
 {
 	// FIND STARTING COORD OF NEAREST TILE
-	int nearest_tile_starting_coord = int(GetCamPosX() / GetTileWidth()) * GetTileWidth();
+	int nearest_tile_starting_coord = GetTileIndexFromPosX(GetCamPosX()) * GetTileWidth();
 
 	// RETURN OFFSET
 	return (GetCamPosX() - nearest_tile_starting_coord);
@@ -174,10 +174,18 @@ int Level::GetTileOffsetX()
 int Level::GetTileOffsetY()
 {
 	// FIND STARTING COORD OF NEAREST TILE
-	int nearest_tile_starting_coord = int(GetCamPosY() / GetTileHeight()) * GetTileHeight();
+	int nearest_tile_starting_coord = GetTileIndexFromPosY(GetCamPosY()) * GetTileHeight();
 
 	// RETURN OFFSET
 	return (GetCamPosY() - nearest_tile_starting_coord);
+}
+
+int Level::GetTileIndexFromPosX(int coord) {
+	return int(coord / GetTileWidth());
+}
+
+int Level::GetTileIndexFromPosY(int coord) {
+	return int(coord / GetTileHeight());
 }
 
 void Level::SetTileChar(int x, int y, char in_char)

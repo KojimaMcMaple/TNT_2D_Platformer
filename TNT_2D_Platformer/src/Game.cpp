@@ -197,14 +197,27 @@ void Game::update()
 		player_ptr_->setVelocityX(6);
 	}
 
-	player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocityX());
-	player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
+	// MOVE PLAYER IF NOT PAST HALF SCREEN
+	if (player_ptr_->getDstX() + player_ptr_->getDstW() + player_ptr_->getVelocityX() <= Globals::sWindowWidth / 2 || player_ptr_->getDstX() + player_ptr_->getVelocityX() >= level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2) {
+		player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocityX());
+		//level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
+	}
+	if (player_ptr_->getDstY() + player_ptr_->getDstH() + player_ptr_->getVelocityY() <= Globals::sWindowHeight / 2 || player_ptr_->getDstY() + player_ptr_->getVelocityY() >= level_ptr_->GetLevelMaxPosY() - Globals::sWindowHeight / 2) {
+		player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
+		//level_ptr_->SetCamPosY(player_ptr_->getDstY() - Globals::sWindowHeight / 2 + player_ptr_->getDstH() / 2);
+	}
+	
+	// MOVE CAM IF PAST SCREEN
+	if (player_ptr_->getDstX() + player_ptr_->getDstW() + player_ptr_->getVelocityX() > Globals::sWindowWidth / 2 && player_ptr_->getDstX() + player_ptr_->getVelocityX() < level_ptr_->GetLevelMaxPosX() - Globals::sWindowHeight / 2) {
+		level_ptr_->SetCamPosX(level_ptr_->GetCamPosX() + player_ptr_->getVelocityX());
+	}
+	if (player_ptr_->getDstY() + player_ptr_->getDstH() + player_ptr_->getVelocityY() > Globals::sWindowHeight / 2 && player_ptr_->getDstY() + player_ptr_->getVelocityY() < level_ptr_->GetLevelMaxPosY() - Globals::sWindowHeight / 2) {
+		level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
+	}
 
-	level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
-	level_ptr_->SetCamPosY(player_ptr_->getDstY() - Globals::sWindowHeight / 2 + player_ptr_->getDstH() / 2);
-	std::cout << "PLAYER X = " << player_ptr_->getDstX() << std::endl;
-	std::cout << "CAM X = " << level_ptr_->GetCamPosX() << std::endl;
-	std::cout << "TILEOFFSET X = " << level_ptr_->GetTileOffsetX() << std::endl;
+	std::cout << "PLAYER X = " << player_ptr_->getDstX()<< std::endl;
+	std::cout << "CAM X = " << level_ptr_->GetCamPosX()<< std::endl;
+	std::cout << "CURRTILE X = " << level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()) << std::endl;
 	//std::cout << "OFFSET Y = " << level_ptr_->GetLevelOffsetY() << std::endl;
 }
 

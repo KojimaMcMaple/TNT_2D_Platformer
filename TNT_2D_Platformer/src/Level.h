@@ -57,6 +57,8 @@ public:
 	int GetNumVisibleTilesY();
 	int GetTileOffsetX();
 	int GetTileOffsetY();
+	int GetTileIndexFromPosX(int coord);
+	int GetTileIndexFromPosY(int coord);
 
 	void SetTileChar(int x, int y, char in_char);
 	void SetLevelWidth(int width);
