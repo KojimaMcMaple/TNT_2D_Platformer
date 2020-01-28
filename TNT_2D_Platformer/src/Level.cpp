@@ -14,8 +14,8 @@ Level::Level(SDL_Renderer* renderer)
 	SetTileWidth(64);
 	SetTileHeight(64);
 	SDL_Rect temp_rect = { -GetTileWidth(), -GetTileHeight(), GetTileWidth(), GetTileHeight() };
-	for (int i = 0; i < GetNumVisibleTilesX(); i++) {
-		for (int j = 0; j < GetNumVisibleTilesY(); j++) {
+	for (int i = -1; i < GetNumVisibleTilesX()+1; i++) {
+		for (int j = -1; j < GetNumVisibleTilesY()+1; j++) {
 			visible_tile_dst_list_.push_back(temp_rect);
 		}
 	}
@@ -49,24 +49,46 @@ void Level::draw()
 
 void Level::draw(SDL_Renderer* renderer)
 {
+	int index = -1;
+	char tile_char = ' ';
 	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
 		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
-			visible_tile_dst_list_[y * GetNumVisibleTilesY() + x].x = x * GetTileWidth();
-			visible_tile_dst_list_[y * GetNumVisibleTilesY() + x].y = y * GetTileHeight();
-			char tile_char = GetTileChar(x + GetLevelOffsetX(), y + GetLevelOffsetY());
+			index = (y) * GetNumVisibleTilesX() + (x);
+			visible_tile_dst_list_[index].x = x * GetTileWidth() + GetLevelOffsetX();
+			visible_tile_dst_list_[index].y = y * GetTileHeight() + GetLevelOffsetY();
+			tile_char = GetTileChar((int)(x + GetLevelOffsetX() / GetTileWidth()), (int)(y + GetLevelOffsetY() % GetTileHeight()));
 			switch (tile_char)
 			{
 			case 'G':
-				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_01]->getTextureId(), tile_ptr_[CHURCH_GROUND_01]->getSrc(), &visible_tile_dst_list_[y * GetNumVisibleTilesY() + x], 0.0, 0, SDL_FLIP_NONE);
+				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_01]->getTextureId(), tile_ptr_[CHURCH_GROUND_01]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
+				break;
 			case '#':
-				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_02]->getTextureId(), tile_ptr_[CHURCH_GROUND_02]->getSrc(), &visible_tile_dst_list_[y * GetNumVisibleTilesY() + x], 0.0, 0, SDL_FLIP_NONE);
+				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_02]->getTextureId(), tile_ptr_[CHURCH_GROUND_02]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
+				break;
 			default:
-				
 				//Fill(x * GetTileWidth(), y * GetTileHeight(), (x) * nTileWidth - fTileOffsetX, (y + 1) * nTileHeight - fTileOffsetY, PIXEL_SOLID, FG_BLACK);
 				break;
 			}
 		}
 	}
+	/*char tile_char = ' ';
+	for (int i = 0; i < GetLevelWidth(); i++) {
+		for (int j = 0; j < GetLevelWidth(); j++) {
+			SDL_Rect temp_rect = { -GetTileWidth(), -GetTileHeight(), GetTileWidth(), GetTileHeight() };
+			temp_rect.x = i * GetTileWidth();
+			temp_rect.y = j * GetTileHeight();
+			tile_char = GetTileChar(i, j);
+			switch (tile_char)
+			{
+			case 'G':
+				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_02]->getTextureId(), tile_ptr_[CHURCH_GROUND_01]->getSrc(), &temp_rect, 0.0, 0, SDL_FLIP_NONE);
+				break;
+			default:
+				break;
+			}
+		}
+	}*/
+
 }
 
 void Level::clean()
@@ -81,8 +103,9 @@ void Level::LoadLevel(std::string in_str)
 
 char Level::GetTileChar(int x, int y)
 {
-	if (x > -1 && x < level_width_ && y > -1 && y < level_height_) { // check bounds just in case
-		return level_raw_str_[y * level_width_ + x]; //magic algorithm
+	
+	if (x > -1 && x < GetLevelWidth() && y > -1 && y < GetLevelHeight()) { // check bounds just in case
+		return level_raw_str_[y * GetLevelWidth() + x]; //magic algorithm
 	}
 	else {
 		return ' ';
@@ -97,6 +120,16 @@ int Level::GetLevelWidth()
 int Level::GetLevelHeight()
 {
 	return level_height_;
+}
+
+int Level::GetLevelMaxPosX()
+{
+	return GetLevelWidth() * GetTileWidth();
+}
+
+int Level::GetLevelMaxPosY()
+{
+	return GetLevelHeight() * GetTileHeight();
 }
 
 int Level::GetTileWidth()
@@ -121,42 +154,64 @@ int Level::GetCamPosY()
 
 int Level::GetNumVisibleTilesX()
 {
-	return Globals::sWindowWidth / tile_width_;
+	return Globals::sWindowWidth / GetTileWidth();
 }
 
 int Level::GetNumVisibleTilesY()
 {
-	return Globals::sWindowHeight / tile_height_;
+	return Globals::sWindowHeight / GetTileHeight();
 }
 
 int Level::GetLevelOffsetX()
 {
-	int result = cam_pos_x_ + GetNumVisibleTilesX() / 2;
-	if (result < 0) {
+	int result = GetCamPosX() + GetInLevelOffsetX();
+	
+	/*if (result < 0) {
 		result = 0;
 	}
-	if (result > GetLevelWidth() - GetNumVisibleTilesX()) {
-		result = GetLevelWidth() - GetNumVisibleTilesX();
-	}
+	if (result > GetLevelWidth() - Globals::sWindowWidth / 2) {
+		result = GetLevelWidth() - Globals::sWindowWidth / 2;
+	}*/
 	return result;
 }
 
 int Level::GetLevelOffsetY()
 {
-	int result = cam_pos_y_ + GetNumVisibleTilesY() / 2;
-	if (result < 0) {
+	int result = GetCamPosY() + GetInLevelOffsetY();
+
+	/*if (result < 0) {
 		result = 0;
 	}
-	if (result > GetLevelHeight() - GetNumVisibleTilesY()) {
-		result = GetLevelHeight() - GetNumVisibleTilesY();
-	}
+	if (result > GetLevelHeight() - Globals::sWindowHeight / 2) {
+		result = GetLevelHeight() - Globals::sWindowHeight / 2;
+	}*/
 	return result;
+}
+
+int Level::GetInLevelOffsetX()
+{
+	return in_level_offset_x_;
+}
+
+int Level::GetInLevelOffsetY()
+{
+	return in_level_offset_y_;
+}
+
+int Level::GetTileOffsetX()
+{
+	return GetTileWidth();
+}
+
+int Level::GetTileOffsetY()
+{
+	return GetTileHeight();
 }
 
 void Level::SetTileChar(int x, int y, char in_char)
 {
-	if (x > -1 && x < level_width_ && y > -1 && y < level_height_) {
-		level_raw_str_[y * level_width_ + x] = in_char;
+	if (x > -1 && x < GetLevelWidth() && y > -1 && y < GetLevelHeight()) {
+		level_raw_str_[y * GetLevelWidth() + x] = in_char;
 	}
 }
 
@@ -182,10 +237,36 @@ void Level::SetTileHeight(int height)
 
 void Level::SetCamPosX(int x_coord)
 {
-	cam_pos_x_ = x_coord;
+	if (x_coord < 0) {
+		cam_pos_x_ = 0;
+	}
+	else if (x_coord + Globals::sWindowWidth > GetLevelWidth() * GetTileWidth()) {
+		cam_pos_x_ = GetLevelWidth() * GetTileWidth() - Globals::sWindowWidth;
+	}
+	else {
+		cam_pos_x_ = x_coord;
+	}
 }
 
 void Level::SetCamPosY(int y_coord)
 {
-	cam_pos_y_ = y_coord;
+	if (y_coord < 0) {
+		cam_pos_y_ = 0;
+	}
+	else if (y_coord + Globals::sWindowHeight > GetLevelHeight() * GetTileHeight()) {
+		cam_pos_y_ = GetLevelHeight() * GetTileHeight() - Globals::sWindowHeight;
+	}
+	else {
+		cam_pos_y_ = y_coord;
+	}
+}
+
+void Level::SetInLevelOffsetX(int x_distance)
+{
+	in_level_offset_x_ = x_distance;
+}
+
+void Level::SetInLevelOffsetY(int y_distance)
+{
+	in_level_offset_y_ = y_distance;
 }

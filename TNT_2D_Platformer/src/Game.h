@@ -36,10 +36,10 @@ public:
 	bool init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
 	// public functions
-	void render();
-	void update();
 	bool isKeyDown(SDL_Scancode keyboard_code);
 	void handleEvents();
+	void update();
+	void render();
 	void clean();
 
 	// a function to access the private running variable
@@ -47,6 +47,12 @@ public:
 
 	// getters
 	SDL_Renderer* getRenderer();
+	int GetOffsetPositionX();
+	int GetOffsetPositionY();
+
+	// setters
+	void SetOffsetPositionX(int x_distance);
+	void SetOffsetPositionY(int y_distance);
 
 	// REDUNDANT
 	glm::vec2 getMousePosition();
@@ -68,6 +74,10 @@ private:
 	Level* level_ptr_;
 	Player* player_ptr_;
 	void createGameObjects();
+
+	// Movement offset
+	int offset_position_x_;
+	int offset_position_y_;
 
 	// REDUNDANT
 	glm::vec2 m_mousePosition;
