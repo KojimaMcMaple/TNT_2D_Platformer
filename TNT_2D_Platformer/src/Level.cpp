@@ -54,8 +54,8 @@ void Level::draw(SDL_Renderer* renderer)
 	for (int x = -1; x < GetNumVisibleTilesX()+1; x++) {
 		for (int y = -1; y < GetNumVisibleTilesY()+1; y++) {
 			index = (y+1) * GetNumVisibleTilesX() + (x+1);
-			visible_tile_dst_list_[index].x = x * GetTileWidth();
-			visible_tile_dst_list_[index].y = y * GetTileHeight();
+			visible_tile_dst_list_[index].x = x * GetTileWidth() - GetTileOffsetX();
+			visible_tile_dst_list_[index].y = y * GetTileHeight() - GetTileOffsetY();
 			tile_char = GetTileChar((int)(x + GetCamPosX() / GetTileWidth()), (int)(y + GetCamPosY() / GetTileHeight()));
 			switch (tile_char)
 			{
@@ -164,12 +164,12 @@ int Level::GetNumVisibleTilesY()
 
 int Level::GetTileOffsetX()
 {
-	return GetTileWidth();
+	return GetCamPosX() * GetTileWidth();
 }
 
 int Level::GetTileOffsetY()
 {
-	return GetTileHeight();
+	return GetCamPosY() * GetTileHeight();
 }
 
 void Level::SetTileChar(int x, int y, char in_char)
