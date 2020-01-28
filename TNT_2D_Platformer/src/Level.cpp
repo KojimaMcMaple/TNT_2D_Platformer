@@ -152,6 +152,16 @@ int Level::GetCamPosY()
 	return cam_pos_y_;
 }
 
+int Level::GetCamCenterX()
+{
+	return cam_pos_x_ + Globals::sWindowWidth / 2;
+}
+
+int Level::GetCamCenterY()
+{
+	return cam_pos_y_ + Globals::sWindowHeight / 2;
+}
+
 int Level::GetNumVisibleTilesX()
 {
 	return Globals::sWindowWidth / GetTileWidth();

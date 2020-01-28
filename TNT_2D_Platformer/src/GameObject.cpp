@@ -44,6 +44,16 @@ int GameObject::getDstH()
 	return dst_.h;
 }
 
+int GameObject::getDstCenterX()
+{
+	return dst_.x + dst_.w / 2;
+}
+
+int GameObject::getDstCenterY()
+{
+	return dst_.y + dst_.h / 2;
+}
+
 SDL_Rect* GameObject::getCollideBox()
 {
 	return &collide_box_;

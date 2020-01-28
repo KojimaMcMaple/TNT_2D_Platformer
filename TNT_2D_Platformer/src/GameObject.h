@@ -31,6 +31,8 @@ public:
 	int getDstY();
 	int getDstW();
 	int getDstH();
+	int getDstCenterX();
+	int getDstCenterY();
 	SDL_Rect* getCollideBox();
 	bool isCollideBoxVisible();
 	bool getIsColliding();

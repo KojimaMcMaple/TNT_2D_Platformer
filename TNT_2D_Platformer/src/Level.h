@@ -53,6 +53,8 @@ public:
 	int GetTileHeight();
 	int GetCamPosX();
 	int GetCamPosY();
+	int GetCamCenterX();
+	int GetCamCenterY();
 	int GetNumVisibleTilesX();
 	int GetNumVisibleTilesY();
 	int GetTileOffsetX();
