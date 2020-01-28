@@ -197,27 +197,53 @@ void Game::update()
 		player_ptr_->setVelocityX(6);
 	}
 
-	// MOVE PLAYER IF NOT PAST BOUNDS ("HALF SCREEN")
-	if (player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() <= Globals::sWindowWidth / 2 || level_ptr_->GetCamCenterX() == level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2) {
+	//if (level_ptr_->GetCamPosX() == 0) {
+	//	std::cout << "(1) IS TRUE" << std::endl;
+	//}
+	//if (player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() <= Globals::sWindowWidth / 2) {
+	//	std::cout << "(2) IS TRUE" << std::endl;
+	//}
+	//if (level_ptr_->GetCamPosX() + Globals::sWindowWidth == level_ptr_->GetLevelMaxPosX()) {
+	//	std::cout << "(3) IS TRUE" << std::endl;
+	//}
+	//if (player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() >= Globals::sWindowWidth / 2) {
+	//	std::cout << "(4) IS TRUE" << std::endl;
+	//}
+	////else {
+	////	std::cout << "(4) IS FALSE WITH " << player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() << " " << level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2 << std::endl;
+	////}
+	//if (player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() > Globals::sWindowWidth / 2) {
+	//	std::cout << "(5) IS TRUE" << std::endl;
+	//}
+	//if (player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() < level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2) {
+	//	std::cout << "(6) IS TRUE" << std::endl;
+	//}
+
+	// MOVE PLAYER IF NOT PAST BOUNDS ("HALF SCREEN"), OTHERWISE MOVE CAM
+	//compare cam w/ level max x/y, compare player with screen w/h
+	if ((level_ptr_->GetCamPosX() == 0 && player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() <= Globals::sWindowWidth / 2) ||
+		(level_ptr_->GetCamPosX() + Globals::sWindowWidth == level_ptr_->GetLevelMaxPosX() && player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() >= Globals::sWindowWidth / 2)) //WILL NOT WORK W/ player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() > level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2
+	{
 		player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocityX());
-		//level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
 	}
-	if (player_ptr_->getDstCenterY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight / 2 || level_ptr_->GetCamCenterY() == level_ptr_->GetLevelMaxPosY() - Globals::sWindowHeight / 2) {
-		player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
-		//level_ptr_->SetCamPosY(player_ptr_->getDstY() - Globals::sWindowHeight / 2 + player_ptr_->getDstH() / 2);
-	}
-	
-	// MOVE CAM IF PAST BOUNDS5
-	if (player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() > Globals::sWindowWidth / 2 && player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() < level_ptr_->GetLevelMaxPosX() - Globals::sWindowHeight / 2) {
+	else {
 		level_ptr_->SetCamPosX(level_ptr_->GetCamPosX() + player_ptr_->getVelocityX());
 	}
-	if (player_ptr_->getDstCenterY() + player_ptr_->getVelocityY() > Globals::sWindowHeight / 2 && player_ptr_->getDstCenterY() + player_ptr_->getVelocityY() < level_ptr_->GetLevelMaxPosY() - Globals::sWindowHeight / 2) {
+
+	if ((level_ptr_->GetCamPosY() == 0 && player_ptr_->getDstCenterY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight / 2) ||
+		(level_ptr_->GetCamPosY() + Globals::sWindowHeight == level_ptr_->GetLevelMaxPosY() && player_ptr_->getDstCenterY() + player_ptr_->getVelocityY() >= Globals::sWindowHeight / 2))
+	{
+		player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
+	}
+	else {
 		level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
 	}
 
+
+
 	std::cout << "PLAYER X = " << player_ptr_->getDstX()<< std::endl;
 	std::cout << "CAM X = " << level_ptr_->GetCamPosX()<< std::endl;
-	std::cout << "CURRTILE X = " << level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()) << std::endl;
+	//std::cout << "CURRTILE X = " << level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()) << std::endl;
 	//std::cout << "OFFSET Y = " << level_ptr_->GetLevelOffsetY() << std::endl;
 }
 
