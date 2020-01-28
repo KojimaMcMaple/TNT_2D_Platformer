@@ -16,7 +16,6 @@ Player::Player(SDL_Renderer* renderer)
 	setDst(0, 0, 55 * 3, 37 * 3);
 	setCollideBox(0, 0, 55, 37);
 	setIsColliding(true);
-	setVelocity(10);
 	setType(GameObjectType::PLAYER);
 
 	/*TheSoundManager::Instance()->load("../Assets/audio/engine.ogg",

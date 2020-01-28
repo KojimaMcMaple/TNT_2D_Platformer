@@ -180,49 +180,32 @@ void Game::handleEvents()
 
 void Game::update()
 {
+	player_ptr_->setVelocityX(0);
+	player_ptr_->setVelocityY(0);
+
 	// PROCESSING, HAPPENS WHEN KEYS ARE HELD DOWN
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_W) || s_pInstance->isKeyDown(SDL_SCANCODE_UP)) {
-		SetOffsetPositionY(player_ptr_->getDstY() - player_ptr_->getVelocity());
-		player_ptr_->setDstY(GetOffsetPositionY());
-		//level_ptr_->SetInLevelOffsetY(GetOffsetPositionY());
-		//level_ptr_->SetCamPosY(player_ptr_->getDstY() - Globals::sWindowHeight / 2 + player_ptr_->getDstH() / 2);
+		player_ptr_->setVelocityY(-6);
 	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_S) || s_pInstance->isKeyDown(SDL_SCANCODE_DOWN)) {
-		SetOffsetPositionY(player_ptr_->getDstY() + player_ptr_->getVelocity());
-		player_ptr_->setDstY(GetOffsetPositionY());
-		//level_ptr_->SetInLevelOffsetY(GetOffsetPositionY());
-		//level_ptr_->SetCamPosY(player_ptr_->getDstY() - Globals::sWindowHeight / 2 + player_ptr_->getDstH() / 2);
+		player_ptr_->setVelocityY(6);
 	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
-		SetOffsetPositionX(player_ptr_->getDstX() - player_ptr_->getVelocity());
-		player_ptr_->setDstX(GetOffsetPositionX());
-		//level_ptr_->SetInLevelOffsetX(GetOffsetPositionX());
-		//level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
+		player_ptr_->setVelocityX(-6);
 	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
-		SetOffsetPositionX(player_ptr_->getDstX() + player_ptr_->getVelocity());
-		player_ptr_->setDstX(GetOffsetPositionX());
-		//level_ptr_->SetInLevelOffsetX(GetOffsetPositionX());
-		//level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
+		player_ptr_->setVelocityX(6);
 	}
 
-	level_ptr_->SetInLevelOffsetX(0);
-	// CAM START TRACKING IF PLAYER PASS HALF THE INITIAL SCREEN 
-	if (player_ptr_->getDstX() > Globals::sWindowWidth / 2 && player_ptr_->getDstX() < level_ptr_->GetLevelMaxPosX()) {
-		level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
-		level_ptr_->SetInLevelOffsetX(GetOffsetPositionX());
-		std::cout << "TRACK X" << std::endl;
-	}
-	if (player_ptr_->getDstY() > Globals::sWindowHeight / 2 && player_ptr_->getDstY() < level_ptr_->GetLevelMaxPosY()) {
-		level_ptr_->SetCamPosY(player_ptr_->getDstY() - Globals::sWindowHeight / 2 + player_ptr_->getDstH() / 2);
-		level_ptr_->SetInLevelOffsetY(GetOffsetPositionY());
-		std::cout << "TRACK Y" << std::endl;
-	}
+	player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocityX());
+	player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
 
-	/*std::cout << player_ptr_->getDstX() << std::endl;
-	std::cout << player_ptr_->getDstY() << std::endl;*/
-	std::cout << "OFFSET X = " << level_ptr_->GetLevelOffsetX() << std::endl;
-	std::cout << "OFFSET Y = " << level_ptr_->GetLevelOffsetY() << std::endl;
+	level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
+	level_ptr_->SetCamPosY(player_ptr_->getDstY() - Globals::sWindowHeight / 2 + player_ptr_->getDstH() / 2);
+	///*std::cout << player_ptr_->getDstX() << std::endl;
+	//std::cout << player_ptr_->getDstY() << std::endl;*/
+	//std::cout << "OFFSET X = " << level_ptr_->GetLevelOffsetX() << std::endl;
+	//std::cout << "OFFSET Y = " << level_ptr_->GetLevelOffsetY() << std::endl;
 }
 
 void Game::render()

@@ -59,9 +59,14 @@ std::string GameObject::getTextureId()
 	return texture_id_;
 }
 
-int GameObject::getVelocity()
+int GameObject::getVelocityX()
 {
-	return velocity_;
+	return velocity_x_;
+}
+
+int GameObject::getVelocityY()
+{
+	return velocity_y_;
 }
 
 glm::vec2 GameObject::getPosition()
@@ -159,9 +164,14 @@ void GameObject::addSfxId(std::string id)
 	sfx_id_list_.push_back(id);
 }
 
-void GameObject::setVelocity(int velocity)
+void GameObject::setVelocityX(int velocity)
 {
-	velocity_ = velocity;
+	velocity_x_ = velocity;
+}
+
+void GameObject::setVelocityY(int velocity)
+{
+	velocity_y_ = velocity;
 }
 
 void GameObject::setPosition(glm::vec2 newPosition)

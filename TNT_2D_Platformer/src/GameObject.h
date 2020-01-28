@@ -35,7 +35,8 @@ public:
 	bool isCollideBoxVisible();
 	bool getIsColliding();
 	std::string getTextureId();
-	int getVelocity();
+	int getVelocityX();
+	int getVelocityY();
 	GameObjectType getType();
 	SteeringState getSteeringState();
 	glm::vec2 getPosition();
@@ -57,7 +58,8 @@ public:
 	void setIsColliding(bool collision);
 	void setTextureId(std::string id); //cleanup is done by manager
 	void addSfxId(std::string id); //cleanup is done by manager
-	void setVelocity(int velocity);
+	void setVelocityX(int velocity);
+	void setVelocityY(int velocity);
 	void setType(GameObjectType newType);
 	void setSteeringState(SteeringState newState);
 	void setAcceleration(glm::vec2 newAcceleration);
@@ -75,7 +77,8 @@ private:
 	std::vector<std::string> sfx_id_list_;
 	
 	// PHYSICS
-	int velocity_;
+	int velocity_x_;
+	int velocity_y_;
 
 	// collision variables
 	SDL_Rect collide_box_;

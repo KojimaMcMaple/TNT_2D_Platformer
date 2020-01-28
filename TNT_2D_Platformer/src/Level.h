@@ -26,8 +26,6 @@ private:
 	std::string level_raw_str_;
 	int level_width_;
 	int level_height_;
-	int in_level_offset_x_;
-	int in_level_offset_y_;
 	Tile* tileset_ptr_[NUM_OF_TILESET_ID];
 	Tile* tile_ptr_[NUM_OF_TILE_ID];
 	std::vector<SDL_Rect> visible_tile_dst_list_;
@@ -57,10 +55,6 @@ public:
 	int GetCamPosY();
 	int GetNumVisibleTilesX();
 	int GetNumVisibleTilesY();
-	int GetLevelOffsetX();
-	int GetLevelOffsetY();
-	int GetInLevelOffsetX();
-	int GetInLevelOffsetY();
 	int GetTileOffsetX();
 	int GetTileOffsetY();
 
@@ -71,8 +65,6 @@ public:
 	void SetTileHeight(int height);
 	void SetCamPosX(int x_coord);
 	void SetCamPosY(int y_coord);
-	void SetInLevelOffsetX(int x_distance);
-	void SetInLevelOffsetY(int y_distance);
 };
 
 #endif
