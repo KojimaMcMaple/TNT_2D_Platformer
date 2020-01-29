@@ -107,6 +107,9 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 			{
 				std::cout << "renderer creation success" << std::endl;
 				SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
+
+				// ENABLE ALPHA BLENDING
+				SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
 			}
 			else
 			{
@@ -239,10 +242,10 @@ void Game::update()
 		level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
 	}
 
+	player_ptr_->update();
 
-
-	std::cout << "PLAYER X = " << player_ptr_->getDstX()<< std::endl;
-	std::cout << "CAM X = " << level_ptr_->GetCamPosX()<< std::endl;
+	//std::cout << "PLAYER X = " << player_ptr_->getDstX()<< std::endl;
+	//std::cout << "CAM X = " << level_ptr_->GetCamPosX()<< std::endl;
 	//std::cout << "CURRTILE X = " << level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()) << std::endl;
 	//std::cout << "OFFSET Y = " << level_ptr_->GetLevelOffsetY() << std::endl;
 }
@@ -250,6 +253,7 @@ void Game::update()
 void Game::render()
 {
 	SDL_RenderClear(m_pRenderer); // clear the renderer to the draw colour
+
 
 	level_ptr_->draw(getRenderer());
 	player_ptr_->draw(getRenderer());

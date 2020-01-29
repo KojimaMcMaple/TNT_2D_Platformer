@@ -16,6 +16,7 @@ enum TileSetId {
 };
 
 enum TileId {
+	CHURCH_BKG_01,
 	CHURCH_GROUND_01,
 	CHURCH_GROUND_02,
 	NUM_OF_TILE_ID

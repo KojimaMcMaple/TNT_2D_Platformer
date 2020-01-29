@@ -24,17 +24,22 @@ Level::Level(SDL_Renderer* renderer)
 	tileset_ptr_[CHURCH_TILESET_01] = new Tile();
 	tileset_ptr_[CHURCH_TILESET_01]->setTextureId("church_tileset_01");
 	TheTextureManager::Instance()->load("../Assets/textures/church_tileset_01.png", tileset_ptr_[CHURCH_TILESET_01]->getTextureId(), renderer);
-	tileset_ptr_[CHURCH_TILESET_01]->setSrc(0, 0, 336, 224);
-	tileset_ptr_[CHURCH_TILESET_01]->setIsColliding(false);
+	//tileset_ptr_[CHURCH_TILESET_01]->setSrc(0, 0, 336, 224);
+	//tileset_ptr_[CHURCH_TILESET_01]->setIsColliding(false);
 
+	tile_ptr_[CHURCH_BKG_01] = new Tile();
+	tile_ptr_[CHURCH_BKG_01]->setTextureId(tileset_ptr_[CHURCH_TILESET_01]->getTextureId());
+	tile_ptr_[CHURCH_BKG_01]->setSrc(128, 16, 15, 15);
+	tile_ptr_[CHURCH_BKG_01]->setIsColliding(false);
+	
 	tile_ptr_[CHURCH_GROUND_01] = new Tile();
 	tile_ptr_[CHURCH_GROUND_01]->setTextureId(tileset_ptr_[CHURCH_TILESET_01]->getTextureId());
-	tile_ptr_[CHURCH_GROUND_01]->setSrc(64, 167, 47, 40);
+	tile_ptr_[CHURCH_GROUND_01]->setSrc(64, 168, 47, 39);
 	tile_ptr_[CHURCH_GROUND_01]->setIsColliding(true);
 
 	tile_ptr_[CHURCH_GROUND_02] = new Tile();
 	tile_ptr_[CHURCH_GROUND_02]->setTextureId(tileset_ptr_[CHURCH_TILESET_01]->getTextureId());
-	tile_ptr_[CHURCH_GROUND_02]->setSrc(128, 167, 47, 40);
+	tile_ptr_[CHURCH_GROUND_02]->setSrc(128, 168, 47, 39);
 	tile_ptr_[CHURCH_GROUND_02]->setIsColliding(true);
 }
 
@@ -66,7 +71,7 @@ void Level::draw(SDL_Renderer* renderer)
 				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_02]->getTextureId(), tile_ptr_[CHURCH_GROUND_02]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			default:
-				
+				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_BKG_01]->getTextureId(), tile_ptr_[CHURCH_BKG_01]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			}
 		}

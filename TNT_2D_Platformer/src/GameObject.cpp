@@ -59,14 +59,54 @@ SDL_Rect* GameObject::getCollideBox()
 	return &collide_box_;
 }
 
+int GameObject::getCollideBoxX()
+{
+	return collide_box_.x;
+}
+
+int GameObject::getCollideBoxY()
+{
+	return collide_box_.y;
+}
+
+int GameObject::getCollideBoxW()
+{
+	return collide_box_.w;
+}
+
+int GameObject::getCollideBoxH()
+{
+	return collide_box_.h;
+}
+
+int GameObject::getCollideBoxCenterX()
+{
+	return collide_box_.x + collide_box_.w / 2;
+}
+
+int GameObject::getCollideBoxCenterY()
+{
+	return collide_box_.y + collide_box_.h / 2;
+}
+
 bool GameObject::isCollideBoxVisible()
 {
-	return is_collide_visible;
+	return is_collide_box_visible;
 }
 
 std::string GameObject::getTextureId()
 {
 	return texture_id_;
+}
+
+int GameObject::getCustomPivotX()
+{
+	return custom_pivot_x_;
+}
+
+int GameObject::getCustomPivotY()
+{
+	return custom_pivot_y_;
 }
 
 int GameObject::getVelocityX()
@@ -159,9 +199,19 @@ void GameObject::setCollideBox(int x, int y, int w, int h)
 	collide_box_ = { x,y,w,h };
 }
 
+void GameObject::setCollideBoxX(int coord)
+{
+	collide_box_.x = coord;
+}
+
+void GameObject::setCollideBoxY(int coord)
+{
+	collide_box_.y = coord;
+}
+
 void GameObject::setCollideBoxVisibility(bool toggle)
 {
-	is_collide_visible = toggle;
+	is_collide_box_visible = toggle;
 }
 
 void GameObject::setTextureId(std::string id)
@@ -172,6 +222,16 @@ void GameObject::setTextureId(std::string id)
 void GameObject::addSfxId(std::string id)
 {
 	sfx_id_list_.push_back(id);
+}
+
+void GameObject::setCustomPivotX(int coord)
+{
+	custom_pivot_x_ = coord;
+}
+
+void GameObject::setCustomPivotY(int coord)
+{
+	custom_pivot_y_ = coord;
 }
 
 void GameObject::setVelocityX(int velocity)
