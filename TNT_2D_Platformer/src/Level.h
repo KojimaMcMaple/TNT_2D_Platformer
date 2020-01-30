@@ -37,15 +37,15 @@ private:
 public:
 	Level();
 	~Level();
-	Level(SDL_Renderer* renderer);
 
 	void update() override;
 	void draw() override;
 	void draw(SDL_Renderer* renderer);
 	void clean() override;
 
-	void LoadLevel(std::string in_str);
+	void LoadLevel(SDL_Renderer* renderer, std::string level_id);
 	char GetTileChar(int x, int y);
+	int IsTileCharCollidable(char tile_char); //0=solid block, 1=air/background, 2=consummables
 	int GetLevelWidth();
 	int GetLevelHeight();
 	int GetLevelMaxPosX();
@@ -63,6 +63,7 @@ public:
 	int GetTileIndexFromPosX(int coord);
 	int GetTileIndexFromPosY(int coord);
 
+	void SetLevelRawStr(std::string raw_str);
 	void SetTileChar(int x, int y, char in_char);
 	void SetLevelWidth(int width);
 	void SetLevelHeight(int height);

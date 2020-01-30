@@ -29,9 +29,19 @@ int GameObject::getDstX()
 	return dst_.x;
 }
 
+int GameObject::getDstRightmostX()
+{
+	return dst_.x + dst_.w;
+}
+
 int GameObject::getDstY()
 {
 	return dst_.y;
+}
+
+int GameObject::getDstLowermostY()
+{
+	return dst_.y + dst_.h;
 }
 
 int GameObject::getDstW()
@@ -64,9 +74,19 @@ int GameObject::getCollideBoxX()
 	return collide_box_.x;
 }
 
+int GameObject::getCollideBoxRightmostX()
+{
+	return collide_box_.x + collide_box_.w;
+}
+
 int GameObject::getCollideBoxY()
 {
 	return collide_box_.y;
+}
+
+int GameObject::getCollideBoxLowermostY()
+{
+	return collide_box_.y + collide_box_.h;
 }
 
 int GameObject::getCollideBoxW()

@@ -48,27 +48,8 @@ glm::vec2 Game::getMousePosition()
 
 void Game::createGameObjects()
 {
-	level_ptr_ = new Level(getRenderer());
-	level_ptr_->SetLevelWidth(64);
-	level_ptr_->SetLevelHeight(16);
-	std::string level_raw_str = "";
-	level_raw_str += "..G.............................................................";
-	level_raw_str += "..G.............................................................";
-	level_raw_str += ".......ooooo....................................................";
-	level_raw_str += "........ooo.....................................................";
-	level_raw_str += ".......................########.................................";
-	level_raw_str += ".....BB?BBBB?BB.......###..............#.#......................";
-	level_raw_str += "....................###................#.#......................";
-	level_raw_str += ".................X.####.........................................";
-	level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG.##############.....########";
-	level_raw_str += "...................................#.#...............###........";
-	level_raw_str += "........................############.#............###...........";
-	level_raw_str += "........................#............#.........###..............";
-	level_raw_str += "........................#.############......###.................";
-	level_raw_str += "........................#................###....................";
-	level_raw_str += "........................#################.......................";
-	level_raw_str += "................................................................";
-	level_ptr_->LoadLevel(level_raw_str);
+	level_ptr_ = new Level();
+	level_ptr_->LoadLevel(getRenderer(), "church");
 
 	player_ptr_ = new Player(getRenderer());
 	player_ptr_->setDstX(1 * level_ptr_->GetTileWidth() + level_ptr_->GetTileWidth() / 2 - player_ptr_->getDstW() / 2);
@@ -222,25 +203,71 @@ void Game::update()
 	//	std::cout << "(6) IS TRUE" << std::endl;
 	//}
 
+	// PRE-PROCESSING
+	int new_player_center_x = player_ptr_->getDstCenterX() + player_ptr_->getVelocityX();
+	int new_player_pos_x = player_ptr_->getDstX();
+	int new_cam_pos_x = level_ptr_->GetCamPosX();
+	int new_player_center_y = player_ptr_->getDstCenterY() + player_ptr_->getVelocityY();
+	int new_player_pos_y = player_ptr_->getDstY();
+	int new_cam_pos_y = level_ptr_->GetCamPosY();
+
 	// MOVE PLAYER IF NOT PAST BOUNDS ("HALF SCREEN"), OTHERWISE MOVE CAM
 	//compare cam w/ level max x/y, compare player with screen w/h
-	if ((level_ptr_->GetCamPosX() == 0 && player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() <= Globals::sWindowWidth / 2) ||
-		(level_ptr_->GetCamPosX() + Globals::sWindowWidth == level_ptr_->GetLevelMaxPosX() && player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() >= Globals::sWindowWidth / 2)) //WILL NOT WORK W/ player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() > level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2
+	if ((level_ptr_->GetCamPosX() == 0 && new_player_center_x <= Globals::sWindowWidth / 2) ||
+		(level_ptr_->GetCamPosX() + Globals::sWindowWidth == level_ptr_->GetLevelMaxPosX() && new_player_center_x >= Globals::sWindowWidth / 2)) //WILL NOT WORK W/ player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() > level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2
 	{
-		player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocityX());
+		if (player_ptr_->getCollideBoxX() + player_ptr_->getVelocityX() >= 0 && player_ptr_->getCollideBoxRightmostX() + player_ptr_->getVelocityX() <= Globals::sWindowWidth) {
+			new_player_pos_x += player_ptr_->getVelocityX();
+		}
+		//player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocityX());
 	}
 	else {
-		level_ptr_->SetCamPosX(level_ptr_->GetCamPosX() + player_ptr_->getVelocityX());
+		new_cam_pos_x += player_ptr_->getVelocityX();
+		//level_ptr_->SetCamPosX(level_ptr_->GetCamPosX() + player_ptr_->getVelocityX());
 	}
 
-	if ((level_ptr_->GetCamPosY() == 0 && player_ptr_->getDstCenterY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight / 2) ||
-		(level_ptr_->GetCamPosY() + Globals::sWindowHeight == level_ptr_->GetLevelMaxPosY() && player_ptr_->getDstCenterY() + player_ptr_->getVelocityY() >= Globals::sWindowHeight / 2))
+	if ((level_ptr_->GetCamPosY() == 0 && new_player_center_y <= Globals::sWindowHeight / 2) ||
+		(level_ptr_->GetCamPosY() + Globals::sWindowHeight == level_ptr_->GetLevelMaxPosY() && new_player_center_y >= Globals::sWindowHeight / 2))
 	{
-		player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
+		if (player_ptr_->getCollideBoxY() + player_ptr_->getVelocityY() >= 0 && player_ptr_->getCollideBoxLowermostY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight) {
+			new_player_pos_y += player_ptr_->getVelocityY();
+		}
+		//player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
 	}
 	else {
-		level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
+		new_cam_pos_y += player_ptr_->getVelocityY();
+		//level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
 	}
+
+
+
+	// COLLISION CHECK
+	//0=solid block, 1=air/background, 2=consummables
+	// LEFT
+	if (player_ptr_->getVelocityX() <= 0) { \
+		if (level_ptr_->IsTileCharCollidable(level_ptr_->GetTileIndexFromPosX(new_player_center_x) - 1) == 0) {
+			player_ptr_->setDstX(new_player_dst_x);
+		}
+		
+	}
+
+	player_ptr_->setDstX(new_player_pos_x);
+	player_ptr_->setDstY(new_player_pos_y);
+	level_ptr_->SetCamPosX(new_cam_pos_x);
+	level_ptr_->SetCamPosY(new_cam_pos_y);
+
+	//if ((level_ptr_->GetCamPosX() == 0 && new_player_center_x <= Globals::sWindowWidth / 2) ||
+	//	(level_ptr_->GetCamPosX() + Globals::sWindowWidth == level_ptr_->GetLevelMaxPosX() && new_player_center_x >= Globals::sWindowWidth / 2) ||
+	//	(level_ptr_->GetCamPosY() == 0 && new_player_center_y <= Globals::sWindowHeight / 2) ||
+	//	(level_ptr_->GetCamPosY() + Globals::sWindowHeight == level_ptr_->GetLevelMaxPosY() && new_cam_pos_y >= Globals::sWindowHeight / 2))
+	//{
+	//	player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocityX());
+	//	player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
+	//}
+	//else {
+	//	level_ptr_->SetCamPosX(level_ptr_->GetCamPosX() + player_ptr_->getVelocityX());
+	//	level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
+	//}
 
 	player_ptr_->update();
 

@@ -15,7 +15,7 @@ Player::Player(SDL_Renderer* renderer)
 	setSrc(0, 0, 55, 37);
 	setDst(0, 0, 55 * 3, 37 * 3);
 	setCollideBox(0, 0, 50, 85);
-	setCollideBoxVisibility(true);
+	//setCollideBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
 	setIsColliding(true);
 	setType(GameObjectType::PLAYER);
 
