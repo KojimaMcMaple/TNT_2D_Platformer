@@ -25,7 +25,7 @@ private:
 
 	// COLLISION
 	SDL_Rect collide_box_;
-	bool is_collide_box_visible = true;
+	bool is_collide_box_visible = false;
 	bool m_isColliding;
 	GameObjectType m_type;
 	SteeringState m_state;

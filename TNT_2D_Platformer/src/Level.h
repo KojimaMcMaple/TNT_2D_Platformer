@@ -31,7 +31,7 @@ private:
 	int level_height_;
 	Tile* tileset_ptr_[NUM_OF_TILESET_ID];
 	Tile* tile_ptr_[NUM_OF_TILE_ID];
-	std::vector<SDL_Rect> visible_tile_dst_list_;
+	std::vector<std::vector<SDL_Rect>> visible_tile_dst_list_;
 	int tile_width_;
 	int tile_height_;
 	int cam_pos_x_;

@@ -14,11 +14,10 @@ Level::~Level()
 void Level::update()
 {
 	int index = -1;
-	for (int x = -1; x < GetNumVisibleTilesX() + 1; x++) {
-		for (int y = -1; y < GetNumVisibleTilesY() + 1; y++) {
-			index = (y + 1) * GetNumVisibleTilesX() + (x + 1);
-			visible_tile_dst_list_[index].x = x * GetTileWidth() - GetTileOffsetX();
-			visible_tile_dst_list_[index].y = y * GetTileHeight() - GetTileOffsetY();
+	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
+		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
+			visible_tile_dst_list_[x][y].x = x * GetTileWidth() - GetTileOffsetX();
+			visible_tile_dst_list_[x][y].y = y * GetTileHeight() - GetTileOffsetY();
 		}
 	}
 }
@@ -31,9 +30,8 @@ void Level::draw(SDL_Renderer* renderer)
 {
 	int index = -1;
 	char tile_char = ' ';
-	for (int x = -1; x < GetNumVisibleTilesX()+1; x++) {
-		for (int y = -1; y < GetNumVisibleTilesY()+1; y++) {
-			index = (y+1) * GetNumVisibleTilesX() + (x+1);
+	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
+		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
 			tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
 			//if (x == -1 && y == -1) {
 			//	std::cout << "tile_char =" << tile_char << std::endl;
@@ -41,16 +39,16 @@ void Level::draw(SDL_Renderer* renderer)
 			switch (tile_char)
 			{
 			case 'G':
-				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_01]->getTextureId(), tile_ptr_[CHURCH_GROUND_01]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
+				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_01]->getTextureId(), tile_ptr_[CHURCH_GROUND_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			case '#':
-				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_02]->getTextureId(), tile_ptr_[CHURCH_GROUND_02]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
+				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_02]->getTextureId(), tile_ptr_[CHURCH_GROUND_02]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			case '@':
-				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_BLOCK_01]->getTextureId(), tile_ptr_[CHURCH_BLOCK_01]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
+				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_BLOCK_01]->getTextureId(), tile_ptr_[CHURCH_BLOCK_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			default:
-				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_BKG_01]->getTextureId(), tile_ptr_[CHURCH_BKG_01]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
+				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_BKG_01]->getTextureId(), tile_ptr_[CHURCH_BKG_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			}
 		}
@@ -110,10 +108,13 @@ void Level::LoadLevel(SDL_Renderer* renderer, std::string level_id)
 	}
 
 	SDL_Rect temp_rect = { -GetTileWidth(), -GetTileHeight(), GetTileWidth(), GetTileHeight() };
-	for (int i = -1; i < GetNumVisibleTilesX() + 1; i++) {
-		for (int j = -1; j < GetNumVisibleTilesY() + 1; j++) {
-			visible_tile_dst_list_.push_back(temp_rect);
+	for (int i = 0; i < GetNumVisibleTilesX(); i++) {
+		std::vector<SDL_Rect> temp;
+		temp.clear();
+		for (int j = 0; j < GetNumVisibleTilesY(); j++) {
+			temp.push_back(temp_rect);
 		}
+		visible_tile_dst_list_.push_back(temp);
 	}
 
 	// Tileset uses src, tiles use dst
@@ -157,7 +158,7 @@ char Level::GetTileChar(int x_index, int y_index)
 SDL_Rect* Level::GetVisibleTileObj(int x_index, int y_index)
 {
 	if (x_index > -1 && x_index < GetNumVisibleTilesX() && y_index > -1 && y_index < GetNumVisibleTilesY()) { // check bounds just in case
-		return &visible_tile_dst_list_[y_index * GetNumVisibleTilesX() + x_index]; //magic algorithm
+		return &visible_tile_dst_list_[x_index][y_index]; //magic algorithm
 	}
 	else {
 		SDL_Rect temp = { 0,0,0,0 };
@@ -274,12 +275,12 @@ int Level::GetCamCenterY()
 
 int Level::GetNumVisibleTilesX()
 {
-	return Globals::sWindowWidth / GetTileWidth();
+	return Globals::sWindowWidth / GetTileWidth() + 1;
 }
 
 int Level::GetNumVisibleTilesY()
 {
-	return Globals::sWindowHeight / GetTileHeight();
+	return Globals::sWindowHeight / GetTileHeight() + 1;
 }
 
 int Level::GetTileOffsetX()
