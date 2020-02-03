@@ -6,6 +6,7 @@
 #include <vector>
 #include "Globals.h"
 #include "GameObject.h"
+#include "CollisionManager.h"
 #include "TextureManager.h"
 #include "SoundManager.h"
 #include "Tile.h"
@@ -19,6 +20,7 @@ enum TileId {
 	CHURCH_BKG_01,
 	CHURCH_GROUND_01,
 	CHURCH_GROUND_02,
+	CHURCH_BLOCK_01,
 	NUM_OF_TILE_ID
 };
 
@@ -44,8 +46,10 @@ public:
 	void clean() override;
 
 	void LoadLevel(SDL_Renderer* renderer, std::string level_id);
-	char GetTileChar(int x, int y);
+	char GetTileChar(int x_index, int y_index);
+	SDL_Rect* GetVisibleTileObj(int x_index, int y_index);
 	int IsTileCharCollidable(char tile_char); //0=solid block, 1=air/background, 2=consummables
+	void CollisionDebug(SDL_Rect* game_obj);
 	int GetLevelWidth();
 	int GetLevelHeight();
 	int GetLevelMaxPosX();

@@ -12,7 +12,7 @@
 class CollisionManager
 {
 public:
-	static bool HaveCollidedAABB(const SDL_Rect& obj1, const SDL_Rect& obj2);
+	static bool HaveCollidedAABB(SDL_Rect* obj1, SDL_Rect* obj2);
 	static int squaredDistance(glm::vec2 P1, glm::vec2 P2);
 	static bool squaredRadiusCheck(GameObject* object1, GameObject* object2);
 private:

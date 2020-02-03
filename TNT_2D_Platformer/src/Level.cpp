@@ -1,14 +1,14 @@
 #include "Level.h"
 
-Level::~Level()
-{
-}
-
 Level::Level()
 {
 	setType(GameObjectType::LEVEL);
 	SetTileWidth(64);
 	SetTileHeight(64);
+}
+
+Level::~Level()
+{
 }
 
 void Level::update()
@@ -37,6 +37,9 @@ void Level::draw(SDL_Renderer* renderer)
 				break;
 			case '#':
 				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_02]->getTextureId(), tile_ptr_[CHURCH_GROUND_02]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
+				break;
+			case '@':
+				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_BLOCK_01]->getTextureId(), tile_ptr_[CHURCH_BLOCK_01]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			default:
 				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_BKG_01]->getTextureId(), tile_ptr_[CHURCH_BKG_01]->getSrc(), &visible_tile_dst_list_[index], 0.0, 0, SDL_FLIP_NONE);
@@ -76,9 +79,9 @@ void Level::LoadLevel(SDL_Renderer* renderer, std::string level_id)
 	}
 
 	if (level_id == "church") {
-		level_raw_str += "..G.............................................................";
-		level_raw_str += "..G.............................................................";
-		level_raw_str += ".......ooooo....................................................";
+		level_raw_str += "G.G.............................................................";
+		level_raw_str += "................................................................";
+		level_raw_str += "G.G....ooooo....................................................";
 		level_raw_str += "........ooo.....................................................";
 		level_raw_str += ".......................########.................................";
 		level_raw_str += ".....BB?BBBB?BB.......###..............#.#......................";
@@ -126,15 +129,31 @@ void Level::LoadLevel(SDL_Renderer* renderer, std::string level_id)
 	tile_ptr_[CHURCH_GROUND_02]->setTextureId(tileset_ptr_[CHURCH_TILESET_01]->getTextureId());
 	tile_ptr_[CHURCH_GROUND_02]->setSrc(128, 168, 47, 39);
 	tile_ptr_[CHURCH_GROUND_02]->setIsColliding(true);
+
+	tile_ptr_[CHURCH_BLOCK_01] = new Tile();
+	tile_ptr_[CHURCH_BLOCK_01]->setTextureId(tileset_ptr_[CHURCH_TILESET_01]->getTextureId());
+	tile_ptr_[CHURCH_BLOCK_01]->setSrc(16, 112, 31, 31);
+	tile_ptr_[CHURCH_BLOCK_01]->setIsColliding(true);
 }
 
-char Level::GetTileChar(int x, int y)
+char Level::GetTileChar(int x_index, int y_index)
 {
-	if (x > -1 && x < GetLevelWidth() && y > -1 && y < GetLevelHeight()) { // check bounds just in case
-		return level_raw_str_[y * GetLevelWidth() + x]; //magic algorithm
+	if (x_index > -1 && x_index < GetLevelWidth() && y_index > -1 && y_index < GetLevelHeight()) { // check bounds just in case
+		return level_raw_str_[y_index * GetLevelWidth() + x_index]; //magic algorithm
 	}
 	else {
 		return ' ';
+	}
+}
+
+SDL_Rect* Level::GetVisibleTileObj(int x_index, int y_index)
+{
+	if (x_index > -1 && x_index < GetNumVisibleTilesX() && y_index > -1 && y_index < GetNumVisibleTilesY()) { // check bounds just in case
+		return &visible_tile_dst_list_[y_index * GetNumVisibleTilesX() + x_index]; //magic algorithm
+	}
+	else {
+		SDL_Rect temp = { 0,0,0,0 };
+		return &temp;
 	}
 }
 
@@ -146,6 +165,34 @@ int Level::IsTileCharCollidable(char tile_char) {
 	else {
 		return 0;
 	}
+}
+
+void Level::CollisionDebug(SDL_Rect* game_obj)
+{
+	std::vector<int> result;
+	for (int x = -1; x < GetNumVisibleTilesX() + 1; x++) {
+		for (int y = -1; y < GetNumVisibleTilesY() + 1; y++) {
+			int index = (y + 1) * GetNumVisibleTilesX() + (x + 1);
+			SDL_Rect* temp_ptr = &(visible_tile_dst_list_[index]);
+			if (CollisionManager::HaveCollidedAABB(game_obj, temp_ptr)) {
+				SetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()), '@');
+				result.push_back(index);
+			}
+		}
+	}
+	//for (int i = 0; i < visible_tile_dst_list_.size(); i++) {
+	//	SDL_Rect* temp_ptr = &(visible_tile_dst_list_[i]);
+	//	if (CollisionManager::HaveCollidedAABB(game_obj, temp_ptr)) {
+	//		std::cout << "X1 = " << game_obj->x << std::endl;
+	//		std::cout << "X2 = " << temp_ptr->x << std::endl;
+	//		level_raw_str_[i] = '@';
+	//		result.push_back(i);
+	//	}
+	//}
+	for (int i = 0; i < result.size(); i++) {
+		std::cout << result[i] << '\t';
+	}
+	std::cout << std::endl;
 }
 
 int Level::GetLevelWidth()

@@ -1,26 +1,27 @@
 #include "CollisionManager.h"
 
-
-
-bool CollisionManager::HaveCollidedAABB(const SDL_Rect& obj1, const SDL_Rect& obj2)
+bool CollisionManager::HaveCollidedAABB(SDL_Rect* obj1, SDL_Rect* obj2)
 {
 	// alternatively, use SDL_HasIntersection
-	/*if (SDL_HasIntersection(&p, &b))
-	{
-		g_isCol = true;
-	}*/
-	if (obj1.x + obj1.w < obj2.x) {
+	if (SDL_HasIntersection(obj1, obj2)) {
+		return true;
+	}
+	else {
 		return false;
 	}
-	if (obj1.x > obj2.x + obj2.w) {
-		return false;
-	}
-	if (obj1.y + obj1.h < obj2.y) {
-		return false;
-	}
-	if (obj1.y > obj2.y + obj2.h) {
-		return false;
-	}
+	//if (obj1->x + obj1->w < obj2->x) {
+	//	return false;
+	//}
+	//if (obj1->x > obj2->x + obj2->w) {
+	//	return false;
+	//}
+	//if (obj1->y + obj1->h < obj2->y) {
+	//	return false;
+	//}
+	//if (obj1->y > obj2->y + obj2->h) {
+	//	return false;
+	//}
+	
 	return true;
 }
 
