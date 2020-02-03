@@ -22,7 +22,7 @@ bool CollisionManager::HaveCollidedAABB(SDL_Rect* obj1, SDL_Rect* obj2)
 	//	return false;
 	//}
 	
-	return true;
+	//return true;
 }
 
 int CollisionManager::squaredDistance(glm::vec2 P1, glm::vec2 P2)

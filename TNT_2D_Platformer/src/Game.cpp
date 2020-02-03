@@ -54,8 +54,8 @@ void Game::createGameObjects()
 	level_ptr_->LoadLevel(getRenderer(), "church");
 
 	player_ptr_ = new Player(getRenderer());
-	player_ptr_->setDstX(0 * level_ptr_->GetTileWidth() + level_ptr_->GetTileWidth() / 2 - player_ptr_->getDstW() / 2);
-	player_ptr_->setDstY(0 * level_ptr_->GetTileHeight() + level_ptr_->GetTileHeight() / 2 - player_ptr_->getDstH() / 2);
+	player_ptr_->setDstX(2 * level_ptr_->GetTileWidth() + level_ptr_->GetTileWidth() / 2 - player_ptr_->getDstW() / 2);
+	player_ptr_->setDstY(3 * level_ptr_->GetTileHeight() + level_ptr_->GetTileHeight() / 2 - player_ptr_->getDstH() / 2);
 
 	// CENTER CAM TO PLAYER
 	level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
@@ -205,6 +205,8 @@ void Game::update()
 	//	std::cout << "(6) IS TRUE" << std::endl;
 	//}
 
+
+	level_ptr_->update();
 	// COLLISION
 	// INSPECT 4 POINTS OF COLLIDE BOX TO CHECK TILE INDEX AND CHECK COLLISION
 	int tile_index_left_x = level_ptr_->GetTileIndexFromPosX(player_ptr_->getCollideBoxX());
@@ -253,8 +255,10 @@ void Game::update()
 	std::cout << "next_tile_index_right_x = " << next_tile_index_right_x << std::endl;
 	std::cout << "next_tile_index_top_y = " << next_tile_index_top_y << std::endl;
 	std::cout << "next_tile_index_down_y = " << next_tile_index_down_y << std::endl;*/
-	
-	level_ptr_->CollisionDebug(player_ptr_->getCollideBox());
+	//std::cout << "index X = " << level_ptr_->GetTileIndexFromPosX(player_ptr_->getCollideBoxX()) << std::endl;
+	//std::cout << "index Y = " << level_ptr_->GetTileIndexFromPosY(player_ptr_->getCollideBoxY()) << std::endl;
+
+	//level_ptr_->CollisionDebug(player_ptr_->getCollideBox());
 
 
 	//if (CollisionManager::HaveCollidedAABB(player_ptr_->getCollideBox(), next_tile_obj_left) && !level_ptr_->IsTileCharCollidable(next_tile_char_left)) {
@@ -334,9 +338,10 @@ void Game::update()
 	//}
 
 	player_ptr_->update();
+	level_ptr_->update();
 
 	//std::cout << "PLAYER X = " << player_ptr_->getDstX()<< std::endl;
-	//std::cout << "CAM X = " << level_ptr_->GetCamPosX()<< std::endl;
+	std::cout << "CAM X = " << level_ptr_->GetCamPosX()<< std::endl;
 	//std::cout << "CURRTILE X = " << level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()) << std::endl;
 	//std::cout << "OFFSET Y = " << level_ptr_->GetLevelOffsetY() << std::endl;
 }

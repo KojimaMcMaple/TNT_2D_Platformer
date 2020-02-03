@@ -13,7 +13,14 @@ Level::~Level()
 
 void Level::update()
 {
-
+	int index = -1;
+	for (int x = -1; x < GetNumVisibleTilesX() + 1; x++) {
+		for (int y = -1; y < GetNumVisibleTilesY() + 1; y++) {
+			index = (y + 1) * GetNumVisibleTilesX() + (x + 1);
+			visible_tile_dst_list_[index].x = x * GetTileWidth() - GetTileOffsetX();
+			visible_tile_dst_list_[index].y = y * GetTileHeight() - GetTileOffsetY();
+		}
+	}
 }
 
 void Level::draw()
@@ -27,9 +34,10 @@ void Level::draw(SDL_Renderer* renderer)
 	for (int x = -1; x < GetNumVisibleTilesX()+1; x++) {
 		for (int y = -1; y < GetNumVisibleTilesY()+1; y++) {
 			index = (y+1) * GetNumVisibleTilesX() + (x+1);
-			visible_tile_dst_list_[index].x = x * GetTileWidth() - GetTileOffsetX();
-			visible_tile_dst_list_[index].y = y * GetTileHeight() - GetTileOffsetY();
 			tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
+			//if (x == -1 && y == -1) {
+			//	std::cout << "tile_char =" << tile_char << std::endl;
+			//}
 			switch (tile_char)
 			{
 			case 'G':
@@ -173,11 +181,29 @@ void Level::CollisionDebug(SDL_Rect* game_obj)
 	for (int x = -1; x < GetNumVisibleTilesX() + 1; x++) {
 		for (int y = -1; y < GetNumVisibleTilesY() + 1; y++) {
 			int index = (y + 1) * GetNumVisibleTilesX() + (x + 1);
-			SDL_Rect* temp_ptr = &(visible_tile_dst_list_[index]);
-			if (CollisionManager::HaveCollidedAABB(game_obj, temp_ptr)) {
-				SetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()), '@');
-				result.push_back(index);
-			}
+			//std::cout << "x = " << x << std::endl;
+			//std::cout << "y = " << y << std::endl;
+			//std::cout << "index = " << index << std::endl;
+			//std::cout << "X = " << visible_tile_dst_list_[index].x << std::endl;
+			//std::cout << "Y = " << visible_tile_dst_list_[index].y << std::endl;
+			//SDL_Rect* temp_ptr = &(visible_tile_dst_list_[index]);
+			//if (CollisionManager::HaveCollidedAABB(game_obj, temp_ptr)) {
+			//	std::cout << "X1 = " << game_obj->x << std::endl;
+			//	std::cout << "X2 = " << temp_ptr->x << std::endl;
+			//	SetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()), '@');
+			//	result.push_back(index);
+			//}
+			//else {
+			//	std::cout << "X1 = " << game_obj->x << std::endl;
+			//	std::cout << "X2 = " << temp_ptr->x << std::endl;
+			//}
+			//if (x == -1 && y == -1) {
+			//	std::cout << "x = " << x << std::endl;
+			//	std::cout << "y = " << y << std::endl;
+			//	std::cout << "index = " << index << std::endl;
+			//	std::cout << "X1 = " << game_obj->x << std::endl;
+			//	std::cout << "X2 = " << temp_ptr->x << std::endl;
+			//}
 		}
 	}
 	//for (int i = 0; i < visible_tile_dst_list_.size(); i++) {
@@ -189,10 +215,11 @@ void Level::CollisionDebug(SDL_Rect* game_obj)
 	//		result.push_back(i);
 	//	}
 	//}
-	for (int i = 0; i < result.size(); i++) {
-		std::cout << result[i] << '\t';
-	}
-	std::cout << std::endl;
+
+	//for (int i = 0; i < result.size(); i++) {
+	//	std::cout << result[i] << '\t';
+	//}
+	//std::cout << std::endl;
 }
 
 int Level::GetLevelWidth()

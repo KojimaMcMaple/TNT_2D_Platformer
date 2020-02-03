@@ -49,6 +49,7 @@ public:
 	char GetTileChar(int x_index, int y_index);
 	SDL_Rect* GetVisibleTileObj(int x_index, int y_index);
 	int IsTileCharCollidable(char tile_char); //0=solid block, 1=air/background, 2=consummables
+	//int CollisionDebug(SDL_Rect* game_obj);
 	void CollisionDebug(SDL_Rect* game_obj);
 	int GetLevelWidth();
 	int GetLevelHeight();
