@@ -24,8 +24,10 @@ private:
 	int velocity_y_;
 
 	// COLLISION
-	SDL_Rect collide_box_;
-	bool is_collide_box_visible = false;
+	SDL_Rect hit_box_;
+	int hit_box_manual_offset_x_ = 0;
+	int hit_box_manual_offset_y_ = 0;
+	bool is_hit_box_visible = true;
 	bool m_isColliding;
 	GameObjectType m_type;
 	SteeringState m_state;
@@ -77,16 +79,18 @@ public:
 	int getDstH();
 	int getDstCenterX();
 	int getDstCenterY();
-	SDL_Rect* getCollideBox();
-	int getCollideBoxX();
-	int getCollideBoxRightmostX();
-	int getCollideBoxY();
-	int getCollideBoxLowermostY();
-	int getCollideBoxW();
-	int getCollideBoxH();
-	int getCollideBoxCenterX();
-	int getCollideBoxCenterY();
-	bool isCollideBoxVisible();
+	SDL_Rect* getHitBox();
+	int getHitBoxX();
+	int getHitBoxRightmostX();
+	int getHitBoxY();
+	int getHitBoxLowermostY();
+	int getHitBoxW();
+	int getHitBoxH();
+	int getHitBoxCenterX();
+	int getHitBoxCenterY();
+	int getHitBoxOffsetX();
+	int getHitBoxOffsetY();
+	bool isHitBoxVisible();
 	bool getIsColliding();
 	std::string getTextureId();
 	int getCustomPivotX();
@@ -109,10 +113,14 @@ public:
 	void setDst(int x, int y, int w, int h);
 	void setDstX(int x);
 	void setDstY(int y);
-	void setCollideBox(int x, int y, int w, int h);
-	void setCollideBoxX(int coord);
-	void setCollideBoxY(int coord);
-	void setCollideBoxVisibility(bool toggle);
+	void setDstXAndHitBox(int x);
+	void setDstYAndHitBox(int y);
+	void setHitBox(int x, int y, int w, int h);
+	void setHitBoxX(int coord);
+	void setHitBoxY(int coord);	
+	void setHitBoxOffsetX(int coord);
+	void setHitBoxOffsetY(int coord);
+	void setHitBoxVisibility(bool toggle);
 	void setIsColliding(bool collision);
 	void setTextureId(std::string id); //cleanup is done by manager
 	void addSfxId(std::string id); //cleanup is done by manager

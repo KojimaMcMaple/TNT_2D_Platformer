@@ -64,54 +64,64 @@ int GameObject::getDstCenterY()
 	return dst_.y + dst_.h / 2;
 }
 
-SDL_Rect* GameObject::getCollideBox()
+SDL_Rect* GameObject::getHitBox()
 {
-	return &collide_box_;
+	return &hit_box_;
 }
 
-int GameObject::getCollideBoxX()
+int GameObject::getHitBoxX()
 {
-	return collide_box_.x;
+	return hit_box_.x;
 }
 
-int GameObject::getCollideBoxRightmostX()
+int GameObject::getHitBoxRightmostX()
 {
-	return collide_box_.x + collide_box_.w;
+	return hit_box_.x + hit_box_.w;
 }
 
-int GameObject::getCollideBoxY()
+int GameObject::getHitBoxY()
 {
-	return collide_box_.y;
+	return hit_box_.y;
 }
 
-int GameObject::getCollideBoxLowermostY()
+int GameObject::getHitBoxLowermostY()
 {
-	return collide_box_.y + collide_box_.h;
+	return hit_box_.y + hit_box_.h;
 }
 
-int GameObject::getCollideBoxW()
+int GameObject::getHitBoxW()
 {
-	return collide_box_.w;
+	return hit_box_.w;
 }
 
-int GameObject::getCollideBoxH()
+int GameObject::getHitBoxH()
 {
-	return collide_box_.h;
+	return hit_box_.h;
 }
 
-int GameObject::getCollideBoxCenterX()
+int GameObject::getHitBoxCenterX()
 {
-	return collide_box_.x + collide_box_.w / 2;
+	return hit_box_.x + hit_box_.w / 2;
 }
 
-int GameObject::getCollideBoxCenterY()
+int GameObject::getHitBoxCenterY()
 {
-	return collide_box_.y + collide_box_.h / 2;
+	return hit_box_.y + hit_box_.h / 2;
 }
 
-bool GameObject::isCollideBoxVisible()
+int GameObject::getHitBoxOffsetX()
 {
-	return is_collide_box_visible;
+	return hit_box_manual_offset_x_;
+}
+
+int GameObject::getHitBoxOffsetY()
+{
+	return hit_box_manual_offset_y_;
+}
+
+bool GameObject::isHitBoxVisible()
+{
+	return is_hit_box_visible;
 }
 
 std::string GameObject::getTextureId()
@@ -214,24 +224,46 @@ void GameObject::setDstY(int y)
 	dst_.y = y;
 }
 
-void GameObject::setCollideBox(int x, int y, int w, int h)
+void GameObject::setDstXAndHitBox(int x)
 {
-	collide_box_ = { x,y,w,h };
+	dst_.x = x;
+	setHitBoxX(getDstCenterX() - getHitBoxW() / 2 + getHitBoxOffsetX());
 }
 
-void GameObject::setCollideBoxX(int coord)
+void GameObject::setDstYAndHitBox(int y)
 {
-	collide_box_.x = coord;
+	dst_.y = y;
+	setHitBoxY(getDstCenterY() - getHitBoxH() / 2 + getHitBoxOffsetY());
 }
 
-void GameObject::setCollideBoxY(int coord)
+void GameObject::setHitBox(int x, int y, int w, int h)
 {
-	collide_box_.y = coord;
+	hit_box_ = { x,y,w,h };
 }
 
-void GameObject::setCollideBoxVisibility(bool toggle)
+void GameObject::setHitBoxX(int coord)
 {
-	is_collide_box_visible = toggle;
+	hit_box_.x = coord;
+}
+
+void GameObject::setHitBoxY(int coord)
+{
+	hit_box_.y = coord;
+}
+
+void GameObject::setHitBoxOffsetX(int coord)
+{
+	hit_box_manual_offset_x_ = coord;
+}
+
+void GameObject::setHitBoxOffsetY(int coord)
+{
+	hit_box_manual_offset_y_ = coord;
+}
+
+void GameObject::setHitBoxVisibility(bool toggle)
+{
+	is_hit_box_visible = toggle;
 }
 
 void GameObject::setTextureId(std::string id)

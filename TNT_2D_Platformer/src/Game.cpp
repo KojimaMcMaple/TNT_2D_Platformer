@@ -54,8 +54,8 @@ void Game::createGameObjects()
 	level_ptr_->LoadLevel(getRenderer(), "church");
 
 	player_ptr_ = new Player(getRenderer());
-	player_ptr_->setDstX(2 * level_ptr_->GetTileWidth() + level_ptr_->GetTileWidth() / 2 - player_ptr_->getDstW() / 2);
-	player_ptr_->setDstY(3 * level_ptr_->GetTileHeight() + level_ptr_->GetTileHeight() / 2 - player_ptr_->getDstH() / 2);
+	player_ptr_->setDstXAndHitBox(4 * level_ptr_->GetTileWidth() + level_ptr_->GetTileWidth() / 2 - player_ptr_->getDstW() / 2);
+	player_ptr_->setDstYAndHitBox(4 * level_ptr_->GetTileHeight() + level_ptr_->GetTileHeight() / 2 - player_ptr_->getDstH() / 2);
 
 	// CENTER CAM TO PLAYER
 	level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
@@ -183,100 +183,98 @@ void Game::update()
 		player_ptr_->setVelocityX(6);
 	}
 
-	//if (level_ptr_->GetCamPosX() == 0) {
-	//	std::cout << "(1) IS TRUE" << std::endl;
-	//}
-	//if (player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() <= Globals::sWindowWidth / 2) {
-	//	std::cout << "(2) IS TRUE" << std::endl;
-	//}
-	//if (level_ptr_->GetCamPosX() + Globals::sWindowWidth == level_ptr_->GetLevelMaxPosX()) {
-	//	std::cout << "(3) IS TRUE" << std::endl;
-	//}
-	//if (player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() >= Globals::sWindowWidth / 2) {
-	//	std::cout << "(4) IS TRUE" << std::endl;
-	//}
-	////else {
-	////	std::cout << "(4) IS FALSE WITH " << player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() << " " << level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2 << std::endl;
-	////}
-	//if (player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() > Globals::sWindowWidth / 2) {
-	//	std::cout << "(5) IS TRUE" << std::endl;
-	//}
-	//if (player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() < level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2) {
-	//	std::cout << "(6) IS TRUE" << std::endl;
-	//}
-
-
 	level_ptr_->update();
 	// COLLISION
-	// INSPECT 4 POINTS OF COLLIDE BOX TO CHECK TILE INDEX AND CHECK COLLISION
-	int tile_index_left_x = level_ptr_->GetTileIndexFromPosX(player_ptr_->getCollideBoxX());
-	int tile_index_right_x = level_ptr_->GetTileIndexFromPosX(player_ptr_->getCollideBoxRightmostX());
-	int tile_index_top_y = level_ptr_->GetTileIndexFromPosY(player_ptr_->getCollideBoxY());
-	int tile_index_down_y = level_ptr_->GetTileIndexFromPosY(player_ptr_->getCollideBoxLowermostY());
+	//level_ptr_->CollisionProcessing(player_ptr_->getHitBox());
+	//level_ptr_->CollisionDebug(player_ptr_->getHitBox());
+	// MOVE RIGHT
+	int index_left_x = level_ptr_->GetTileIndexFromPosX(player_ptr_->getHitBoxX() + level_ptr_->GetTileOffsetX()); //offset to handle screen-scrolling, fixed the issue of player not mapped correctly to an offseted tile
+	int index_right_x = level_ptr_->GetTileIndexFromPosX(player_ptr_->getHitBoxRightmostX() + level_ptr_->GetTileOffsetX());
+	int index_mid_x = (int)(index_left_x + index_right_x) / 2;
+	int index_top_y = level_ptr_->GetTileIndexFromPosY(player_ptr_->getHitBoxY() + level_ptr_->GetTileOffsetY());
+	int index_down_y = level_ptr_->GetTileIndexFromPosY(player_ptr_->getHitBoxLowermostY() + level_ptr_->GetTileOffsetY());
+	int index_mid_y = (int)(index_top_y + index_down_y) / 2; //player may occupy 3 vertical tiles so this is needed, fixed the issue of the center of player going through tiles
+	int next_index_left_x = index_left_x;
+	int next_index_right_x = index_right_x;
+	int next_index_top_y = index_top_y;
+	int next_index_down_y = index_down_y;
+	if (index_left_x > 0) {
+		next_index_left_x = index_left_x - 1;
+	}
+	if (index_right_x < level_ptr_->GetNumVisibleTilesX()) {
+		next_index_right_x = index_right_x + 1;
+	}
+	if (index_top_y > 0) {
+		next_index_top_y = index_top_y - 1;
+	}
+	if (index_down_y < level_ptr_->GetNumVisibleTilesY()) {
+		next_index_down_y = index_down_y + 1;
+	}
 
-	int next_tile_index_left_x = tile_index_left_x;
-	int next_tile_index_right_x = tile_index_right_x;
-	int next_tile_index_top_y = tile_index_top_y;
-	int next_tile_index_down_y = tile_index_down_y;
-
-	if (tile_index_left_x > 0) {
-		next_tile_index_left_x = tile_index_left_x - 1;
-	}
-	if (tile_index_right_x < level_ptr_->GetNumVisibleTilesX()) {
-		next_tile_index_right_x = tile_index_right_x + 1;
-	}
-	if (tile_index_top_y > 0) {
-		next_tile_index_top_y = tile_index_top_y - 1;
-	}
-	if (tile_index_down_y < level_ptr_->GetNumVisibleTilesY()) {
-		next_tile_index_down_y = tile_index_down_y + 1;
-	}
-
-	SDL_Rect* tile_obj_left = level_ptr_->GetVisibleTileObj(tile_index_left_x, tile_index_top_y);
-	SDL_Rect* tile_obj_right = level_ptr_->GetVisibleTileObj(tile_index_right_x, tile_index_top_y);
-	SDL_Rect* tile_obj_top = level_ptr_->GetVisibleTileObj(tile_index_left_x, tile_index_down_y);
-	SDL_Rect* tile_obj_down = level_ptr_->GetVisibleTileObj(tile_index_right_x, tile_index_down_y);
+	SDL_Rect* next_left_tile_top = level_ptr_->GetVisibleTileObj(next_index_left_x, index_top_y);
+	SDL_Rect* next_left_tile_mid = level_ptr_->GetVisibleTileObj(next_index_left_x, index_mid_y);
+	SDL_Rect* next_left_tile_down = level_ptr_->GetVisibleTileObj(next_index_left_x, index_down_y);
+	SDL_Rect* next_right_tile_top = level_ptr_->GetVisibleTileObj(next_index_right_x, index_top_y);
+	SDL_Rect* next_right_tile_mid = level_ptr_->GetVisibleTileObj(next_index_right_x, index_mid_y);
+	SDL_Rect* next_right_tile_down = level_ptr_->GetVisibleTileObj(next_index_right_x, index_down_y);
+	char next_left_tile_top_char = level_ptr_->GetTileChar(next_index_left_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), index_top_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
+	char next_left_tile_mid_char = level_ptr_->GetTileChar(next_index_left_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), index_mid_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
+	char next_left_tile_down_char = level_ptr_->GetTileChar(next_index_left_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), index_down_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
+	char next_right_tile_top_char = level_ptr_->GetTileChar(next_index_right_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), index_top_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
+	char next_right_tile_mid_char = level_ptr_->GetTileChar(next_index_right_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), index_mid_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
+	char next_right_tile_down_char = level_ptr_->GetTileChar(next_index_right_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), index_down_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
 	
-	SDL_Rect* next_tile_obj_left = level_ptr_->GetVisibleTileObj(next_tile_index_left_x, next_tile_index_top_y);
-	SDL_Rect* next_tile_obj_right = level_ptr_->GetVisibleTileObj(next_tile_index_right_x, next_tile_index_top_y);
-	SDL_Rect* next_tile_obj_top = level_ptr_->GetVisibleTileObj(next_tile_index_left_x, next_tile_index_down_y);
-	SDL_Rect* next_tile_obj_down = level_ptr_->GetVisibleTileObj(next_tile_index_right_x, next_tile_index_down_y);
-	
-	char next_tile_char_left = level_ptr_->GetTileChar(tile_index_left_x, tile_index_top_y);
-	char next_tile_char_right = level_ptr_->GetTileChar(tile_index_right_x, tile_index_top_y);
-	char next_tile_char_top = level_ptr_->GetTileChar(tile_index_left_x, tile_index_down_y);
-	char next_tile_char_down = level_ptr_->GetTileChar(tile_index_right_x, tile_index_down_y);
+	SDL_Rect* next_top_tile_left = level_ptr_->GetVisibleTileObj(index_left_x, next_index_top_y);
+	SDL_Rect* next_top_tile_mid = level_ptr_->GetVisibleTileObj(index_mid_x, next_index_top_y);
+	SDL_Rect* next_top_tile_right = level_ptr_->GetVisibleTileObj(index_right_x, next_index_top_y);	
+	SDL_Rect* next_down_tile_left = level_ptr_->GetVisibleTileObj(index_left_x, next_index_down_y);
+	SDL_Rect* next_down_tile_mid = level_ptr_->GetVisibleTileObj(index_mid_x, next_index_down_y);
+	SDL_Rect* next_down_tile_right = level_ptr_->GetVisibleTileObj(index_right_x, next_index_down_y);
+	char next_top_tile_left_char = level_ptr_->GetTileChar(index_left_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), next_index_top_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
+	char next_top_tile_mid_char = level_ptr_->GetTileChar(index_mid_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), next_index_top_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
+	char next_top_tile_right_char = level_ptr_->GetTileChar(index_right_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), next_index_top_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
+	char next_down_tile_left_char = level_ptr_->GetTileChar(index_left_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), next_index_down_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
+	char next_down_tile_mid_char = level_ptr_->GetTileChar(index_mid_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), next_index_down_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
+	char next_down_tile_right_char = level_ptr_->GetTileChar(index_right_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), next_index_down_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
 
-	/*std::cout << "tile_index_left_x = " << tile_index_left_x << std::endl;
-	std::cout << "tile_index_right_x = " << tile_index_right_x << std::endl;
-	std::cout << "tile_index_top_y = " << tile_index_top_y << std::endl;
-	std::cout << "tile_index_down_y = " << tile_index_down_y << std::endl;	
-	std::cout << "next_tile_index_left_x = " << next_tile_index_left_x << std::endl;
-	std::cout << "next_tile_index_right_x = " << next_tile_index_right_x << std::endl;
-	std::cout << "next_tile_index_top_y = " << next_tile_index_top_y << std::endl;
-	std::cout << "next_tile_index_down_y = " << next_tile_index_down_y << std::endl;*/
-	//std::cout << "index X = " << level_ptr_->GetTileIndexFromPosX(player_ptr_->getCollideBoxX()) << std::endl;
-	//std::cout << "index Y = " << level_ptr_->GetTileIndexFromPosY(player_ptr_->getCollideBoxY()) << std::endl;
-
-	//level_ptr_->CollisionDebug(player_ptr_->getCollideBox());
-
-
-	//if (CollisionManager::HaveCollidedAABB(player_ptr_->getCollideBox(), next_tile_obj_left) && !level_ptr_->IsTileCharCollidable(next_tile_char_left)) {
-	//	//player_ptr_->setVelocityX(0);
-	//	level_ptr_->SetTileChar(next_tile_index_left_x, next_tile_index_top_y, 'G');
-	//}
-	//if (CollisionManager::HaveCollidedAABB(player_ptr_->getCollideBox(), next_tile_obj_right) && !level_ptr_->IsTileCharCollidable(next_tile_char_right)) {
-	//	//player_ptr_->setVelocityX(0);
-	//	level_ptr_->SetTileChar(next_tile_index_right_x, next_tile_index_top_y, 'G');
-	//}
-	//if (CollisionManager::HaveCollidedAABB(player_ptr_->getCollideBox(), next_tile_obj_top) && !level_ptr_->IsTileCharCollidable(next_tile_char_top)) {
-	//	//player_ptr_->setVelocityY(0);
-	//	level_ptr_->SetTileChar(next_tile_index_left_x, next_tile_index_down_y, 'G');
-	//}
-	//if (CollisionManager::HaveCollidedAABB(player_ptr_->getCollideBox(), next_tile_obj_down) && !level_ptr_->IsTileCharCollidable(next_tile_char_down)) {
-	//	//player_ptr_->setVelocityY(0);
-	//	level_ptr_->SetTileChar(next_tile_index_right_x, next_tile_index_down_y, 'G');
-	//}
+	// MOVE LEFT
+	if (player_ptr_->getVelocityX() < 0) {
+		if ((CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_left_tile_top, player_ptr_->getVelocityX()) && level_ptr_->IsTileCharCollidable(next_left_tile_top_char) == 0) ||
+			(CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_left_tile_mid, player_ptr_->getVelocityX()) && level_ptr_->IsTileCharCollidable(next_left_tile_mid_char) == 0) ||
+			(CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_left_tile_down, player_ptr_->getVelocityX()) && level_ptr_->IsTileCharCollidable(next_left_tile_down_char) == 0)) {
+			player_ptr_->setVelocityX(0);
+		}
+	}
+	// MOVE RIGHT
+	if (player_ptr_->getVelocityX() > 0) {
+		if ((CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_right_tile_top, player_ptr_->getVelocityX()) && level_ptr_->IsTileCharCollidable(next_right_tile_top_char) == 0) ||
+			(CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_right_tile_mid, player_ptr_->getVelocityX()) && level_ptr_->IsTileCharCollidable(next_right_tile_mid_char) == 0) ||
+			(CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_right_tile_down, player_ptr_->getVelocityX()) && level_ptr_->IsTileCharCollidable(next_right_tile_down_char) == 0)) {
+			player_ptr_->setVelocityX(0);
+		}
+	}
+	// MOVE UP
+	if (player_ptr_->getVelocityY() < 0) {
+		if ((CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_top_tile_left, player_ptr_->getVelocityY()) && level_ptr_->IsTileCharCollidable(next_top_tile_left_char) == 0) ||
+			(CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_top_tile_mid, player_ptr_->getVelocityY()) && level_ptr_->IsTileCharCollidable(next_top_tile_mid_char) == 0) ||
+			(CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_top_tile_right, player_ptr_->getVelocityY()) && level_ptr_->IsTileCharCollidable(next_top_tile_right_char) == 0)) {
+			player_ptr_->setVelocityY(0);
+		}
+	}
+	// MOVE DOWN
+	if (player_ptr_->getVelocityY() > 0) {
+		if ((CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_down_tile_left, player_ptr_->getVelocityY()) && level_ptr_->IsTileCharCollidable(next_down_tile_left_char) == 0) ||
+			(CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_down_tile_mid, player_ptr_->getVelocityY()) && level_ptr_->IsTileCharCollidable(next_down_tile_mid_char) == 0) ||
+			(CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_down_tile_right, player_ptr_->getVelocityY()) && level_ptr_->IsTileCharCollidable(next_down_tile_right_char) == 0)) {
+			player_ptr_->setVelocityY(0);
+		}
+	}
+	/*std::cout << "left top = " << next_index_left_x << " " << index_top_y << " " << next_left_tile_top_char << std::endl;
+	std::cout << "left down = " << next_index_left_x << " " << index_down_y << " " << next_left_tile_down_char << std::endl;
+	std::cout << "right top = " << next_index_right_x << " " << index_top_y << " " << next_right_tile_top_char << std::endl;
+	std::cout << "right down = " << next_index_right_x << " " << index_down_y << " " << next_right_tile_down_char << std::endl;*/
+	//std::cout << "player Y = " << player_ptr_->getHitBoxY() << std::endl;
+	//std::cout << "tile Y = " << next_right_tile_top->y << std::endl;
 
 	// PRE-PROCESSING
 	int new_player_center_x = player_ptr_->getDstCenterX() + player_ptr_->getVelocityX();
@@ -291,14 +289,9 @@ void Game::update()
 	if ((level_ptr_->GetCamPosX() == 0 && new_player_center_x <= Globals::sWindowWidth / 2) ||
 		(level_ptr_->GetCamPosX() + Globals::sWindowWidth == level_ptr_->GetLevelMaxPosX() && new_player_center_x >= Globals::sWindowWidth / 2)) //WILL NOT WORK W/ player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() > level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2
 	{
-		//if (player_ptr_->getCollideBoxX() + player_ptr_->getVelocityX() >= 0 && player_ptr_->getCollideBoxRightmostX() + player_ptr_->getVelocityX() <= Globals::sWindowWidth) {
-		//	new_player_pos_x += player_ptr_->getVelocityX();
-		//}
-		if (player_ptr_->getCollideBoxX() + player_ptr_->getVelocityX() >= 0 && player_ptr_->getCollideBoxRightmostX() + player_ptr_->getVelocityX() <= Globals::sWindowWidth) {
-			
+		if (player_ptr_->getHitBoxX() + player_ptr_->getVelocityX() >= 0 && player_ptr_->getHitBoxRightmostX() + player_ptr_->getVelocityX() <= Globals::sWindowWidth) {
 			new_player_pos_x += player_ptr_->getVelocityX();
 		}
-		//char tile_char = level_ptr_->GetTileChar(level_ptr_->GetTileIndexFromPosX(player_ptr_->getCollideBoxX()), level_ptr_->GetTileIndexFromPosY(player_ptr_->getCollideBoxY()));
 		//player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocityX());
 	}
 	else {
@@ -309,7 +302,7 @@ void Game::update()
 	if ((level_ptr_->GetCamPosY() == 0 && new_player_center_y <= Globals::sWindowHeight / 2) ||
 		(level_ptr_->GetCamPosY() + Globals::sWindowHeight == level_ptr_->GetLevelMaxPosY() && new_player_center_y >= Globals::sWindowHeight / 2))
 	{
-		if (player_ptr_->getCollideBoxY() + player_ptr_->getVelocityY() >= 0 && player_ptr_->getCollideBoxLowermostY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight) {
+		if (player_ptr_->getHitBoxY() + player_ptr_->getVelocityY() >= 0 && player_ptr_->getHitBoxLowermostY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight) {
 			new_player_pos_y += player_ptr_->getVelocityY();
 		}
 		//player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
@@ -319,8 +312,8 @@ void Game::update()
 		//level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
 	}
 
-	player_ptr_->setDstX(new_player_pos_x);
-	player_ptr_->setDstY(new_player_pos_y);
+	player_ptr_->setDstXAndHitBox(new_player_pos_x);
+	player_ptr_->setDstYAndHitBox(new_player_pos_y);
 	level_ptr_->SetCamPosX(new_cam_pos_x);
 	level_ptr_->SetCamPosY(new_cam_pos_y);
 
@@ -337,12 +330,12 @@ void Game::update()
 	//	level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
 	//}
 
-	player_ptr_->update();
+	//player_ptr_->update();
 	level_ptr_->update();
 
 	//std::cout << "PLAYER X = " << player_ptr_->getDstX()<< std::endl;
-	std::cout << "CAM X = " << level_ptr_->GetCamPosX()<< std::endl;
-	//std::cout << "CURRTILE X = " << level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()) << std::endl;
+	//std::cout << "CAM X = " << level_ptr_->GetCamPosX()<< std::endl;
+	//std::cout << "CURRTILE X = " << level_ptr_->GetWorldTileIndexFromPosX(level_ptr_->GetCamPosX()) << std::endl;
 	//std::cout << "OFFSET Y = " << level_ptr_->GetLevelOffsetY() << std::endl;
 }
 

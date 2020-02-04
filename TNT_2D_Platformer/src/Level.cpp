@@ -13,7 +13,6 @@ Level::~Level()
 
 void Level::update()
 {
-	int index = -1;
 	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
 		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
 			visible_tile_dst_list_[x][y].x = x * GetTileWidth() - GetTileOffsetX();
@@ -28,7 +27,6 @@ void Level::draw()
 
 void Level::draw(SDL_Renderer* renderer)
 {
-	int index = -1;
 	char tile_char = ' ';
 	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
 		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
@@ -89,11 +87,11 @@ void Level::LoadLevel(SDL_Renderer* renderer, std::string level_id)
 		level_raw_str += "................................................................";
 		level_raw_str += "G.G....ooooo....................................................";
 		level_raw_str += "........ooo.....................................................";
-		level_raw_str += ".......................########.................................";
+		level_raw_str += "G.G....................########.................................";
 		level_raw_str += ".....BB?BBBB?BB.......###..............#.#......................";
-		level_raw_str += "....................###................#.#......................";
-		level_raw_str += ".................X.####.........................................";
-		level_raw_str += "G.G.G.GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG.#############......########";
+		level_raw_str += "G.G.................###................#.#......................";
+		level_raw_str += "...................####.........................................";
+		level_raw_str += "G.G.G.GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG.##########.........########";
 		level_raw_str += "........................############.#...............###........";
 		level_raw_str += "........................#............#............###...........";
 		level_raw_str += "........................#............#.........###..............";
@@ -158,7 +156,7 @@ char Level::GetTileChar(int x_index, int y_index)
 SDL_Rect* Level::GetVisibleTileObj(int x_index, int y_index)
 {
 	if (x_index > -1 && x_index < GetNumVisibleTilesX() && y_index > -1 && y_index < GetNumVisibleTilesY()) { // check bounds just in case
-		return &visible_tile_dst_list_[x_index][y_index]; //magic algorithm
+		return &visible_tile_dst_list_[x_index][y_index];
 	}
 	else {
 		SDL_Rect temp = { 0,0,0,0 };
@@ -168,32 +166,116 @@ SDL_Rect* Level::GetVisibleTileObj(int x_index, int y_index)
 
 int Level::IsTileCharCollidable(char tile_char) {
 	//0=solid block, 1=air/background, 2=consummables
-	if (tile_char == '.') {
-		return 1;
-	}
-	else {
+	if (tile_char == 'G' || tile_char == '#' || tile_char == '@') {
 		return 0;
 	}
+	else {
+		return 1;
+	}
+}
+
+bool Level::WillCollideAABB(SDL_Rect* game_obj, int velocity)
+{
+	char tile_char = ' ';
+	std::vector<int> result;
+	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
+		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
+			tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
+			if (IsTileCharCollidable(tile_char) == 0) {
+				if (CollisionManager::WillCollideAABB(game_obj, &(visible_tile_dst_list_[x][y]), velocity)) {
+					return true;
+				}
+			}
+			
+		}
+	}
+	return false;
+}
+
+bool Level::WillCollideRight(SDL_Rect* game_obj, int velocity)
+{
+	char tile_char = ' ';
+	std::vector<int> result;
+	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
+		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
+			tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
+			if (IsTileCharCollidable(tile_char) == 0) {
+				if (CollisionManager::WillCollideRight(game_obj, &(visible_tile_dst_list_[x][y]), velocity)) {
+					return true;
+				}
+			}
+			
+		}
+	}
+	return false;
+}
+
+
+bool Level::WillCollideLeft(SDL_Rect* game_obj, int velocity)
+{
+	char tile_char = ' ';
+	std::vector<int> result;
+	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
+		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
+			if (CollisionManager::WillCollideLeft(game_obj, &(visible_tile_dst_list_[x][y]), velocity)) {
+				tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
+				if (IsTileCharCollidable(tile_char) == 0) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool Level::WillCollideTop(SDL_Rect* game_obj, int velocity)
+{
+	char tile_char = ' ';
+	std::vector<int> result;
+	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
+		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
+			if (CollisionManager::WillCollideTop(game_obj, &(visible_tile_dst_list_[x][y]), velocity)) {
+				tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
+				if (IsTileCharCollidable(tile_char) == 0) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool Level::WillCollideDown(SDL_Rect* game_obj, int velocity)
+{
+	char tile_char = ' ';
+	std::vector<int> result;
+	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
+		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
+			if (CollisionManager::WillCollideDown(game_obj, &(visible_tile_dst_list_[x][y]), velocity)) {
+				tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
+				if (IsTileCharCollidable(tile_char) == 0) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
 
 void Level::CollisionDebug(SDL_Rect* game_obj)
 {
 	std::vector<int> result;
-	for (int x = -1; x < GetNumVisibleTilesX() + 1; x++) {
-		for (int y = -1; y < GetNumVisibleTilesY() + 1; y++) {
-			int index = (y + 1) * GetNumVisibleTilesX() + (x + 1);
+	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
+		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
 			//std::cout << "x = " << x << std::endl;
 			//std::cout << "y = " << y << std::endl;
 			//std::cout << "index = " << index << std::endl;
 			//std::cout << "X = " << visible_tile_dst_list_[index].x << std::endl;
 			//std::cout << "Y = " << visible_tile_dst_list_[index].y << std::endl;
-			//SDL_Rect* temp_ptr = &(visible_tile_dst_list_[index]);
-			//if (CollisionManager::HaveCollidedAABB(game_obj, temp_ptr)) {
-			//	std::cout << "X1 = " << game_obj->x << std::endl;
-			//	std::cout << "X2 = " << temp_ptr->x << std::endl;
-			//	SetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()), '@');
-			//	result.push_back(index);
-			//}
+			if (CollisionManager::HaveCollidedAABB(game_obj, &(visible_tile_dst_list_[x][y]))) {
+				SetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()), '@');
+				result.push_back(x);
+			}
 			//else {
 			//	std::cout << "X1 = " << game_obj->x << std::endl;
 			//	std::cout << "X2 = " << temp_ptr->x << std::endl;
@@ -207,20 +289,6 @@ void Level::CollisionDebug(SDL_Rect* game_obj)
 			//}
 		}
 	}
-	//for (int i = 0; i < visible_tile_dst_list_.size(); i++) {
-	//	SDL_Rect* temp_ptr = &(visible_tile_dst_list_[i]);
-	//	if (CollisionManager::HaveCollidedAABB(game_obj, temp_ptr)) {
-	//		std::cout << "X1 = " << game_obj->x << std::endl;
-	//		std::cout << "X2 = " << temp_ptr->x << std::endl;
-	//		level_raw_str_[i] = '@';
-	//		result.push_back(i);
-	//	}
-	//}
-
-	//for (int i = 0; i < result.size(); i++) {
-	//	std::cout << result[i] << '\t';
-	//}
-	//std::cout << std::endl;
 }
 
 int Level::GetLevelWidth()
