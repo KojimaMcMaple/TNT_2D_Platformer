@@ -5,6 +5,7 @@ Game* Game::s_pInstance = 0;
 
 Game::Game()
 {
+	SetJumpKeyPressable(true);
 }
 
 Game::~Game()
@@ -31,6 +32,11 @@ int Game::GetOffsetPositionY()
 	return offset_position_y_;
 }
 
+bool Game::IsJumpKeyPressable()
+{
+	return is_jump_key_pressable_;
+}
+
 void Game::SetOffsetPositionX(int x_distance)
 {
 	offset_position_x_ = x_distance;
@@ -39,6 +45,11 @@ void Game::SetOffsetPositionX(int x_distance)
 void Game::SetOffsetPositionY(int y_distance)
 {
 	offset_position_y_ = y_distance;
+}
+
+void Game::SetJumpKeyPressable(bool toggle)
+{
+	is_jump_key_pressable_ = toggle;
 }
 
 glm::vec2 Game::getMousePosition()
@@ -162,17 +173,13 @@ void Game::handleEvents()
 			}
 			break;
 		case SDL_KEYUP:
-			switch (event.key.keysym.sym) {
-			case SDLK_a:
+			if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_RIGHT) {
 				player_ptr_->setAccelerationX(0);
-				break;
-			case SDLK_d:
-				player_ptr_->setAccelerationX(0);
-				break;
-			case SDLK_SPACE:
-				
-				break;
 			}
+			if (event.key.keysym.sym == SDLK_SPACE) {
+				SetJumpKeyPressable(true);
+			}
+			break;
 		default:
 			break;
 		}
@@ -198,7 +205,8 @@ void Game::update()
 		player_ptr_->setMoveDirection(1);
 		player_ptr_->MoveX();
 	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE)) {
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->isGrounded()) {
+		SetJumpKeyPressable(false);
 		player_ptr_->setAccelerationY(-Globals::sJumpForce);
 		player_ptr_->setGrounded(false);
 	}
@@ -341,7 +349,8 @@ void Game::update()
 	level_ptr_->SetCamPosX(new_cam_pos_x);
 	level_ptr_->SetCamPosY(new_cam_pos_y);
 
-	//std::cout << "vel Y = " << player_ptr_->getVelocityY() << std::endl;
+	//std::cout << "getAccelerationX = " << player_ptr_->getAccelerationX() << std::endl;
+	//std::cout << "getVelocityX = " << player_ptr_->getVelocityX() << std::endl;
 
 	//player_ptr_->update();
 	level_ptr_->update();

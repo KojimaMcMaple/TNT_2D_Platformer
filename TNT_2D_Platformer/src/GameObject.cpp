@@ -124,6 +124,11 @@ bool GameObject::isHitBoxVisible()
 	return is_hit_box_visible_;
 }
 
+bool GameObject::isGrounded()
+{
+	return is_grounded_;
+}
+
 std::string GameObject::getTextureId()
 {
 	return texture_id_;
@@ -313,7 +318,7 @@ void GameObject::setHitBoxVisibility(bool toggle)
 
 void GameObject::setGrounded(bool toggle)
 {
-	is_on_ground_ = toggle;
+	is_grounded_ = toggle;
 }
 
 void GameObject::setTextureId(std::string id)

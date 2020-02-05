@@ -38,7 +38,7 @@ private:
 	int hit_box_manual_offset_x_ = 0;
 	int hit_box_manual_offset_y_ = 0;
 	bool is_hit_box_visible_ = true;
-	bool is_on_ground_ = false;
+	bool is_grounded_ = false;
 	bool m_isColliding;
 	GameObjectType m_type;
 	SteeringState m_state;
@@ -102,7 +102,7 @@ public:
 	int getHitBoxOffsetX();
 	int getHitBoxOffsetY();
 	bool isHitBoxVisible();
-	bool isOnGround();
+	bool isGrounded();
 	bool getIsColliding();
 	std::string getTextureId();
 	int getCustomPivotX();

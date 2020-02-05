@@ -49,10 +49,12 @@ public:
 	SDL_Renderer* getRenderer();
 	int GetOffsetPositionX();
 	int GetOffsetPositionY();
+	bool IsJumpKeyPressable();
 
 	// setters
 	void SetOffsetPositionX(int x_distance);
 	void SetOffsetPositionY(int y_distance);
+	void SetJumpKeyPressable(bool toggle);
 
 	// REDUNDANT
 	glm::vec2 getMousePosition();
@@ -76,6 +78,7 @@ private:
 	void createGameObjects();
 
 	// Movement offset
+	bool is_jump_key_pressable_ = true;
 	int offset_position_x_;
 	int offset_position_y_;
 
