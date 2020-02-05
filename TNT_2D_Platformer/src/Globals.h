@@ -6,4 +6,6 @@ public:
 	static int sDelayTime;
 	static int sWindowWidth;
 	static int sWindowHeight;
+	static float sGravity;
+	static float sJumpForce;
 };

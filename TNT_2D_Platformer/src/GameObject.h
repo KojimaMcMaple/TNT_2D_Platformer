@@ -7,6 +7,7 @@
 #include <vector>
 #include <SDL.h>
 
+#include "Globals.h"
 #include "GameObjectType.h"
 #include "SteeringState.h"
 
@@ -20,14 +21,24 @@ private:
 	std::vector<std::string> sfx_id_list_;
 
 	// PHYSICS
-	int velocity_x_;
-	int velocity_y_;
+	float velocity_x_ = 0.0f;
+	float velocity_y_= 0.0f;
+	float max_velocity_x_ = 0.0f;
+	float max_velocity_y_= 0.0f;
+	float acceleration_x_= 0.0f;
+	float acceleration_y_= 0.0f;
+	float max_acceleration_x_= 0.0f;
+	float max_acceleration_y_= 0.0f;
+	float drag_= 0.0f;
+	float gravity_= 0.0f;
+	int move_direction_ = 1;
 
 	// COLLISION
 	SDL_Rect hit_box_;
 	int hit_box_manual_offset_x_ = 0;
 	int hit_box_manual_offset_y_ = 0;
-	bool is_hit_box_visible = true;
+	bool is_hit_box_visible_ = true;
+	bool is_on_ground_ = false;
 	bool m_isColliding;
 	GameObjectType m_type;
 	SteeringState m_state;
@@ -91,12 +102,22 @@ public:
 	int getHitBoxOffsetX();
 	int getHitBoxOffsetY();
 	bool isHitBoxVisible();
+	bool isOnGround();
 	bool getIsColliding();
 	std::string getTextureId();
 	int getCustomPivotX();
 	int getCustomPivotY();
-	int getVelocityX();
-	int getVelocityY();
+	float getVelocityX();
+	float getVelocityY();
+	float getMaxVelocityX();
+	float getMaxVelocityY();
+	float getAccelerationX();
+	float getAccelerationY();
+	float getMaxAccelerationX();
+	float getMaxAccelerationY();
+	float getDrag();
+	float getGravity();
+	int getMoveDirection();
 	GameObjectType getType();
 	SteeringState getSteeringState();
 	glm::vec2 getPosition();
@@ -121,13 +142,23 @@ public:
 	void setHitBoxOffsetX(int coord);
 	void setHitBoxOffsetY(int coord);
 	void setHitBoxVisibility(bool toggle);
+	void setGrounded(bool toggle);
 	void setIsColliding(bool collision);
 	void setTextureId(std::string id); //cleanup is done by manager
 	void addSfxId(std::string id); //cleanup is done by manager
 	void setCustomPivotX(int coord);
 	void setCustomPivotY(int coord);
-	void setVelocityX(int velocity);
-	void setVelocityY(int velocity);
+	void setVelocityX(float value);
+	void setVelocityY(float value);
+	void setMaxVelocityX(float value);
+	void setMaxVelocityY(float value);
+	void setAccelerationX(float value);
+	void setAccelerationY(float value);
+	void setMaxAccelerationX(float value);
+	void setMaxAccelerationY(float value);
+	void setDrag(float value);
+	void setGravity(float value);
+	void setMoveDirection(int value);
 	void setType(GameObjectType newType);
 	void setSteeringState(SteeringState newState);
 	void setAcceleration(glm::vec2 newAcceleration);

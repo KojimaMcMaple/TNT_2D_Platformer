@@ -19,26 +19,49 @@ Player::Player(SDL_Renderer* renderer)
 	setHitBoxOffsetY(10);
 	//setHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
 	setIsColliding(true);
+	setGrounded(false);
+	setAccelerationX(0);
+	setAccelerationY(0);
+	setVelocityX(0);
+	setVelocityY(0);
+	setGravity(Globals::sGravity);
+	setMaxAccelerationX(2.0);
+	setMaxAccelerationY(2.0);
+	setMaxVelocityX(6.0);
+	setMaxVelocityY(getGravity());
+	setDrag(0.9);
+	setMoveDirection(1);
 	setType(GameObjectType::PLAYER);
 
 	/*TheSoundManager::Instance()->load("../Assets/audio/engine.ogg",
 		"engine", sound_type::SOUND_MUSIC);
 
 	TheSoundManager::Instance()->playMusic("engine", -1);*/
-
-	// CHEAT CODES
-	//setCustomPivotX(25*3);
-	//setCustomPivotY(20*3);
 }
 
+void Player::MoveX() 
+{
+	setAccelerationX(getAccelerationX() + 0.1 * getMoveDirection());
+}
 
 void Player::update()
 {
-	setHitBoxX(getDstCenterX() - getHitBoxW() / 2 + getHitBoxOffsetX());
-	setHitBoxY(getDstCenterY() - getHitBoxH() / 2 + getHitBoxOffsetY());
+	setAccelerationX(std::min(std::max(getAccelerationX(), -getMaxAccelerationX()), getMaxAccelerationX()));
+	setVelocityX((getVelocityX() + getAccelerationX()) * getDrag());
+	setVelocityX(std::min(std::max(getVelocityX(), -getMaxVelocityX()), getMaxVelocityX()));
+	//setDstX(getDstX() + (int)getVelocityX());
+
+	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity() / 3));
+	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY() * 3), getMaxVelocityY()));
+	//std::cout << "getVelocityY = " << getVelocityY() << std::endl;
+	//std::cout << "-1*getMaxVelocityY()*10 = " << -1 * getMaxVelocityY() * 10 << std::endl;
+	//std::cout << "getMaxVelocityY = " << getMaxVelocityY() << std::endl;
+	//std::cout << "std::max(getVelocityY(), -1*getMaxVelocityY()*10) = " << std::max(getVelocityY(), -1 * getMaxVelocityY() * 10) << std::endl;
 	
-	/*glm::vec2 mouseVector = TheGame::Instance()->getMousePosition();
-	setPosition(glm::vec2(mouseVector.x, getPosition().y));*/
+	//setDstY(getDstY() + (int)getVelocityY());
+	
+	//setHitBoxX(getDstCenterX() - getHitBoxW() / 2 + getHitBoxOffsetX());
+	//setHitBoxY(getDstCenterY() - getHitBoxH() / 2 + getHitBoxOffsetY());
 }
 
 void Player::draw()

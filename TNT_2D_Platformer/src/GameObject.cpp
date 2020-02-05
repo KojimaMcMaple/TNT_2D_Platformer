@@ -121,7 +121,7 @@ int GameObject::getHitBoxOffsetY()
 
 bool GameObject::isHitBoxVisible()
 {
-	return is_hit_box_visible;
+	return is_hit_box_visible_;
 }
 
 std::string GameObject::getTextureId()
@@ -139,14 +139,59 @@ int GameObject::getCustomPivotY()
 	return custom_pivot_y_;
 }
 
-int GameObject::getVelocityX()
+float GameObject::getVelocityX()
 {
 	return velocity_x_;
 }
 
-int GameObject::getVelocityY()
+float GameObject::getVelocityY()
 {
 	return velocity_y_;
+}
+
+float GameObject::getMaxVelocityX()
+{
+	return max_velocity_x_;
+}
+
+float GameObject::getMaxVelocityY()
+{
+	return max_velocity_y_;
+}
+
+float GameObject::getAccelerationX()
+{
+	return acceleration_x_;
+}
+
+float GameObject::getAccelerationY()
+{
+	return acceleration_y_;
+}
+
+float GameObject::getMaxAccelerationX()
+{
+	return max_acceleration_x_;
+}
+
+float GameObject::getMaxAccelerationY()
+{
+	return max_acceleration_y_;
+}
+
+float GameObject::getDrag()
+{
+	return drag_;
+}
+
+float GameObject::getGravity()
+{
+	return gravity_;
+}
+
+int GameObject::getMoveDirection()
+{
+	return move_direction_;
 }
 
 glm::vec2 GameObject::getPosition()
@@ -263,7 +308,12 @@ void GameObject::setHitBoxOffsetY(int coord)
 
 void GameObject::setHitBoxVisibility(bool toggle)
 {
-	is_hit_box_visible = toggle;
+	is_hit_box_visible_ = toggle;
+}
+
+void GameObject::setGrounded(bool toggle)
+{
+	is_on_ground_ = toggle;
 }
 
 void GameObject::setTextureId(std::string id)
@@ -286,14 +336,59 @@ void GameObject::setCustomPivotY(int coord)
 	custom_pivot_y_ = coord;
 }
 
-void GameObject::setVelocityX(int velocity)
+void GameObject::setVelocityX(float value)
 {
-	velocity_x_ = velocity;
+	velocity_x_ = value;
 }
 
-void GameObject::setVelocityY(int velocity)
+void GameObject::setVelocityY(float value)
 {
-	velocity_y_ = velocity;
+	velocity_y_ = value;
+}
+
+void GameObject::setMaxVelocityX(float value)
+{
+	max_velocity_x_ = value;
+}
+
+void GameObject::setMaxVelocityY(float value)
+{
+	max_velocity_y_ = value;
+}
+
+void GameObject::setAccelerationX(float value)
+{
+	acceleration_x_ = value;
+}
+
+void GameObject::setAccelerationY(float value)
+{
+	acceleration_y_ = value;
+}
+
+void GameObject::setMaxAccelerationX(float value)
+{
+	max_acceleration_x_ = value;
+}
+
+void GameObject::setMaxAccelerationY(float value)
+{
+	max_acceleration_y_ = value;
+}
+
+void GameObject::setDrag(float value)
+{
+	drag_ = value;
+}
+
+void GameObject::setGravity(float value)
+{
+	gravity_ = value;
+}
+
+void GameObject::setMoveDirection(int value)
+{
+	move_direction_ = value;
 }
 
 void GameObject::setPosition(glm::vec2 newPosition)

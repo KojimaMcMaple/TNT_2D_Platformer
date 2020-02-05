@@ -60,6 +60,7 @@ void Game::createGameObjects()
 	// CENTER CAM TO PLAYER
 	level_ptr_->SetCamPosX(player_ptr_->getDstX() - Globals::sWindowWidth / 2 + player_ptr_->getDstW() / 2);
 	level_ptr_->SetCamPosY(player_ptr_->getDstY() - Globals::sWindowHeight / 2 + player_ptr_->getDstH() / 2);
+	level_ptr_->update();
 	//std::cout << TheTextureManager::Instance();
 }
 
@@ -156,36 +157,57 @@ void Game::handleEvents()
 			case SDLK_ESCAPE:
 				m_bRunning = false;
 				break;
+			default:
+				break;
 			}
 			break;
+		case SDL_KEYUP:
+			switch (event.key.keysym.sym) {
+			case SDLK_a:
+				player_ptr_->setAccelerationX(0);
+				break;
+			case SDLK_d:
+				player_ptr_->setAccelerationX(0);
+				break;
+			case SDLK_SPACE:
+				
+				break;
+			}
 		default:
 			break;
 		}
 	}
+
+	// PROCESSING, HAPPENS WHEN KEYS ARE HELD DOWN
+	//if (s_pInstance->isKeyDown(SDL_SCANCODE_W) || s_pInstance->isKeyDown(SDL_SCANCODE_UP)) {
+	//	player_ptr_->setVelocityY(-6);
+	//}
+	//if (s_pInstance->isKeyDown(SDL_SCANCODE_S) || s_pInstance->isKeyDown(SDL_SCANCODE_DOWN)) {
+	//	player_ptr_->setVelocityY(6);
+	//}
+	
 }
 
 void Game::update()
 {
-	player_ptr_->setVelocityX(0);
-	player_ptr_->setVelocityY(0);
-
-	// PROCESSING, HAPPENS WHEN KEYS ARE HELD DOWN
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_W) || s_pInstance->isKeyDown(SDL_SCANCODE_UP)) {
-		player_ptr_->setVelocityY(-6);
-	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_S) || s_pInstance->isKeyDown(SDL_SCANCODE_DOWN)) {
-		player_ptr_->setVelocityY(6);
-	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
-		player_ptr_->setVelocityX(-6);
+		player_ptr_->setMoveDirection(-1);
+		player_ptr_->MoveX();
 	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
-		player_ptr_->setVelocityX(6);
+		player_ptr_->setMoveDirection(1);
+		player_ptr_->MoveX();
+	}
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE)) {
+		player_ptr_->setAccelerationY(-Globals::sJumpForce);
+		player_ptr_->setGrounded(false);
 	}
 
-	level_ptr_->update();
+	player_ptr_->update();
+	player_ptr_->setAccelerationY(0);
+	//std::cout << "vel Y = " << player_ptr_->getVelocityY() << std::endl;
+
 	// COLLISION
-	//level_ptr_->CollisionProcessing(player_ptr_->getHitBox());
 	//level_ptr_->CollisionDebug(player_ptr_->getHitBox());
 	// MOVE RIGHT
 	int index_left_x = level_ptr_->GetTileIndexFromPosX(player_ptr_->getHitBoxX() + level_ptr_->GetTileOffsetX()); //offset to handle screen-scrolling, fixed the issue of player not mapped correctly to an offseted tile
@@ -253,6 +275,7 @@ void Game::update()
 			player_ptr_->setVelocityX(0);
 		}
 	}
+
 	// MOVE UP
 	if (player_ptr_->getVelocityY() < 0) {
 		if ((CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_top_tile_left, player_ptr_->getVelocityY()) && level_ptr_->IsTileCharCollidable(next_top_tile_left_char) == 0) ||
@@ -267,6 +290,7 @@ void Game::update()
 			(CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_down_tile_mid, player_ptr_->getVelocityY()) && level_ptr_->IsTileCharCollidable(next_down_tile_mid_char) == 0) ||
 			(CollisionManager::WillCollideAABB(player_ptr_->getHitBox(), next_down_tile_right, player_ptr_->getVelocityY()) && level_ptr_->IsTileCharCollidable(next_down_tile_right_char) == 0)) {
 			player_ptr_->setVelocityY(0);
+			player_ptr_->setGrounded(true);
 		}
 	}
 	/*std::cout << "left top = " << next_index_left_x << " " << index_top_y << " " << next_left_tile_top_char << std::endl;
@@ -317,26 +341,10 @@ void Game::update()
 	level_ptr_->SetCamPosX(new_cam_pos_x);
 	level_ptr_->SetCamPosY(new_cam_pos_y);
 
-	//if ((level_ptr_->GetCamPosX() == 0 && new_player_center_x <= Globals::sWindowWidth / 2) ||
-	//	(level_ptr_->GetCamPosX() + Globals::sWindowWidth == level_ptr_->GetLevelMaxPosX() && new_player_center_x >= Globals::sWindowWidth / 2) ||
-	//	(level_ptr_->GetCamPosY() == 0 && new_player_center_y <= Globals::sWindowHeight / 2) ||
-	//	(level_ptr_->GetCamPosY() + Globals::sWindowHeight == level_ptr_->GetLevelMaxPosY() && new_cam_pos_y >= Globals::sWindowHeight / 2))
-	//{
-	//	player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocityX());
-	//	player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
-	//}
-	//else {
-	//	level_ptr_->SetCamPosX(level_ptr_->GetCamPosX() + player_ptr_->getVelocityX());
-	//	level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
-	//}
+	//std::cout << "vel Y = " << player_ptr_->getVelocityY() << std::endl;
 
 	//player_ptr_->update();
 	level_ptr_->update();
-
-	//std::cout << "PLAYER X = " << player_ptr_->getDstX()<< std::endl;
-	//std::cout << "CAM X = " << level_ptr_->GetCamPosX()<< std::endl;
-	//std::cout << "CURRTILE X = " << level_ptr_->GetWorldTileIndexFromPosX(level_ptr_->GetCamPosX()) << std::endl;
-	//std::cout << "OFFSET Y = " << level_ptr_->GetLevelOffsetY() << std::endl;
 }
 
 void Game::render()

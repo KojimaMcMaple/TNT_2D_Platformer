@@ -85,13 +85,13 @@ void Level::LoadLevel(SDL_Renderer* renderer, std::string level_id)
 	if (level_id == "church") {
 		level_raw_str += "G.G.............................................................";
 		level_raw_str += "................................................................";
-		level_raw_str += "G.G....ooooo....................................................";
-		level_raw_str += "........ooo.....................................................";
-		level_raw_str += "G.G....................########.................................";
-		level_raw_str += ".....BB?BBBB?BB.......###..............#.#......................";
-		level_raw_str += "G.G.................###................#.#......................";
+		level_raw_str += "G.G.............................................................";
+		level_raw_str += "................................................................";
+		level_raw_str += "G......................########.................................";
+		level_raw_str += "......................###..............#.#......................";
+		level_raw_str += "G...................###................#.#......................";
 		level_raw_str += "...................####.........................................";
-		level_raw_str += "G.G.G.GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG.##########.........########";
+		level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG.##########.........########";
 		level_raw_str += "........................############.#...............###........";
 		level_raw_str += "........................#............#............###...........";
 		level_raw_str += "........................#............#.........###..............";
@@ -172,94 +172,6 @@ int Level::IsTileCharCollidable(char tile_char) {
 	else {
 		return 1;
 	}
-}
-
-bool Level::WillCollideAABB(SDL_Rect* game_obj, int velocity)
-{
-	char tile_char = ' ';
-	std::vector<int> result;
-	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
-		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
-			tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
-			if (IsTileCharCollidable(tile_char) == 0) {
-				if (CollisionManager::WillCollideAABB(game_obj, &(visible_tile_dst_list_[x][y]), velocity)) {
-					return true;
-				}
-			}
-			
-		}
-	}
-	return false;
-}
-
-bool Level::WillCollideRight(SDL_Rect* game_obj, int velocity)
-{
-	char tile_char = ' ';
-	std::vector<int> result;
-	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
-		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
-			tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
-			if (IsTileCharCollidable(tile_char) == 0) {
-				if (CollisionManager::WillCollideRight(game_obj, &(visible_tile_dst_list_[x][y]), velocity)) {
-					return true;
-				}
-			}
-			
-		}
-	}
-	return false;
-}
-
-
-bool Level::WillCollideLeft(SDL_Rect* game_obj, int velocity)
-{
-	char tile_char = ' ';
-	std::vector<int> result;
-	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
-		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
-			if (CollisionManager::WillCollideLeft(game_obj, &(visible_tile_dst_list_[x][y]), velocity)) {
-				tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
-				if (IsTileCharCollidable(tile_char) == 0) {
-					return true;
-				}
-			}
-		}
-	}
-	return false;
-}
-
-bool Level::WillCollideTop(SDL_Rect* game_obj, int velocity)
-{
-	char tile_char = ' ';
-	std::vector<int> result;
-	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
-		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
-			if (CollisionManager::WillCollideTop(game_obj, &(visible_tile_dst_list_[x][y]), velocity)) {
-				tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
-				if (IsTileCharCollidable(tile_char) == 0) {
-					return true;
-				}
-			}
-		}
-	}
-	return false;
-}
-
-bool Level::WillCollideDown(SDL_Rect* game_obj, int velocity)
-{
-	char tile_char = ' ';
-	std::vector<int> result;
-	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
-		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
-			if (CollisionManager::WillCollideDown(game_obj, &(visible_tile_dst_list_[x][y]), velocity)) {
-				tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
-				if (IsTileCharCollidable(tile_char) == 0) {
-					return true;
-				}
-			}
-		}
-	}
-	return false;
 }
 
 void Level::CollisionDebug(SDL_Rect* game_obj)
