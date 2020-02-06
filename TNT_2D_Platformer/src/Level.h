@@ -10,6 +10,7 @@
 #include "TextureManager.h"
 #include "SoundManager.h"
 #include "Tile.h"
+#include "UI.h"
 
 enum TileSetId {
 	CHURCH_TILESET_01,
@@ -36,6 +37,9 @@ private:
 	int tile_height_;
 	int cam_pos_x_;
 	int cam_pos_y_;
+	UI* ui_pause_ptr_;
+	UI* ui_quit_ptr_;
+
 public:
 	Level();
 	~Level();

@@ -38,6 +38,7 @@ void PauseState::Render()
 	SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), 255, 255, 255, 50);
 	SDL_Rect temp_overlay = { 0,0,Globals::sWindowWidth,Globals::sWindowHeight };
 	SDL_RenderFillRect(TheGame::Instance()->getRenderer(), &temp_overlay);
+	TheGame::Instance()->GetPauseScreen().draw();
 	GameState::Render();
 }
 
@@ -109,8 +110,9 @@ void TitleState::Update()
 void TitleState::Render()
 {
 	std::cout << "Rendering Title..." << std::endl;
-
-
+	SDL_RenderClear(TheGame::Instance()->getRenderer()); // clear the renderer to the draw colour
+	TheGame::Instance()->GetTitleScreen().draw();
+	GameState::Render();
 }
 
 void TitleState::Exit()

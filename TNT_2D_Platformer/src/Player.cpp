@@ -63,7 +63,7 @@ void Player::update()
 
 void Player::draw()
 {
-	TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), "player", getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
+	TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
 	if (isHitBoxVisible()) {
 		/*SDL_SetRenderDrawColor(renderer, 150, 0, 0, 50);
 		SDL_Rect temp_rect = { getDstX(),getDstY(),getDstW(),getDstH() };

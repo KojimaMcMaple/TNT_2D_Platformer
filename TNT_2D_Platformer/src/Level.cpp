@@ -6,6 +6,8 @@ Level::Level()
 	setType(GameObjectType::LEVEL);
 	SetTileWidth(64);
 	SetTileHeight(64);
+	ui_pause_ptr_ = new UI("pause_text", "../Assets/textures/press P to pause.png", 0, 0, 321, 44, 800, 10, 321 / 2, 44 / 2);
+	ui_quit_ptr_ = new UI("quit_text", "../Assets/textures/press X to quit.png", 0, 0, 296, 46, 800, 50, 296 / 2, 46 / 2);
 }
 
 Level::~Level()
@@ -48,6 +50,10 @@ void Level::draw()
 			}
 		}
 	}
+
+	ui_pause_ptr_->draw();
+	ui_quit_ptr_->draw();
+
 	/*char tile_char = ' ';
 	for (int i = 0; i < GetLevelWidth(); i++) {
 		for (int j = 0; j < GetLevelWidth(); j++) {

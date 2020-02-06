@@ -42,6 +42,18 @@ bool Game::IsJumpKeyPressable()
 	return is_jump_key_pressable_;
 }
 
+UI& Game::GetTitleScreen()
+{
+	// TODO: insert return statement here
+	return *title_screen_ptr_;
+}
+
+UI& Game::GetPauseScreen()
+{
+	// TODO: insert return statement here
+	return *pause_screen_ptr_;
+}
+
 void Game::SetOffsetPositionX(int x_distance)
 {
 	offset_position_x_ = x_distance;
@@ -64,6 +76,9 @@ glm::vec2 Game::getMousePosition()
 
 void Game::createGameObjects()
 {
+	title_screen_ptr_ = new UI("title", "../Assets/textures/Title_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
+	pause_screen_ptr_ = new UI("pause", "../Assets/textures/Pause_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
+
 	level_ptr_ = new Level();
 	level_ptr_->LoadLevel("church");
 

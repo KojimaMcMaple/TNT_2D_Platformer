@@ -37,7 +37,7 @@ private:
 	SDL_Rect hit_box_;
 	int hit_box_manual_offset_x_ = 0;
 	int hit_box_manual_offset_y_ = 0;
-	bool is_hit_box_visible_ = true;
+	bool is_hit_box_visible_ = false;
 	bool is_grounded_ = false;
 	bool m_isColliding;
 	GameObjectType m_type;

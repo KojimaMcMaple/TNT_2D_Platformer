@@ -15,6 +15,7 @@
 #include "FSM.h"
 
 // Game Objects
+#include "UI.h"
 #include "Level.h"
 #include "Player.h"
 
@@ -34,6 +35,8 @@ private:
 	const Uint8* key_states_ = nullptr;
 
 	// GameObjects
+	UI* title_screen_ptr_;
+	UI* pause_screen_ptr_;
 	Level* level_ptr_;
 	Player* player_ptr_;
 	void createGameObjects();
@@ -81,6 +84,8 @@ public:
 	int GetOffsetPositionX();
 	int GetOffsetPositionY();
 	bool IsJumpKeyPressable();
+	UI& GetTitleScreen();
+	UI& GetPauseScreen();
 
 	// setters
 	void SetOffsetPositionX(int x_distance);
