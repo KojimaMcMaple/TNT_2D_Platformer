@@ -22,6 +22,11 @@ SDL_Renderer* Game::getRenderer()
 	return m_pRenderer;
 }
 
+FSM& Game::GetFSM()
+{
+	return *fsm_;
+}
+
 int Game::GetOffsetPositionX()
 {
 	return offset_position_x_;
@@ -59,12 +64,10 @@ glm::vec2 Game::getMousePosition()
 
 void Game::createGameObjects()
 {
-	std::cout << "MEOW" << std::endl;
-
 	level_ptr_ = new Level();
-	level_ptr_->LoadLevel(getRenderer(), "church");
+	level_ptr_->LoadLevel("church");
 
-	player_ptr_ = new Player(getRenderer());
+	player_ptr_ = new Player();
 	player_ptr_->setDstXAndHitBox(4 * level_ptr_->GetTileWidth() + level_ptr_->GetTileWidth() / 2 - player_ptr_->getDstW() / 2);
 	player_ptr_->setDstYAndHitBox(4 * level_ptr_->GetTileHeight() + level_ptr_->GetTileHeight() / 2 - player_ptr_->getDstH() / 2);
 
@@ -75,127 +78,7 @@ void Game::createGameObjects()
 	//std::cout << TheTextureManager::Instance();
 }
 
-bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
-{
-	int flags = 0;
-
-	if (fullscreen)
-	{
-		flags = SDL_WINDOW_FULLSCREEN;
-	}
-
-	// initialize SDL
-	if (SDL_Init(SDL_INIT_EVERYTHING) >= 0)
-	{
-		std::cout << "SDL Init success" << std::endl;
-
-		// if succeeded create our window
-		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
-
-		// if window creation successful create our renderer
-		if (m_pWindow != 0)
-		{
-			std::cout << "window creation success" << std::endl;
-			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
-
-			if (m_pRenderer != 0) // render init success
-			{
-				std::cout << "renderer creation success" << std::endl;
-				SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
-
-				// ENABLE ALPHA BLENDING
-				SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
-			}
-			else
-			{
-				std::cout << "renderer init failure" << std::endl;
-				return false; // render int fail
-			}
-
-			//TheTextureManager::Instance()->load("../../Assets/textures/animate-alpha.png", "animate", m_pRenderer);
-			createGameObjects();
-		}
-		else 
-		{
-			std::cout << "window init failure" << std::endl;
-			return false; // window init fail
-		}
-	}
-	else
-	{
-		std::cout << "SDL init failure" << std::endl;
-		return false; //SDL could not intialize
-	}
-	key_states_ = SDL_GetKeyboardState(nullptr);
-	
-	std::cout << "init success" << std::endl;
-	m_bRunning = true; // everything initialized successfully - start the main loop
-
-	return true;
-}
-
-bool Game::isKeyDown(SDL_Scancode keyboard_code)
-{
-	if (key_states_ != nullptr) {
-		if (key_states_[keyboard_code]) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	else {
-		return false;
-	}
-}
-
-void Game::handleEvents()
-{
-	SDL_Event event;
-	if (SDL_PollEvent(&event))
-	{
-		switch (event.type)
-		{
-		case SDL_QUIT:
-			m_bRunning = false;
-			break;
-		case SDL_MOUSEMOTION:
-			m_mousePosition.x = event.motion.x;
-			m_mousePosition.y = event.motion.y;
-			break;
-		case SDL_KEYDOWN:
-			switch (event.key.keysym.sym) {
-			case SDLK_ESCAPE:
-				m_bRunning = false;
-				break;
-			default:
-				break;
-			}
-			break;
-		case SDL_KEYUP:
-			if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_RIGHT) {
-				player_ptr_->setAccelerationX(0);
-			}
-			if (event.key.keysym.sym == SDLK_SPACE) {
-				SetJumpKeyPressable(true);
-			}
-			break;
-		default:
-			break;
-		}
-	}
-
-	// PROCESSING, HAPPENS WHEN KEYS ARE HELD DOWN
-	//if (s_pInstance->isKeyDown(SDL_SCANCODE_W) || s_pInstance->isKeyDown(SDL_SCANCODE_UP)) {
-	//	player_ptr_->setVelocityY(-6);
-	//}
-	//if (s_pInstance->isKeyDown(SDL_SCANCODE_S) || s_pInstance->isKeyDown(SDL_SCANCODE_DOWN)) {
-	//	player_ptr_->setVelocityY(6);
-	//}
-	
-}
-
-void Game::update()
+void Game::UpdateGameObjects()
 {
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
 		player_ptr_->setMoveDirection(-1);
@@ -253,10 +136,10 @@ void Game::update()
 	char next_right_tile_top_char = level_ptr_->GetTileChar(next_index_right_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), index_top_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
 	char next_right_tile_mid_char = level_ptr_->GetTileChar(next_index_right_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), index_mid_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
 	char next_right_tile_down_char = level_ptr_->GetTileChar(next_index_right_x + level_ptr_->GetTileIndexFromPosX(level_ptr_->GetCamPosX()), index_down_y + level_ptr_->GetTileIndexFromPosY(level_ptr_->GetCamPosY()));
-	
+
 	SDL_Rect* next_top_tile_left = level_ptr_->GetVisibleTileObj(index_left_x, next_index_top_y);
 	SDL_Rect* next_top_tile_mid = level_ptr_->GetVisibleTileObj(index_mid_x, next_index_top_y);
-	SDL_Rect* next_top_tile_right = level_ptr_->GetVisibleTileObj(index_right_x, next_index_top_y);	
+	SDL_Rect* next_top_tile_right = level_ptr_->GetVisibleTileObj(index_right_x, next_index_top_y);
 	SDL_Rect* next_down_tile_left = level_ptr_->GetVisibleTileObj(index_left_x, next_index_down_y);
 	SDL_Rect* next_down_tile_mid = level_ptr_->GetVisibleTileObj(index_mid_x, next_index_down_y);
 	SDL_Rect* next_down_tile_right = level_ptr_->GetVisibleTileObj(index_right_x, next_index_down_y);
@@ -356,21 +239,159 @@ void Game::update()
 	level_ptr_->update();
 }
 
+void Game::RenderGameObjects()
+{
+	level_ptr_->draw();
+	player_ptr_->draw();
+}
+
+bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
+{
+	int flags = 0;
+
+	if (fullscreen)
+	{
+		flags = SDL_WINDOW_FULLSCREEN;
+	}
+
+	// initialize SDL
+	if (SDL_Init(SDL_INIT_EVERYTHING) >= 0)
+	{
+		std::cout << "SDL Init success" << std::endl;
+
+		// if succeeded create our window
+		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+
+		// if window creation successful create our renderer
+		if (m_pWindow != 0)
+		{
+			std::cout << "window creation success" << std::endl;
+			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
+
+			if (m_pRenderer != 0) // render init success
+			{
+				std::cout << "renderer creation success" << std::endl;
+				SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
+
+				// ENABLE ALPHA BLENDING
+				SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
+			}
+			else
+			{
+				std::cout << "renderer init failure" << std::endl;
+				return false; // render int fail
+			}
+
+			//TheTextureManager::Instance()->load("../../Assets/textures/animate-alpha.png", "animate", m_pRenderer);
+			createGameObjects();
+		}
+		else 
+		{
+			std::cout << "window init failure" << std::endl;
+			return false; // window init fail
+		}
+	}
+	else
+	{
+		std::cout << "SDL init failure" << std::endl;
+		return false; //SDL could not intialize
+	}
+	key_states_ = SDL_GetKeyboardState(nullptr);
+	fsm_ = new FSM();
+	fsm_->ChangeState(new TitleState());
+	std::cout << "init success" << std::endl;
+	m_bRunning = true; // everything initialized successfully - start the main loop
+
+	return true;
+}
+
+bool Game::isKeyDown(SDL_Scancode keyboard_code)
+{
+	if (key_states_ != nullptr) {
+		if (key_states_[keyboard_code]) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		return false;
+	}
+}
+
+void Game::handleEvents()
+{
+	SDL_Event event;
+	if (SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+		case SDL_QUIT:
+			m_bRunning = false;
+			break;
+		case SDL_MOUSEMOTION:
+			m_mousePosition.x = event.motion.x;
+			m_mousePosition.y = event.motion.y;
+			break;
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.sym) {
+			case SDLK_ESCAPE:
+				m_bRunning = false;
+				break;
+			default:
+				break;
+			}
+			break;
+		case SDL_KEYUP:
+			if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_RIGHT) {
+				player_ptr_->setAccelerationX(0);
+			}
+			if (event.key.keysym.sym == SDLK_SPACE) {
+				SetJumpKeyPressable(true);
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	// PROCESSING, HAPPENS WHEN KEYS ARE HELD DOWN
+	//if (s_pInstance->isKeyDown(SDL_SCANCODE_W) || s_pInstance->isKeyDown(SDL_SCANCODE_UP)) {
+	//	player_ptr_->setVelocityY(-6);
+	//}
+	//if (s_pInstance->isKeyDown(SDL_SCANCODE_S) || s_pInstance->isKeyDown(SDL_SCANCODE_DOWN)) {
+	//	player_ptr_->setVelocityY(6);
+	//}
+	
+}
+
+void Game::update()
+{
+	GetFSM().Update();
+}
+
 void Game::render()
 {
-	SDL_RenderClear(m_pRenderer); // clear the renderer to the draw colour
+	GetFSM().Render();
+	
+	//SDL_RenderClear(m_pRenderer); // clear the renderer to the draw colour
 
 
-	level_ptr_->draw(getRenderer());
-	player_ptr_->draw(getRenderer());
+	//level_ptr_->draw();
+	//player_ptr_->draw();
 
 
-	SDL_RenderPresent(m_pRenderer); // draw to the screen
+	//SDL_RenderPresent(m_pRenderer); // draw to the screen
 }
 
 void Game::clean()
 {
 	std::cout << "cleaning game" << std::endl;
+	//fsm_->Clean();
+	GetFSM().Clean();
+	delete fsm_;
+	//fsm_ = nullptr;
 
 	TheSoundManager::Instance()->freeAllSounds();
 	TheTextureManager::Instance()->destroyAllTextures();

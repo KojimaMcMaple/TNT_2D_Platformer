@@ -1,4 +1,5 @@
 #include "Level.h"
+#include "Game.h"
 
 Level::Level()
 {
@@ -23,10 +24,6 @@ void Level::update()
 
 void Level::draw()
 {
-}
-
-void Level::draw(SDL_Renderer* renderer)
-{
 	char tile_char = ' ';
 	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
 		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
@@ -37,16 +34,16 @@ void Level::draw(SDL_Renderer* renderer)
 			switch (tile_char)
 			{
 			case 'G':
-				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_01]->getTextureId(), tile_ptr_[CHURCH_GROUND_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
+				TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), tile_ptr_[CHURCH_GROUND_01]->getTextureId(), tile_ptr_[CHURCH_GROUND_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			case '#':
-				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_GROUND_02]->getTextureId(), tile_ptr_[CHURCH_GROUND_02]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
+				TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), tile_ptr_[CHURCH_GROUND_02]->getTextureId(), tile_ptr_[CHURCH_GROUND_02]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			case '@':
-				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_BLOCK_01]->getTextureId(), tile_ptr_[CHURCH_BLOCK_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
+				TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), tile_ptr_[CHURCH_BLOCK_01]->getTextureId(), tile_ptr_[CHURCH_BLOCK_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			default:
-				TheTextureManager::Instance()->draw(renderer, tile_ptr_[CHURCH_BKG_01]->getTextureId(), tile_ptr_[CHURCH_BKG_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
+				TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), tile_ptr_[CHURCH_BKG_01]->getTextureId(), tile_ptr_[CHURCH_BKG_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
 				break;
 			}
 		}
@@ -75,7 +72,7 @@ void Level::clean()
 {
 }
 
-void Level::LoadLevel(SDL_Renderer* renderer, std::string level_id)
+void Level::LoadLevel(std::string level_id)
 {
 	std::string level_raw_str = "";
 	if (!visible_tile_dst_list_.empty()) {
@@ -118,7 +115,7 @@ void Level::LoadLevel(SDL_Renderer* renderer, std::string level_id)
 	// Tileset uses src, tiles use dst
 	tileset_ptr_[CHURCH_TILESET_01] = new Tile();
 	tileset_ptr_[CHURCH_TILESET_01]->setTextureId("church_tileset_01");
-	TheTextureManager::Instance()->load("../Assets/textures/church_tileset_01.png", tileset_ptr_[CHURCH_TILESET_01]->getTextureId(), renderer);
+	TheTextureManager::Instance()->load("../Assets/textures/church_tileset_01.png", tileset_ptr_[CHURCH_TILESET_01]->getTextureId(), TheGame::Instance()->getRenderer());
 	//tileset_ptr_[CHURCH_TILESET_01]->setSrc(0, 0, 336, 224);
 	//tileset_ptr_[CHURCH_TILESET_01]->setIsColliding(false);
 

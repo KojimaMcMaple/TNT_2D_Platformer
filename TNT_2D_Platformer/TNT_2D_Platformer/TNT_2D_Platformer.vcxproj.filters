@@ -60,6 +60,9 @@
     <ClCompile Include="..\src\Tile.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\FSM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Game.h">
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Tile.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\FSM.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

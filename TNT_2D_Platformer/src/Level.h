@@ -42,10 +42,9 @@ public:
 
 	void update() override;
 	void draw() override;
-	void draw(SDL_Renderer* renderer);
 	void clean() override;
 
-	void LoadLevel(SDL_Renderer* renderer, std::string level_id);
+	void LoadLevel(std::string level_id);
 	char GetTileChar(int x_index, int y_index);
 	SDL_Rect* GetVisibleTileObj(int x_index, int y_index);
 	int IsTileCharCollidable(char tile_char); //0=solid block, 1=air/background, 2=consummables

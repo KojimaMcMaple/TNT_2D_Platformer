@@ -13,13 +13,11 @@ private:
 
 public:
 	Player();
-	Player(SDL_Renderer* renderer);
 	~Player();
 	
 	void MoveX();
 	void update() override;
 	void draw() override;
-	void draw(SDL_Renderer* renderer);
 	void clean() override;
 };
 

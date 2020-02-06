@@ -1,17 +1,10 @@
 #include "Player.h"
+#include "Game.h"
 
 Player::Player()
 {
-}
-
-Player::~Player()
-{
-}
-
-Player::Player(SDL_Renderer* renderer)
-{
 	setTextureId("player");
-	TheTextureManager::Instance()->load("../Assets/textures/adventurer-v1.5-Sheet.png", getTextureId(), renderer);
+	TheTextureManager::Instance()->load("../Assets/textures/adventurer-v1.5-Sheet.png", getTextureId(), TheGame::Instance()->getRenderer());
 	setSrc(0, 0, 55, 37);
 	setDst(0, 0, 55 * 3, 37 * 3);
 	setHitBox(0, 0, 50, 85);
@@ -37,6 +30,10 @@ Player::Player(SDL_Renderer* renderer)
 		"engine", sound_type::SOUND_MUSIC);
 
 	TheSoundManager::Instance()->playMusic("engine", -1);*/
+}
+
+Player::~Player()
+{
 }
 
 void Player::MoveX() 
@@ -66,17 +63,13 @@ void Player::update()
 
 void Player::draw()
 {
-}
-
-void Player::draw(SDL_Renderer* renderer)
-{
-	TheTextureManager::Instance()->draw(renderer, "player", getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
+	TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), "player", getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
 	if (isHitBoxVisible()) {
 		/*SDL_SetRenderDrawColor(renderer, 150, 0, 0, 50);
 		SDL_Rect temp_rect = { getDstX(),getDstY(),getDstW(),getDstH() };
 		SDL_RenderFillRect(renderer, &temp_rect);*/
-		SDL_SetRenderDrawColor(renderer, 0, 150, 0, 50);
-		SDL_RenderFillRect(renderer, getHitBox());
+		SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), 0, 150, 0, 50);
+		SDL_RenderFillRect(TheGame::Instance()->getRenderer(), getHitBox());
 	}
 }
 

@@ -12,6 +12,7 @@
 // Game Managers
 #include "TextureManager.h"
 #include "CollisionManager.h"
+#include "FSM.h"
 
 // Game Objects
 #include "Level.h"
@@ -19,6 +20,32 @@
 
 class Game
 {
+private:
+	Game();
+	~Game();
+
+	SDL_Window* m_pWindow;
+	SDL_Renderer* m_pRenderer;
+	FSM* fsm_;
+
+	static Game* s_pInstance;
+	int m_currentFrame;
+	bool m_bRunning;
+	const Uint8* key_states_ = nullptr;
+
+	// GameObjects
+	Level* level_ptr_;
+	Player* player_ptr_;
+	void createGameObjects();
+
+	// Movement offset
+	bool is_jump_key_pressable_ = true;
+	int offset_position_x_;
+	int offset_position_y_;
+
+	// REDUNDANT
+	glm::vec2 m_mousePosition;
+
 public:
 	static Game* Instance()
 	{
@@ -45,8 +72,12 @@ public:
 	// a function to access the private running variable
 	bool running() { return m_bRunning; }
 
+	void UpdateGameObjects();
+	void RenderGameObjects();
+
 	// getters
 	SDL_Renderer* getRenderer();
+	FSM& GetFSM();
 	int GetOffsetPositionX();
 	int GetOffsetPositionY();
 	bool IsJumpKeyPressable();
@@ -59,31 +90,6 @@ public:
 	// REDUNDANT
 	glm::vec2 getMousePosition();
 	glm::vec2 getTargetPosition();
-
-private:
-	Game();
-	~Game();
-
-	SDL_Window* m_pWindow;
-	SDL_Renderer* m_pRenderer;
-
-	static Game* s_pInstance;
-	int m_currentFrame;
-	bool m_bRunning;
-	const Uint8* key_states_ = nullptr;
-
-	// GameObjects
-	Level* level_ptr_;
-	Player* player_ptr_;
-	void createGameObjects();
-
-	// Movement offset
-	bool is_jump_key_pressable_ = true;
-	int offset_position_x_;
-	int offset_position_y_;
-
-	// REDUNDANT
-	glm::vec2 m_mousePosition;
 };
 
 typedef Game TheGame;
