@@ -39,8 +39,7 @@ private:
 	UI* pause_screen_ptr_;
 	Level* level_ptr_;
 	Player* player_ptr_;
-	void createGameObjects();
-
+	
 	// Movement offset
 	bool is_jump_key_pressable_ = true;
 	int offset_position_x_;
@@ -75,6 +74,7 @@ public:
 	// a function to access the private running variable
 	bool running() { return m_bRunning; }
 
+	void createGameObjects();
 	void UpdateGameObjects();
 	void RenderGameObjects();
 

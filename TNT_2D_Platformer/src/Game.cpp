@@ -229,18 +229,22 @@ void Game::UpdateGameObjects()
 		//level_ptr_->SetCamPosX(level_ptr_->GetCamPosX() + player_ptr_->getVelocityX());
 	}
 
-	if ((level_ptr_->GetCamPosY() == 0 && new_player_center_y <= Globals::sWindowHeight / 2) ||
-		(level_ptr_->GetCamPosY() + Globals::sWindowHeight == level_ptr_->GetLevelMaxPosY() && new_player_center_y >= Globals::sWindowHeight / 2))
-	{
-		if (player_ptr_->getHitBoxY() + player_ptr_->getVelocityY() >= 0 && player_ptr_->getHitBoxLowermostY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight) {
-			new_player_pos_y += player_ptr_->getVelocityY();
-		}
-		//player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
+	if (player_ptr_->getHitBoxY() + player_ptr_->getVelocityY() >= 0 && player_ptr_->getHitBoxLowermostY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight) {
+		new_player_pos_y += player_ptr_->getVelocityY();
 	}
-	else {
-		new_cam_pos_y += player_ptr_->getVelocityY();
-		//level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
-	}
+
+	//if ((level_ptr_->GetCamPosY() == 0 && new_player_center_y <= Globals::sWindowHeight / 2) ||
+	//	(level_ptr_->GetCamPosY() + Globals::sWindowHeight == level_ptr_->GetLevelMaxPosY() && new_player_center_y >= Globals::sWindowHeight / 2))
+	//{
+	//	if (player_ptr_->getHitBoxY() + player_ptr_->getVelocityY() >= 0 && player_ptr_->getHitBoxLowermostY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight) {
+	//		new_player_pos_y += player_ptr_->getVelocityY();
+	//	}
+	//	//player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
+	//}
+	//else {
+	//	new_cam_pos_y += player_ptr_->getVelocityY();
+	//	//level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
+	//}
 
 	player_ptr_->setDstXAndHitBox(new_player_pos_x);
 	player_ptr_->setDstYAndHitBox(new_player_pos_y);

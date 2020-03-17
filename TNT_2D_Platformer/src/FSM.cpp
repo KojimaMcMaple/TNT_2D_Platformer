@@ -50,6 +50,7 @@ void PauseState::Exit()
 // RUNNING
 RunningState::RunningState()
 {
+	TheGame::Instance()->createGameObjects();
 }
 
 void RunningState::Enter()
