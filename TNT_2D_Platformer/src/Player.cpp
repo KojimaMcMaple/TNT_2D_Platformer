@@ -5,9 +5,9 @@ Player::Player()
 {
 	setTextureId("player");
 	TheTextureManager::Instance()->load("../Assets/textures/adventurer-v1.5-Sheet.png", getTextureId(), TheGame::Instance()->getRenderer());
-	setSrc(0, 0, 55, 37);
-	setDst(0, 0, 55 * 3, 37 * 3);
-	setHitBox(0, 0, 50, 85);
+	setSrc(0, 0, 50, 37);
+	setDst(0, 0, 50 * 3, 37 * 3);
+	setHitBox(0, 0, 45, 85);
 	setHitBoxOffsetX(-8);
 	setHitBoxOffsetY(10);
 	//setHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
@@ -47,6 +47,7 @@ void Player::update()
 	setVelocityX((getVelocityX() + getAccelerationX()) * getDrag());
 	setVelocityX(std::min(std::max(getVelocityX(), -getMaxVelocityX()), getMaxVelocityX()));
 	//setDstX(getDstX() + (int)getVelocityX());
+	std::cout << "getVelocityX = " << getVelocityX() << std::endl;
 
 	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity() / 3));
 	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY() * 3), getMaxVelocityY()));

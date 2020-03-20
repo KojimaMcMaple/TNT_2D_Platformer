@@ -72,7 +72,7 @@ void RunningState::Update()
 
 void RunningState::Render()
 {
-	std::cout << "Rendering Game..." << std::endl;
+	//std::cout << "Rendering Game..." << std::endl;
 
 	SDL_RenderClear(TheGame::Instance()->getRenderer()); // clear the renderer to the draw colour
 	TheGame::Instance()->RenderGameObjects();
