@@ -32,8 +32,7 @@ private:
 	int level_num_of_rows_;
 	Tile* tileset_texture_list_[NUM_OF_TILESET_ID];
 	Tile* tile_texture_list_[NUM_OF_TILE_ID];
-	std::vector<std::vector<SDL_Rect*>> level_tile_list_;
-	std::vector<std::vector<SDL_Rect*>> visible_tile_dst_list_;
+	std::vector<std::vector<SDL_Rect>> visible_tile_dst_list_;
 	int tile_width_;
 	int tile_height_;
 	int cam_pos_x_;
@@ -50,7 +49,6 @@ public:
 	void clean() override;
 
 	void LoadLevel(std::string level_id);
-	void MapTileNeighbors();
 	char GetTileChar(int x_index, int y_index);
 	SDL_Rect* GetVisibleTileObj(int x_index, int y_index);
 	int IsTileCharCollidable(char tile_char); //0=solid block, 1=air/background, 2=consummables
@@ -74,8 +72,8 @@ public:
 
 	void SetLevelRawStr(std::string raw_str);
 	void SetTileChar(int x, int y, char in_char);
-	void SetLevelNumOfColumns(int total_columns);
-	void SetLevelNumOfRows(int total_rows);
+	void SetLevelNumOfColumns(int width);
+	void SetLevelNumOfRows(int height);
 	void SetTileWidth(int width);
 	void SetTileHeight(int height);
 	void SetCamPosX(int x_coord);

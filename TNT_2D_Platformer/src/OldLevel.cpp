@@ -16,15 +16,62 @@ Level::~Level()
 
 void Level::update()
 {
-	
+	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
+		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
+			visible_tile_dst_list_[x][y].x = x * GetTileWidth() - GetTileOffsetX();
+			visible_tile_dst_list_[x][y].y = y * GetTileHeight() - GetTileOffsetY();
+		}
+	}
 }
 
 void Level::draw()
 {
-	
+	char tile_char = ' ';
+	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
+		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
+			tile_char = GetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()));
+			//if (x == -1 && y == -1) {
+			//	std::cout << "tile_char =" << tile_char << std::endl;
+			//}
+			switch (tile_char)
+			{
+			case 'G':
+				TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), tile_texture_list_[CHURCH_GROUND_01]->getTextureId(), tile_texture_list_[CHURCH_GROUND_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
+				break;
+			case '#':
+				TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), tile_texture_list_[CHURCH_GROUND_02]->getTextureId(), tile_texture_list_[CHURCH_GROUND_02]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
+				break;
+			case '@':
+				TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), tile_texture_list_[CHURCH_BLOCK_01]->getTextureId(), tile_texture_list_[CHURCH_BLOCK_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
+				break;
+			default:
+				TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), tile_texture_list_[CHURCH_BKG_01]->getTextureId(), tile_texture_list_[CHURCH_BKG_01]->getSrc(), &visible_tile_dst_list_[x][y], 0.0, 0, SDL_FLIP_NONE);
+				break;
+			}
+		}
+	}
 
 	ui_pause_ptr_->draw();
 	ui_quit_ptr_->draw();
+
+	/*char tile_char = ' ';
+	for (int i = 0; i < GetLevelWidth(); i++) {
+		for (int j = 0; j < GetLevelWidth(); j++) {
+			SDL_Rect temp_rect = { -GetTileWidth(), -GetTileHeight(), GetTileWidth(), GetTileHeight() };
+			temp_rect.x = i * GetTileWidth();
+			temp_rect.y = j * GetTileHeight();
+			tile_char = GetTileChar(i, j);
+			switch (tile_char)
+			{
+			case 'G':
+				TheTextureManager::Instance()->draw(renderer, tile_texture_list_[CHURCH_GROUND_02]->getTextureId(), tile_texture_list_[CHURCH_GROUND_01]->getSrc(), &temp_rect, 0.0, 0, SDL_FLIP_NONE);
+				break;
+			default:
+				break;
+			}
+		}
+	}*/
+
 }
 
 void Level::clean()
@@ -33,51 +80,42 @@ void Level::clean()
 
 void Level::LoadLevel(std::string level_id)
 {
-	// NUKE PREVIOUS LEVEL (IF ANY)
 	std::string level_raw_str = "";
-	if (!level_tile_list_.empty()) {
-		level_tile_list_.clear();
+	if (!visible_tile_dst_list_.empty()) {
+		visible_tile_dst_list_.clear();
 	}
 
-	// BUILD LEVEL
 	if (level_id == "church") {
-		level_raw_str += ".......................................................................................";
-		level_raw_str += ".......................................................................................";
-		level_raw_str += ".......................................................................................";
-		level_raw_str += ".......................................................................................";
-		level_raw_str += "......................#########........................................................";
-		level_raw_str += ".....................####..............................................................";
-		level_raw_str += "....................###.........................................#......................";
-		level_raw_str += "...................###.........................................###.....................";
-		level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG.##########.####....###############################";
-		level_raw_str += "........................############.#...............###...............................";
-		level_raw_str += "........................#............#............###..................................";
-		level_raw_str += "........................#............#.........###.....................................";
-		level_raw_str += "........................#.############......###........................................";
-		level_raw_str += "........................#................###...........................................";
-		level_raw_str += "........................#..............##..............................................";
-		level_raw_str += "........................################...............................................";
+		level_raw_str += "G.G.............................................................";
+		level_raw_str += "................................................................";
+		level_raw_str += "G.G.............................................................";
+		level_raw_str += "................................................................";
+		level_raw_str += "G......................########.................................";
+		level_raw_str += "......................###..............#.#......................";
+		level_raw_str += "G...................###................#.#......................";
+		level_raw_str += "...................####.........................................";
+		level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG.##########.........########";
+		level_raw_str += "........................############.#...............###........";
+		level_raw_str += "........................#............#............###...........";
+		level_raw_str += "........................#............#.........###..............";
+		level_raw_str += "........................#.############......###.................";
+		level_raw_str += "........................#................###....................";
+		level_raw_str += "........................#..............##.......................";
+		level_raw_str += "........................################........................";
 
 		SetLevelRawStr(level_raw_str);
+		SetLevelNumOfColumns(64);
 		SetLevelNumOfRows(16);
-		SetLevelNumOfColumns(level_raw_str.size()/GetLevelNumOfRows());
 	}
 
-	std::vector<std::vector<char>> level_raw_str_list;
-	level_raw_str_list.resize(GetLevelNumOfRows(), std::vector<char>(GetLevelNumOfColumns(), '.'));
-	for (int row = 0; row < GetLevelNumOfRows(); row++) {
-		for (int col = 0; col < GetLevelNumOfColumns(); col++) {
-			//1D to 2D arr fomula: array2d[row][col] = array1d[(row * no_of_col) + col]; 
-			level_raw_str_list[row][col] = level_raw_str[row * GetLevelNumOfColumns() + col];
+	SDL_Rect temp_rect = { -GetTileWidth(), -GetTileHeight(), GetTileWidth(), GetTileHeight() };
+	for (int i = 0; i < GetNumVisibleTilesX(); i++) {
+		std::vector<SDL_Rect> temp;
+		temp.clear();
+		for (int j = 0; j < GetNumVisibleTilesY(); j++) {
+			temp.push_back(temp_rect);
 		}
-	}
-
-	level_tile_list_.resize(GetLevelNumOfRows(), std::vector<SDL_Rect*>(GetLevelNumOfColumns(), nullptr));
-	for (int row = 0; row < GetLevelNumOfRows(); row++) {
-		for (int col = 0; col < GetLevelNumOfColumns(); col++) {
-			SDL_Rect temp_rect = { col * GetTileWidth(), row * GetTileHeight(), GetTileWidth(), GetTileHeight() };
-			level_tile_list_[row][col] = 
-		}
+		visible_tile_dst_list_.push_back(temp);
 	}
 
 	// Tileset uses src, tiles use dst
@@ -267,14 +305,14 @@ void Level::SetTileChar(int x, int y, char in_char)
 	}
 }
 
-void Level::SetLevelNumOfColumns(int total_columns)
+void Level::SetLevelNumOfColumns(int width)
 {
-	this->level_num_of_columns_ = total_columns;
+	this->level_num_of_columns_ = width;
 }
 
-void Level::SetLevelNumOfRows(int total_rows)
+void Level::SetLevelNumOfRows(int height)
 {
-	this->level_num_of_rows_ = total_rows;
+	this->level_num_of_rows_ = height;
 }
 
 void Level::SetTileWidth(int width)
