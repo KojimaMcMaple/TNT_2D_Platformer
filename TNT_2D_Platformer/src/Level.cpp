@@ -4,8 +4,8 @@
 Level::Level()
 {
 	setType(GameObjectType::LEVEL);
-	SetTileWidth(64);
-	SetTileHeight(64);
+	SetLevelTileWidth(64);
+	SetLevelTileHeight(64);
 	ui_pause_ptr_ = new UI("pause_text", "../Assets/textures/press P to pause.png", 0, 0, 321, 44, 800, 10, 321 / 2, 44 / 2);
 	ui_quit_ptr_ = new UI("quit_text", "../Assets/textures/press X to quit.png", 0, 0, 296, 46, 800, 50, 296 / 2, 46 / 2);
 }
@@ -16,12 +16,58 @@ Level::~Level()
 
 void Level::update()
 {
+	int row_idx_start;
+	int row_idx_end;
+	int col_idx_start;
+	int col_idx_end;
+
+	row_idx_start = GetTileIndexFromPosY(cam_pos_y_);
+	row_idx_end = row_idx_start + GetVisibleTilesNumOfRows();
 	
+	// TRY TO INCLUDE OUTSIDE TILES FOR OVERDRAWING
+	if (row_idx_start > 0) {
+		row_idx_start -= 1;
+	}
+	if (row_idx_end < GetLevelNumOfRows()-1) {
+		row_idx_end += 1;
+	}
+	
+	col_idx_start = GetTileIndexFromPosX(cam_pos_x_);
+	col_idx_end = col_idx_start + GetVisibleTilesNumOfColumns();
+	
+	// TRY TO INCLUDE OUTSIDE TILES FOR OVERDRAWING
+	if (col_idx_start > 0) {
+		col_idx_start -= 1;
+	}
+	if (col_idx_end < GetVisibleTilesNumOfColumns()-1) {
+		col_idx_end += 1;
+	}
+
+	// UPDATE SCREEN POS
+	for (int row = 0; row < GetVisibleTilesNumOfRows(); row++) {
+		int world_row = row + row_idx_start;
+		for (int col = 0; col < GetVisibleTilesNumOfColumns(); col++) {
+			int world_col = col + col_idx_start;
+			auto world_tile = level_world_tile_list_[world_row][world_col];
+			auto tile = visible_tile_list_[row][col];
+			tile->setDstX(world_tile->GetWorldRect()->x - cam_pos_x_);
+			tile->setDstY(world_tile->GetWorldRect()->y - cam_pos_y_);
+			tile->SetTileTextureId(world_tile->GetTileTextureId());
+		}
+	}
 }
 
 void Level::draw()
 {
-	
+	for (int row = 0; row < GetVisibleTilesNumOfRows(); row++) {
+		for (int col = 0; col < GetVisibleTilesNumOfColumns(); col++) {
+			auto tile = visible_tile_list_[row][col];
+			TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(),
+				tile_texture_list_[tile->GetTileTextureId()]->getTextureId(),
+				tile_texture_list_[tile->GetTileTextureId()]->getSrc(),
+				visible_tile_list_[row][col]->getDst(), 0.0, 0, SDL_FLIP_NONE);
+		}
+	}
 
 	ui_pause_ptr_->draw();
 	ui_quit_ptr_->draw();
@@ -31,21 +77,96 @@ void Level::clean()
 {
 }
 
+
+void Level::MapAllTileNeighbors() //set up, down, left, right tile neighbors for easy access
+{
+	// CONSTRUCTOR FOR NEIGHBORS
+	for (int row = 0; row < GetLevelNumOfRows(); row++) {
+		for (int col = 0; col < GetLevelNumOfColumns(); col++) {
+			auto tile = level_world_tile_list_[row][col];
+			std::cout << "[" << row << "]" << "[" << col << "]" << std::endl;
+			row > 0 ? tile->setUp(level_world_tile_list_[row - 1][col])   : tile->setUp(nullptr);
+			row < (GetLevelNumOfRows() - 1)    ? tile->setDown(level_world_tile_list_[row + 1][col])  : tile->setDown(nullptr);
+			col > 0 ? tile->setLeft(level_world_tile_list_[row][col - 1]) : tile->setLeft(nullptr);
+			col < (GetLevelNumOfColumns() - 1) ? tile->setRight(level_world_tile_list_[row][col + 1]) : tile->setRight(nullptr);
+		}
+	}
+}
+
+void Level::BuildTileTextureDatabase()
+{
+	//Tileset uses src, tiles use dst
+	tileset_texture_list_[CHURCH_TILESET_01] = new Tile();
+	tileset_texture_list_[CHURCH_TILESET_01]->setTextureId("church_tileset_01");
+	TheTextureManager::Instance()->load("../Assets/textures/church_tileset_01.png", tileset_texture_list_[CHURCH_TILESET_01]->getTextureId(), TheGame::Instance()->getRenderer());
+
+	tile_texture_list_[CHURCH_BKG_01] = new Tile();
+	tile_texture_list_[CHURCH_BKG_01]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
+	tile_texture_list_[CHURCH_BKG_01]->setSrc(128, 16, 15, 15);
+
+	tile_texture_list_[CHURCH_GROUND_01] = new Tile();
+	tile_texture_list_[CHURCH_GROUND_01]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
+	tile_texture_list_[CHURCH_GROUND_01]->setSrc(64, 168, 47, 39);
+
+	tile_texture_list_[CHURCH_GROUND_02] = new Tile();
+	tile_texture_list_[CHURCH_GROUND_02]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
+	tile_texture_list_[CHURCH_GROUND_02]->setSrc(128, 168, 47, 39);
+
+	tile_texture_list_[CHURCH_BLOCK_01] = new Tile();
+	tile_texture_list_[CHURCH_BLOCK_01]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
+	tile_texture_list_[CHURCH_BLOCK_01]->setSrc(16, 112, 31, 31);
+}
+
+void Level::MapAllTileTextureIdAndCollision() //determine which char is responsible for which texture_id
+{
+	for (int row = 0; row < GetLevelNumOfRows(); row++) {
+		for (int col = 0; col < GetLevelNumOfColumns(); col++) {
+			auto tile = level_world_tile_list_[row][col];
+			switch (tile->GetTileChar())
+			{
+			case 'G':
+				tile->SetTileTextureId(CHURCH_GROUND_01);
+				tile->SetCollidable(true);
+				break;
+			case '#':
+				tile->SetTileTextureId(CHURCH_GROUND_02);
+				tile->SetCollidable(true);
+				break;
+			case 'B':
+				tile->SetTileTextureId(CHURCH_BLOCK_01);
+				tile->SetCollidable(true);
+				break;
+			default:
+				tile->SetTileTextureId(CHURCH_BKG_01);
+				tile->SetCollidable(false);
+				break;
+			}
+		}
+	}
+}
+
 void Level::LoadLevel(std::string level_id)
 {
 	// NUKE PREVIOUS LEVEL (IF ANY)
 	std::string level_raw_str = "";
-	if (!level_tile_list_.empty()) {
-		level_tile_list_.clear();
+	if (!level_world_tile_list_.empty()) {
+		level_world_tile_list_.clear();
+		level_world_tile_list_.resize(0);
+		level_world_tile_list_.shrink_to_fit();
+	}
+	if (!visible_tile_list_.empty()) {
+		visible_tile_list_.clear();
+		visible_tile_list_.resize(0);
+		visible_tile_list_.shrink_to_fit();
 	}
 
-	// BUILD LEVEL
+	// PROCESS RAW STRING
 	if (level_id == "church") {
 		level_raw_str += ".......................................................................................";
 		level_raw_str += ".......................................................................................";
 		level_raw_str += ".......................................................................................";
 		level_raw_str += ".......................................................................................";
-		level_raw_str += "......................#########........................................................";
+		level_raw_str += "......................#########.B.B.B..................................................";
 		level_raw_str += ".....................####..............................................................";
 		level_raw_str += "....................###.........................................#......................";
 		level_raw_str += "...................###.........................................###.....................";
@@ -57,9 +178,11 @@ void Level::LoadLevel(std::string level_id)
 		level_raw_str += "........................#................###...........................................";
 		level_raw_str += "........................#..............##..............................................";
 		level_raw_str += "........................################...............................................";
+		level_raw_str += ".......................................................................................";
+		level_raw_str += ".......................................................................................";
 
 		SetLevelRawStr(level_raw_str);
-		SetLevelNumOfRows(16);
+		SetLevelNumOfRows(18);
 		SetLevelNumOfColumns(level_raw_str.size()/GetLevelNumOfRows());
 	}
 
@@ -72,99 +195,27 @@ void Level::LoadLevel(std::string level_id)
 		}
 	}
 
-	level_tile_list_.resize(GetLevelNumOfRows(), std::vector<SDL_Rect*>(GetLevelNumOfColumns(), nullptr));
+	// BUILD LEVEL
+	level_world_tile_list_.resize(GetLevelNumOfRows(), std::vector<Tile*>(GetLevelNumOfColumns(), nullptr));
 	for (int row = 0; row < GetLevelNumOfRows(); row++) {
 		for (int col = 0; col < GetLevelNumOfColumns(); col++) {
-			SDL_Rect temp_rect = { col * GetTileWidth(), row * GetTileHeight(), GetTileWidth(), GetTileHeight() };
-			level_tile_list_[row][col] = 
+			level_world_tile_list_[row][col] = new Tile(col * GetLevelTileWidth(), row * GetLevelTileHeight(), GetLevelTileWidth(), GetLevelTileHeight(), level_raw_str_list[row][col], WORLD_RECT);
 		}
 	}
+	MapAllTileNeighbors();
 
-	// Tileset uses src, tiles use dst
-	tileset_texture_list_[CHURCH_TILESET_01] = new Tile();
-	tileset_texture_list_[CHURCH_TILESET_01]->setTextureId("church_tileset_01");
-	TheTextureManager::Instance()->load("../Assets/textures/church_tileset_01.png", tileset_texture_list_[CHURCH_TILESET_01]->getTextureId(), TheGame::Instance()->getRenderer());
-	//tileset_texture_list_[CHURCH_TILESET_01]->setSrc(0, 0, 336, 224);
-	//tileset_texture_list_[CHURCH_TILESET_01]->setIsColliding(false);
+	// BUILD TILE TEXTURE DATABASE USING "FAKE" TILE OBJECTS TO HOLD DATA
+	BuildTileTextureDatabase();
 
-	tile_texture_list_[CHURCH_BKG_01] = new Tile();
-	tile_texture_list_[CHURCH_BKG_01]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
-	tile_texture_list_[CHURCH_BKG_01]->setSrc(128, 16, 15, 15);
-	tile_texture_list_[CHURCH_BKG_01]->setIsColliding(false);
+	// TRANSLATE CHAR TO TEXTURE ID
+	MapAllTileTextureIdAndCollision();
 
-	tile_texture_list_[CHURCH_GROUND_01] = new Tile();
-	tile_texture_list_[CHURCH_GROUND_01]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
-	tile_texture_list_[CHURCH_GROUND_01]->setSrc(64, 168, 47, 39);
-	tile_texture_list_[CHURCH_GROUND_01]->setIsColliding(true);
-
-	tile_texture_list_[CHURCH_GROUND_02] = new Tile();
-	tile_texture_list_[CHURCH_GROUND_02]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
-	tile_texture_list_[CHURCH_GROUND_02]->setSrc(128, 168, 47, 39);
-	tile_texture_list_[CHURCH_GROUND_02]->setIsColliding(true);
-
-	tile_texture_list_[CHURCH_BLOCK_01] = new Tile();
-	tile_texture_list_[CHURCH_BLOCK_01]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
-	tile_texture_list_[CHURCH_BLOCK_01]->setSrc(16, 112, 31, 31);
-	tile_texture_list_[CHURCH_BLOCK_01]->setIsColliding(true);
-}
-
-char Level::GetTileChar(int x_index, int y_index)
-{
-	if (x_index > -1 && x_index < GetLevelNumOfColumns() && y_index > -1 && y_index < GetLevelNumOfRows()) { // check bounds just in case
-		return level_raw_str_[y_index * GetLevelNumOfColumns() + x_index]; //magic algorithm
-	}
-	else {
-		return ' ';
-	}
-}
-
-SDL_Rect* Level::GetVisibleTileObj(int x_index, int y_index)
-{
-	if (x_index > -1 && x_index < GetNumVisibleTilesX() && y_index > -1 && y_index < GetNumVisibleTilesY()) { // check bounds just in case
-		return &visible_tile_dst_list_[x_index][y_index];
-	}
-	else {
-		/*SDL_Rect temp = { 0,0,0,0 };
-		return &temp;*/
-		return nullptr;
-	}
-}
-
-int Level::IsTileCharCollidable(char tile_char) {
-	//0=solid block, 1=air/background, 2=consummables
-	if (tile_char == 'G' || tile_char == '#' || tile_char == '@') {
-		return 0;
-	}
-	else {
-		return 1;
-	}
-}
-
-void Level::CollisionDebug(SDL_Rect* game_obj)
-{
-	std::vector<int> result;
-	for (int x = 0; x < GetNumVisibleTilesX(); x++) {
-		for (int y = 0; y < GetNumVisibleTilesY(); y++) {
-			//std::cout << "x = " << x << std::endl;
-			//std::cout << "y = " << y << std::endl;
-			//std::cout << "index = " << index << std::endl;
-			//std::cout << "X = " << visible_tile_dst_list_[index].x << std::endl;
-			//std::cout << "Y = " << visible_tile_dst_list_[index].y << std::endl;
-			if (CollisionManager::HaveCollidedAABB(game_obj, &(visible_tile_dst_list_[x][y]))) {
-				SetTileChar(x + GetTileIndexFromPosX(GetCamPosX()), y + GetTileIndexFromPosY(GetCamPosY()), '@');
-				result.push_back(x);
-			}
-			//else {
-			//	std::cout << "X1 = " << game_obj->x << std::endl;
-			//	std::cout << "X2 = " << temp_ptr->x << std::endl;
-			//}
-			//if (x == -1 && y == -1) {
-			//	std::cout << "x = " << x << std::endl;
-			//	std::cout << "y = " << y << std::endl;
-			//	std::cout << "index = " << index << std::endl;
-			//	std::cout << "X1 = " << game_obj->x << std::endl;
-			//	std::cout << "X2 = " << temp_ptr->x << std::endl;
-			//}
+	visible_tile_list_.resize(GetVisibleTilesNumOfRows()+2, std::vector<Tile*>(GetVisibleTilesNumOfColumns()+2, nullptr)); //overdraw by +2 rows/columns
+	for (int row = 0; row < GetVisibleTilesNumOfRows()+2; row++) {
+		for (int col = 0; col < GetVisibleTilesNumOfColumns()+2; col++) {
+			/*SDL_Rect temp_rect = { col * GetLevelTileWidth(), row * GetLevelTileHeight(), GetLevelTileWidth(), GetLevelTileHeight() };
+			visible_tile_list_[row][col] = &temp_rect;*/
+			visible_tile_list_[row][col] = new Tile(col * GetLevelTileWidth(), row * GetLevelTileHeight(), GetLevelTileWidth(), GetLevelTileHeight(), DST_RECT);
 		}
 	}
 }
@@ -179,24 +230,42 @@ int Level::GetLevelNumOfRows()
 	return level_num_of_rows_;
 }
 
+int Level::GetLevelTileWidth()
+{
+	return level_tile_width_;
+}
+
+int Level::GetLevelTileHeight()
+{
+	return level_tile_height_;
+}
+
 int Level::GetLevelMaxPosX()
 {
-	return GetLevelNumOfColumns() * GetTileWidth();
+	return GetLevelNumOfColumns() * GetLevelTileWidth();
 }
 
 int Level::GetLevelMaxPosY()
 {
-	return GetLevelNumOfRows() * GetTileHeight();
+	return GetLevelNumOfRows() * GetLevelTileHeight();
 }
 
-int Level::GetTileWidth()
-{
-	return tile_width_;
+int Level::GetTileIndexFromPosX(int coord) {
+	return int(coord / GetLevelTileWidth());
 }
 
-int Level::GetTileHeight()
+int Level::GetTileIndexFromPosY(int coord) {
+	return int(coord / GetLevelTileHeight());
+}
+
+int Level::GetVisibleTilesNumOfColumns()
 {
-	return tile_height_;
+	return Globals::sWindowWidth / GetLevelTileWidth();
+}
+
+int Level::GetVisibleTilesNumOfRows()
+{
+	return Globals::sWindowHeight / GetLevelTileHeight();
 }
 
 int Level::GetCamPosX()
@@ -219,52 +288,9 @@ int Level::GetCamCenterY()
 	return cam_pos_y_ + Globals::sWindowHeight / 2;
 }
 
-int Level::GetNumVisibleTilesX()
-{
-	return Globals::sWindowWidth / GetTileWidth() + 1;
-}
-
-int Level::GetNumVisibleTilesY()
-{
-	return Globals::sWindowHeight / GetTileHeight() + 1;
-}
-
-int Level::GetTileOffsetX()
-{
-	// FIND STARTING COORD OF NEAREST TILE
-	int nearest_tile_starting_coord = GetTileIndexFromPosX(GetCamPosX()) * GetTileWidth();
-
-	// RETURN OFFSET
-	return (GetCamPosX() - nearest_tile_starting_coord);
-}
-
-int Level::GetTileOffsetY()
-{
-	// FIND STARTING COORD OF NEAREST TILE
-	int nearest_tile_starting_coord = GetTileIndexFromPosY(GetCamPosY()) * GetTileHeight();
-
-	// RETURN OFFSET
-	return (GetCamPosY() - nearest_tile_starting_coord);
-}
-
-int Level::GetTileIndexFromPosX(int coord) {
-	return int(coord / GetTileWidth());
-}
-
-int Level::GetTileIndexFromPosY(int coord) {
-	return int(coord / GetTileHeight());
-}
-
 void Level::SetLevelRawStr(std::string raw_str)
 {
 	level_raw_str_ = raw_str;
-}
-
-void Level::SetTileChar(int x, int y, char in_char)
-{
-	if (x > -1 && x < GetLevelNumOfColumns() && y > -1 && y < GetLevelNumOfRows()) {
-		level_raw_str_[y * GetLevelNumOfColumns() + x] = in_char;
-	}
 }
 
 void Level::SetLevelNumOfColumns(int total_columns)
@@ -277,23 +303,20 @@ void Level::SetLevelNumOfRows(int total_rows)
 	this->level_num_of_rows_ = total_rows;
 }
 
-void Level::SetTileWidth(int width)
+void Level::SetLevelTileWidth(int width)
 {
-	tile_width_ = width;
+	level_tile_width_ = width;
 }
 
-void Level::SetTileHeight(int height)
+void Level::SetLevelTileHeight(int height)
 {
-	tile_height_ = height;
+	level_tile_height_ = height;
 }
 
 void Level::SetCamPosX(int x_coord)
 {
 	if (x_coord < 0) {
 		cam_pos_x_ = 0;
-	}
-	else if (x_coord + Globals::sWindowWidth > GetLevelNumOfColumns() * GetTileWidth()) {
-		cam_pos_x_ = GetLevelNumOfColumns() * GetTileWidth() - Globals::sWindowWidth;
 	}
 	else {
 		cam_pos_x_ = x_coord;
@@ -304,9 +327,6 @@ void Level::SetCamPosY(int y_coord)
 {
 	if (y_coord < 0) {
 		cam_pos_y_ = 0;
-	}
-	else if (y_coord + Globals::sWindowHeight > GetLevelNumOfRows() * GetTileHeight()) {
-		cam_pos_y_ = GetLevelNumOfRows() * GetTileHeight() - Globals::sWindowHeight;
 	}
 	else {
 		cam_pos_y_ = y_coord;

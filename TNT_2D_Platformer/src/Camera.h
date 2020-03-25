@@ -2,8 +2,21 @@
 #ifndef __Camera__
 #define __Camera__
 
-class Camera
-{
+#include "Globals.h"
+#include "GameObject.h"
+#include "Player.h"
+#include "Level.h"
+
+class Camera : public GameObject {	
+public:
+	Camera();
+	~Camera();
+
+	void update() override;
+	void draw() override;
+	void clean() override;
+
+	void RefocusCamera(Player* player_ptr, Level* level_ptr);
 };
 
 #endif

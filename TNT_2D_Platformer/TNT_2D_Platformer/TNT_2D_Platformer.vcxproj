@@ -163,7 +163,6 @@
     <ClCompile Include="..\src\FSM.cpp" />
     <ClCompile Include="..\src\Globals.cpp" />
     <ClCompile Include="..\src\Level.cpp" />
-    <ClCompile Include="..\src\OldLevel.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Player.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
@@ -181,7 +180,6 @@
     <ClInclude Include="..\src\FSM.h" />
     <ClInclude Include="..\src\Globals.h" />
     <ClInclude Include="..\src\Level.h" />
-    <ClInclude Include="..\src\OldLevel.h" />
     <ClInclude Include="..\src\Player.h" />
     <ClInclude Include="..\src\SoundManager.h" />
     <ClInclude Include="..\src\SteeringState.h" />

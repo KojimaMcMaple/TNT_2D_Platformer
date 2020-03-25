@@ -10,9 +10,9 @@ Player::Player()
 	setHitBox(0, 0, 45, 85);
 	setHitBoxOffsetX(-8);
 	setHitBoxOffsetY(10);
-	//setHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
-	setIsColliding(true);
-	setGrounded(false);
+	//SetHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
+	SetCollidable(true);
+	SetGrounded(false);
 	setAccelerationX(0);
 	setAccelerationY(0);
 	setVelocityX(0);
@@ -65,7 +65,7 @@ void Player::update()
 void Player::draw()
 {
 	TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
-	if (isHitBoxVisible()) {
+	if (IsHitBoxVisible()) {
 		/*SDL_SetRenderDrawColor(renderer, 150, 0, 0, 50);
 		SDL_Rect temp_rect = { getDstX(),getDstY(),getDstW(),getDstH() };
 		SDL_RenderFillRect(renderer, &temp_rect);*/

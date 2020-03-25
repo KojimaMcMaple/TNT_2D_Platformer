@@ -17,6 +17,7 @@
 // Game Objects
 #include "UI.h"
 #include "Level.h"
+#include "Camera.h"
 #include "Player.h"
 
 class Game
@@ -38,6 +39,7 @@ private:
 	UI* title_screen_ptr_;
 	UI* pause_screen_ptr_;
 	Level* level_ptr_;
+	Camera* camera_ptr_;
 	Player* player_ptr_;
 	
 	// Movement offset
@@ -76,7 +78,6 @@ public:
 
 	void createGameObjects();
 	void CheckCollisionTest();
-	void CheckCollision();
 	void UpdateGameObjects();
 	void RenderGameObjects();
 

@@ -12,4 +12,9 @@ enum GameObjectType {
 	NUM_OF_TYPES
 };
 
+enum GameObjectInitType {
+	WORLD_RECT,
+	DST_RECT
+};
+
 #endif /* defined (__GAME_OBJECT_TYPE__) */

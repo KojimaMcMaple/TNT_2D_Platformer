@@ -13,6 +13,20 @@ GameObject::~GameObject()
 {
 }
 
+SDL_Rect* GameObject::GetWorldRect()
+{
+	return &world_rect_;
+}
+
+int GameObject::GetWorldRectCenterX()
+{
+	return Util::XCenterRect(&world_rect_);
+}
+
+int GameObject::GetWorldRectCenterY()
+{
+	return Util::YCenterRect(&world_rect_);
+}
 
 SDL_Rect* GameObject::getSrc()
 {
@@ -119,12 +133,12 @@ int GameObject::getHitBoxOffsetY()
 	return hit_box_manual_offset_y_;
 }
 
-bool GameObject::isHitBoxVisible()
+bool GameObject::IsHitBoxVisible()
 {
 	return is_hit_box_visible_;
 }
 
-bool GameObject::isGrounded()
+bool GameObject::IsGrounded()
 {
 	return is_grounded_;
 }
@@ -234,9 +248,9 @@ int GameObject::getHeight()
 	return m_height;
 }
 
-bool GameObject::getIsColliding()
+bool GameObject::IsCollidable()
 {
-	return m_isColliding;
+	return is_collidable_;
 }
 
 GameObjectType GameObject::getType()
@@ -247,6 +261,21 @@ GameObjectType GameObject::getType()
 SteeringState GameObject::getSteeringState()
 {
 	return m_state;
+}
+
+void GameObject::SetWorldRect(int x, int y, int w, int h)
+{
+	world_rect_ = { x,y,w,h };
+}
+
+void GameObject::SetWorldRectX(int coord)
+{
+	world_rect_.x = coord;
+}
+
+void GameObject::SetWorldRectY(int coord)
+{
+	world_rect_.y = coord;
 }
 
 void GameObject::setSrc(SDL_Rect src_rect)
@@ -311,12 +340,12 @@ void GameObject::setHitBoxOffsetY(int coord)
 	hit_box_manual_offset_y_ = coord;
 }
 
-void GameObject::setHitBoxVisibility(bool toggle)
+void GameObject::SetHitBoxVisibility(bool toggle)
 {
 	is_hit_box_visible_ = toggle;
 }
 
-void GameObject::setGrounded(bool toggle)
+void GameObject::SetGrounded(bool toggle)
 {
 	is_grounded_ = toggle;
 }
@@ -416,9 +445,9 @@ void GameObject::setVelocityVect(glm::vec2 newVelocity)
 	m_velocity = newVelocity;
 }
 
-void GameObject::setIsColliding(bool collision)
+void GameObject::SetCollidable(bool toggle)
 {
-	m_isColliding = collision;
+	is_collidable_ = toggle;
 }
 
 void GameObject::setType(GameObjectType newType)

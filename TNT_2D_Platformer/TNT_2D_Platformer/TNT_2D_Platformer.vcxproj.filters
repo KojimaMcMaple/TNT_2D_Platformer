@@ -63,9 +63,6 @@
     <ClCompile Include="..\src\UI.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\OldLevel.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Level.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -111,9 +108,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\UI.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\OldLevel.h">
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Level.h">

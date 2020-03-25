@@ -3,7 +3,7 @@
 #define __Util__
 
 #include "GLM/vec2.hpp"
-
+#include <SDL.h>
 
 class Util
 {
@@ -37,7 +37,8 @@ public:
 	static float angle(glm::vec2 from, glm::vec2 to);
 	static float dot(glm::vec2 lhs, glm::vec2 rhs);
 
-
+	static int XCenterRect(SDL_Rect* rect);
+	static int YCenterRect(SDL_Rect* rect);
 
 };
 #endif /* defined (__Util__) */

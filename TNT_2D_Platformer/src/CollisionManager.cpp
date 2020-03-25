@@ -103,9 +103,9 @@ bool CollisionManager::squaredRadiusCheck(GameObject * object1, GameObject * obj
 	//if (glm::distance(P1, P2) < halfHeights) {
 
 	if (CollisionManager::squaredDistance(P1, P2) < (halfHeights * halfHeights)) {
-		if (!object2->getIsColliding()) {
+		if (!object2->IsCollidable()) {
 			
-			object2->setIsColliding(true);
+			object2->SetCollidable(true);
 
 			switch (object2->getType()) {
 			case ENEMY:
