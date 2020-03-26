@@ -10,7 +10,7 @@ class Tile : public GameObject {
 private:
 	char tile_char_ = ' ';
 	int tile_texture_id_;
-	std::vector<Tile*> m_pNeighbours;
+	std::vector<Tile*> m_pNeighbours = { nullptr, nullptr, nullptr, nullptr };
 public:
 	Tile();
 	Tile(int x, int y, int w, int h, int init_type);
