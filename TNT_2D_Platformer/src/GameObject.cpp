@@ -18,6 +18,16 @@ SDL_Rect* GameObject::GetWorldRect()
 	return &world_rect_;
 }
 
+int GameObject::GetWorldRectRightmostX()
+{
+	return world_rect_.x+world_rect_.w;
+}
+
+int GameObject::GetWorldRectLowermostY()
+{
+	return world_rect_.y + world_rect_.h;
+}
+
 int GameObject::GetWorldRectCenterX()
 {
 	return Util::XCenterRect(&world_rect_);

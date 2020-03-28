@@ -77,7 +77,7 @@ public:
 	bool running() { return m_bRunning; }
 
 	void createGameObjects();
-	void CheckCollisionTest();
+	void CheckCollision();
 	void UpdateGameObjects();
 	void RenderGameObjects();
 

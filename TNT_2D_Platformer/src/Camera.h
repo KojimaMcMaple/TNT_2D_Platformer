@@ -14,6 +14,7 @@ public:
 
 	void update() override;
 	void draw() override;
+	void draw(GameObject* obj_ptr);
 	void clean() override;
 
 	void RefocusCamera(Player* player_ptr, Level* level_ptr);

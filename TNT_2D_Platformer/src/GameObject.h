@@ -85,6 +85,8 @@ public:
 
 	// getters for common variables
 	SDL_Rect* GetWorldRect();
+	int GetWorldRectRightmostX();
+	int GetWorldRectLowermostY();
 	int GetWorldRectCenterX();
 	int GetWorldRectCenterY();
 	SDL_Rect* getSrc();

@@ -94,87 +94,9 @@ void Game::createGameObjects()
 	level_ptr_->SetCamPosY(camera_ptr_->GetWorldRect()->y);
 }
 
-void Game::CheckCollisionTest()
+void Game::CheckCollision()
 {
-	//int player_tile_index_x = level_ptr_->GetTileIndexFromPosX(player_ptr_->getHitBoxX() + level_ptr_->GetTileOffsetX()); //offset to handle screen-scrolling, fixed the issue of player not mapped correctly to an offseted tile
-	//int player_tile_index_y = level_ptr_->GetTileIndexFromPosY(player_ptr_->getHitBoxY() + level_ptr_->GetTileOffsetY());
-
-	//for (int row = (player_tile_index_y < 0 ? 0 : player_tile_index_y); row < ((player_tile_index_y + 3) > level_ptr_->GetVisibleTilesNumOfRows() ? level_ptr_->GetVisibleTilesNumOfRows() : (player_tile_index_y + 3)); row++)
-	//{
-	//	for (int col = (player_tile_index_x < 0 ? 0 : player_tile_index_x); col < ((player_tile_index_x + 2) > level_ptr_->GetVisibleTilesNumOfColumns() ? level_ptr_->GetVisibleTilesNumOfColumns() : (player_tile_index_x + 2)); col++)
-	//	{
-	//		if (level_ptr_->GetVisibleTileObj(col,row) != nullptr && SDL_HasIntersection(player_ptr_->getDst(), level_ptr_->GetVisibleTileObj(row, col)))
-	//		{
-	//			if ((player_ptr_->getDst()->y + player_ptr_->getDst()->h) - player_ptr_->getVelocityY() <= level_ptr_->GetVisibleTileObj(row, col)->y)
-	//			{ // Collision from top.
-	//				player_ptr_->SetGrounded(true);
-	//				player_ptr_->setVelocityY(0.0); // Stop the player from moving vertically. We aren't modifying gravity.
-	//				player_ptr_->setDstY(level_ptr_->GetVisibleTileObj(row, col)->y - player_ptr_->getDst()->h);
-	//			}
-	//			else if (player_ptr_->getDst()->y - player_ptr_->getVelocityY() >= level_ptr_->GetVisibleTileObj(row, col)->y + level_ptr_->GetVisibleTileObj(col,row)->h)
-	//			{ // Collision from bottom.
-	//				player_ptr_->setVelocityY(0.0); // Stop the player from moving vertically. We aren't modifying gravity.
-	//				player_ptr_->setDstY(level_ptr_->GetVisibleTileObj(col,row)->y + level_ptr_->GetVisibleTileObj(col,row)->h);
-	//			}
-	//			else if ((player_ptr_->getDst()->x + player_ptr_->getDst()->w) - player_ptr_->getVelocityX() <= level_ptr_->GetVisibleTileObj(col,row)->x)
-	//			{ // Collision from left.
-	//				player_ptr_->setVelocityX(0.0); // Stop the player from moving horizontally.
-	//				player_ptr_->setDstX(level_ptr_->GetVisibleTileObj(col,row)->x - player_ptr_->getDst()->w);
-	//			}
-	//			else if (player_ptr_->getDst()->x - player_ptr_->getVelocityX() >= level_ptr_->GetVisibleTileObj(col,row)->x + level_ptr_->GetVisibleTileObj(col,row)->w)
-	//			{ // Collision from right.
-	//				player_ptr_->setVelocityX(0.0); // Stop the player from moving horizontally.
-	//				player_ptr_->setDstX(level_ptr_->GetVisibleTileObj(col,row)->x + level_ptr_->GetVisibleTileObj(col,row)->w);
-	//			}
-	//			//break;
-	//		}
-	//	}
-	//}
-
-	//// PRE-PROCESSING
-	//int new_player_center_x = player_ptr_->getDstCenterX() + player_ptr_->getVelocityX();
-	//int new_player_pos_x = player_ptr_->getDstX();
-	//int new_cam_pos_x = level_ptr_->GetCamPosX();
-	//int new_player_center_y = player_ptr_->getDstCenterY() + player_ptr_->getVelocityY();
-	//int new_player_pos_y = player_ptr_->getDstY();
-	//int new_cam_pos_y = level_ptr_->GetCamPosY();
-
-	//// MOVE PLAYER IF NOT PAST BOUNDS ("HALF SCREEN"), OTHERWISE MOVE CAM
-	////compare cam w/ level max x/y, compare player with screen w/h
-	//if ((level_ptr_->GetCamPosX() == 0 && new_player_center_x <= Globals::sWindowWidth / 2) ||
-	//	(level_ptr_->GetCamPosX() + Globals::sWindowWidth == level_ptr_->GetLevelMaxPosX() && new_player_center_x >= Globals::sWindowWidth / 2)) //WILL NOT WORK W/ player_ptr_->getDstCenterX() + player_ptr_->getVelocityX() > level_ptr_->GetLevelMaxPosX() - Globals::sWindowWidth / 2
-	//{
-	//	if (player_ptr_->getHitBoxX() + player_ptr_->getVelocityX() >= 0 && player_ptr_->getHitBoxRightmostX() + player_ptr_->getVelocityX() <= Globals::sWindowWidth) {
-	//		new_player_pos_x += player_ptr_->getVelocityX();
-	//	}
-	//	//player_ptr_->setDstX(player_ptr_->getDstX() + player_ptr_->getVelocityX());
-	//}
-	//else {
-	//	new_cam_pos_x += player_ptr_->getVelocityX();
-	//	//level_ptr_->SetCamPosX(level_ptr_->GetCamPosX() + player_ptr_->getVelocityX());
-	//}
-
-	//if (player_ptr_->getHitBoxY() + player_ptr_->getVelocityY() >= 0 && player_ptr_->getHitBoxLowermostY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight) {
-	//	new_player_pos_y += player_ptr_->getVelocityY();
-	//}
-
-	////if ((level_ptr_->GetCamPosY() == 0 && new_player_center_y <= Globals::sWindowHeight / 2) ||
-	////	(level_ptr_->GetCamPosY() + Globals::sWindowHeight == level_ptr_->GetLevelMaxPosY() && new_player_center_y >= Globals::sWindowHeight / 2))
-	////{
-	////	if (player_ptr_->getHitBoxY() + player_ptr_->getVelocityY() >= 0 && player_ptr_->getHitBoxLowermostY() + player_ptr_->getVelocityY() <= Globals::sWindowHeight) {
-	////		new_player_pos_y += player_ptr_->getVelocityY();
-	////	}
-	////	//player_ptr_->setDstY(player_ptr_->getDstY() + player_ptr_->getVelocityY());
-	////}
-	////else {
-	////	new_cam_pos_y += player_ptr_->getVelocityY();
-	////	//level_ptr_->SetCamPosY(level_ptr_->GetCamPosY() + player_ptr_->getVelocityY());
-	////}
-
-	//player_ptr_->setDstXAndHitBox(new_player_pos_x);
-	//player_ptr_->setDstYAndHitBox(new_player_pos_y);
-	//level_ptr_->SetCamPosX(new_cam_pos_x);
-	//level_ptr_->SetCamPosY(new_cam_pos_y);
+	
 }
 
 void Game::UpdateGameObjects()
@@ -198,7 +120,7 @@ void Game::UpdateGameObjects()
 	player_ptr_->setAccelerationY(0);
 	//std::cout << "vel Y = " << player_ptr_->getVelocityY() << std::endl;
 
-	//CheckCollisionTest();
+	CheckCollision();
 
 	camera_ptr_->RefocusCamera(player_ptr_, level_ptr_);
 	
@@ -210,7 +132,7 @@ void Game::UpdateGameObjects()
 void Game::RenderGameObjects()
 {
 	level_ptr_->draw();
-	player_ptr_->draw();
+	camera_ptr_->draw(player_ptr_);
 }
 
 bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)

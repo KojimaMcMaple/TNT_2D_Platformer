@@ -6,6 +6,7 @@ Player::Player()
 	setTextureId("player");
 	TheTextureManager::Instance()->load("../Assets/textures/adventurer-v1.5-Sheet.png", getTextureId(), TheGame::Instance()->getRenderer());
 	setSrc(0, 0, 50, 37);
+	SetWorldRect(0, 0, 50 * 3, 37 * 3);
 	setDst(0, 0, 50 * 3, 37 * 3);
 	setHitBox(0, 0, 45, 85);
 	setHitBoxOffsetX(-8);
@@ -43,35 +44,26 @@ void Player::MoveX()
 
 void Player::update()
 {
+	// UPDATE POSITION
 	setAccelerationX(std::min(std::max(getAccelerationX(), -getMaxAccelerationX()), getMaxAccelerationX()));
 	setVelocityX((getVelocityX() + getAccelerationX()) * getDrag());
 	setVelocityX(std::min(std::max(getVelocityX(), -getMaxVelocityX()), getMaxVelocityX()));
-	//setDstX(getDstX() + (int)getVelocityX());
-	std::cout << "getVelocityX = " << getVelocityX() << std::endl;
+	SetWorldRectX(GetWorldRect()->x + (int)getVelocityX());
+	//std::cout << "getVelocityX = " << getVelocityX() << std::endl;
 
 	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity() / 3));
 	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY() * 3), getMaxVelocityY()));
+	SetWorldRectY(GetWorldRect()->y + (int)getVelocityY());
 	//std::cout << "getVelocityY = " << getVelocityY() << std::endl;
-	//std::cout << "-1*getMaxVelocityY()*10 = " << -1 * getMaxVelocityY() * 10 << std::endl;
-	//std::cout << "getMaxVelocityY = " << getMaxVelocityY() << std::endl;
-	//std::cout << "std::max(getVelocityY(), -1*getMaxVelocityY()*10) = " << std::max(getVelocityY(), -1 * getMaxVelocityY() * 10) << std::endl;
 	
-	//setDstY(getDstY() + (int)getVelocityY());
-	
-	//setHitBoxX(getDstCenterX() - getHitBoxW() / 2 + getHitBoxOffsetX());
-	//setHitBoxY(getDstCenterY() - getHitBoxH() / 2 + getHitBoxOffsetY());
+	// UPDATE HITBOX
+	setHitBoxX(GetWorldRectCenterX() - getHitBoxW() / 2 + getHitBoxOffsetX());
+	setHitBoxY(GetWorldRectCenterY() - getHitBoxH() / 2 + getHitBoxOffsetY());
 }
 
 void Player::draw()
 {
 	TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
-	if (IsHitBoxVisible()) {
-		/*SDL_SetRenderDrawColor(renderer, 150, 0, 0, 50);
-		SDL_Rect temp_rect = { getDstX(),getDstY(),getDstW(),getDstH() };
-		SDL_RenderFillRect(renderer, &temp_rect);*/
-		SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), 0, 150, 0, 50);
-		SDL_RenderFillRect(TheGame::Instance()->getRenderer(), getHitBox());
-	}
 }
 
 void Player::clean()
