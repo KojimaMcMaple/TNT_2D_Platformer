@@ -313,16 +313,28 @@ void GameObject::setDstY(int y)
 	dst_.y = y;
 }
 
-void GameObject::setDstXAndHitBox(int x)
+void GameObject::SetWorldXAndHitBox(int coord)
 {
-	dst_.x = x;
-	setHitBoxX(getDstCenterX() - getHitBoxW() / 2 + getHitBoxOffsetX());
+	world_rect_.x = coord;
+	setHitBoxX(GetWorldRectCenterX() - (getHitBoxW() / 2) + getHitBoxOffsetX()); //center hitbox and then apply offset
 }
 
-void GameObject::setDstYAndHitBox(int y)
+void GameObject::SetWorldYAndHitBox(int coord)
 {
-	dst_.y = y;
-	setHitBoxY(getDstCenterY() - getHitBoxH() / 2 + getHitBoxOffsetY());
+	world_rect_.y = coord;
+	setHitBoxY(GetWorldRectCenterY() - (getHitBoxH() / 2) + getHitBoxOffsetY()); //center hitbox and then apply offset
+}
+
+void GameObject::SetHitBoxXAndWorld(int coord)
+{
+	hit_box_.x = coord;
+	SetWorldRectX(getHitBoxCenterX() - getHitBoxOffsetX() - (GetWorldRect()->w / 2)); //center world_rect_ to hitbox, factoring in offset
+}
+
+void GameObject::SetHitBoxYAndWorld(int coord)
+{
+	hit_box_.y = coord;
+	SetWorldRectY(getHitBoxCenterY() - getHitBoxOffsetY() - (GetWorldRect()->h / 2)); //center world_rect_ to hitbox, factoring in offset
 }
 
 void GameObject::setHitBox(int x, int y, int w, int h)

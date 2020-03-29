@@ -83,8 +83,8 @@ void Game::createGameObjects()
 	level_ptr_->LoadLevel("church");
 
 	player_ptr_ = new Player();
-	player_ptr_->setDstXAndHitBox(4 * level_ptr_->GetLevelTileWidth() + level_ptr_->GetLevelTileWidth() / 2 - player_ptr_->getDstW() / 2);
-	player_ptr_->setDstYAndHitBox(4 * level_ptr_->GetLevelTileHeight() + level_ptr_->GetLevelTileHeight() / 2 - player_ptr_->getDstH() / 2);
+	player_ptr_->SetWorldXAndHitBox(4 * level_ptr_->GetLevelTileWidth() + level_ptr_->GetLevelTileWidth() / 2 - player_ptr_->getDstW() / 2);
+	player_ptr_->SetWorldYAndHitBox(4 * level_ptr_->GetLevelTileHeight() + level_ptr_->GetLevelTileHeight() / 2 - player_ptr_->getDstH() / 2);
 
 	// CENTER CAM TO PLAYER
 	camera_ptr_ = new Camera();
@@ -96,7 +96,8 @@ void Game::createGameObjects()
 
 void Game::CheckCollision()
 {
-	
+	int direction = level_ptr_->CheckLevelCollision(player_ptr_);
+
 }
 
 void Game::UpdateGameObjects()

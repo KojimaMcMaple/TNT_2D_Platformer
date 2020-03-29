@@ -27,6 +27,7 @@ public:
 	void SetTileTextureId(int id);
 
 	// get neighbours
+	std::vector<Tile*> getNeighbours();
 	Tile* getUp();
 	Tile* getDown();
 	Tile* getRight();

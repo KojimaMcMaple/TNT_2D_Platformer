@@ -54,6 +54,11 @@ void Tile::SetTileTextureId(int id)
 	tile_texture_id_ = id;
 }
 
+std::vector<Tile*> Tile::getNeighbours()
+{
+	return m_pNeighbours;
+}
+
 Tile* Tile::getUp()
 {
 	return m_pNeighbours[UP];

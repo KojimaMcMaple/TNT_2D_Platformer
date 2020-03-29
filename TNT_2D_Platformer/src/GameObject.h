@@ -146,8 +146,10 @@ public:
 	void setDst(int x, int y, int w, int h);
 	void setDstX(int x);
 	void setDstY(int y);
-	void setDstXAndHitBox(int x);
-	void setDstYAndHitBox(int y);
+	void SetWorldXAndHitBox(int coord);
+	void SetWorldYAndHitBox(int coord);
+	void SetHitBoxXAndWorld(int coord);
+	void SetHitBoxYAndWorld(int coord);
 	void setHitBox(int x, int y, int w, int h);
 	void setHitBoxX(int coord);
 	void setHitBoxY(int coord);	

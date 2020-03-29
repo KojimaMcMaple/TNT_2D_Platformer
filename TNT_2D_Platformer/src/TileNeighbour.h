@@ -4,9 +4,9 @@
 enum TileNeighbour
 {
 	UP,
-	RIGHT,
 	DOWN,
 	LEFT,
+	RIGHT,
 	NUM_OF_NEIGHBOURS
 };
 #endif /* defined (__TILE_NEIGHBOUR__) */

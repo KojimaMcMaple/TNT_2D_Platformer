@@ -9,7 +9,7 @@ Player::Player()
 	SetWorldRect(0, 0, 50 * 3, 37 * 3);
 	setDst(0, 0, 50 * 3, 37 * 3);
 	setHitBox(0, 0, 45, 85);
-	setHitBoxOffsetX(-8);
+	setHitBoxOffsetX(-4);
 	setHitBoxOffsetY(10);
 	//SetHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
 	SetCollidable(true);
@@ -48,17 +48,17 @@ void Player::update()
 	setAccelerationX(std::min(std::max(getAccelerationX(), -getMaxAccelerationX()), getMaxAccelerationX()));
 	setVelocityX((getVelocityX() + getAccelerationX()) * getDrag());
 	setVelocityX(std::min(std::max(getVelocityX(), -getMaxVelocityX()), getMaxVelocityX()));
-	SetWorldRectX(GetWorldRect()->x + (int)getVelocityX());
+	SetWorldXAndHitBox(GetWorldRect()->x + (int)getVelocityX());
 	//std::cout << "getVelocityX = " << getVelocityX() << std::endl;
 
 	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity() / 3));
 	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY() * 3), getMaxVelocityY()));
-	SetWorldRectY(GetWorldRect()->y + (int)getVelocityY());
+	SetWorldYAndHitBox(GetWorldRect()->y + (int)getVelocityY());
 	//std::cout << "getVelocityY = " << getVelocityY() << std::endl;
 	
-	// UPDATE HITBOX
-	setHitBoxX(GetWorldRectCenterX() - getHitBoxW() / 2 + getHitBoxOffsetX());
-	setHitBoxY(GetWorldRectCenterY() - getHitBoxH() / 2 + getHitBoxOffsetY());
+	//// UPDATE HITBOX
+	//setHitBoxX(GetWorldRectCenterX() - getHitBoxW() / 2);
+	//setHitBoxY(GetWorldRectCenterY() - getHitBoxH() / 2);
 }
 
 void Player::draw()

@@ -49,6 +49,7 @@ public:
 	void draw() override;
 	void clean() override;
 
+	int CheckLevelCollision(GameObject* obj_ptr);
 	void MapAllTileNeighbors();
 	void BuildTileTextureDatabase();
 	void MapAllTileTextureIdAndCollision();

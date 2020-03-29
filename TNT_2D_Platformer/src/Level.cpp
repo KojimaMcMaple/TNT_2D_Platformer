@@ -44,23 +44,25 @@ void Level::update()
 	}
 
 	// UPDATE SCREEN POS
-	for (int row = 0; row < GetVisibleTilesNumOfRows(); row++) {
+	for (int row = 0; row < GetVisibleTilesNumOfRows()+2; row++) {
 		int world_row = row + row_idx_start;
-		for (int col = 0; col < GetVisibleTilesNumOfColumns(); col++) {
+		for (int col = 0; col < GetVisibleTilesNumOfColumns()+2; col++) {
 			int world_col = col + col_idx_start;
-			auto world_tile = level_world_tile_list_[world_row][world_col];
-			auto tile = visible_tile_list_[row][col];
-			tile->setDstX(world_tile->GetWorldRect()->x - cam_pos_x_);
-			tile->setDstY(world_tile->GetWorldRect()->y - cam_pos_y_);
-			tile->SetTileTextureId(world_tile->GetTileTextureId());
+			if (world_row < GetLevelNumOfRows() - 1 && world_col < GetLevelNumOfColumns() - 1) { //bound check
+				auto world_tile = level_world_tile_list_[world_row][world_col];
+				auto tile = visible_tile_list_[row][col];
+				tile->setDstX(world_tile->GetWorldRect()->x - cam_pos_x_);
+				tile->setDstY(world_tile->GetWorldRect()->y - cam_pos_y_);
+				tile->SetTileTextureId(world_tile->GetTileTextureId());
+			}
 		}
 	}
 }
 
 void Level::draw()
 {
-	for (int row = 0; row < GetVisibleTilesNumOfRows(); row++) {
-		for (int col = 0; col < GetVisibleTilesNumOfColumns(); col++) {
+	for (int row = 0; row < GetVisibleTilesNumOfRows()+2; row++) {
+		for (int col = 0; col < GetVisibleTilesNumOfColumns()+2; col++) {
 			auto tile = visible_tile_list_[row][col];
 			TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(),
 				tile_texture_list_[tile->GetTileTextureId()]->getTextureId(),
@@ -77,6 +79,48 @@ void Level::clean()
 {
 }
 
+
+int Level::CheckLevelCollision(GameObject* obj_ptr)
+{
+	int result = -1;
+	int row = GetTileIndexFromPosY(obj_ptr->getHitBoxY());
+	int col = GetTileIndexFromPosX(obj_ptr->getHitBoxX());
+	Tile* tile = level_world_tile_list_[row][col];
+	//SDL_HasIntersection
+	for (int i = 0; i < NUM_OF_NEIGHBOURS; i++) {
+		Tile* nbour = tile->getNeighbours()[i];
+		if (nbour != nullptr) {
+			if (SDL_HasIntersection(obj_ptr->getHitBox(), nbour->GetWorldRect()) && nbour->IsCollidable()) {
+				if (i == UP) {
+					obj_ptr->setVelocityY(0);
+					obj_ptr->SetHitBoxYAndWorld(nbour->GetWorldRectLowermostY());
+				}
+				else if (i == DOWN) {
+					obj_ptr->SetGrounded(true);
+					obj_ptr->setVelocityY(0);
+					obj_ptr->SetHitBoxYAndWorld(nbour->GetWorldRect()->y - obj_ptr->getHitBoxH());
+				}
+				else if (i == LEFT) {
+					obj_ptr->setVelocityX(0);
+					obj_ptr->SetHitBoxXAndWorld(nbour->GetWorldRectRightmostX());
+				}
+				else if (i == RIGHT) {
+					obj_ptr->setVelocityX(0);
+					obj_ptr->SetHitBoxXAndWorld(nbour->GetWorldRect()->x - obj_ptr->getHitBoxW());
+				}
+				result = i;
+
+				std::cout << result << std::endl;
+				std::cout << row << std::endl;
+				std::cout << col << std::endl;
+				std::cout << ".........." << std::endl;
+				return result;
+			}
+		}
+	}
+
+	return result;
+}
 
 void Level::MapAllTileNeighbors() //set up, down, left, right tile neighbors for easy access
 {
@@ -170,7 +214,7 @@ void Level::LoadLevel(std::string level_id)
 		level_raw_str += "..........#.#........####..............................................................";
 		level_raw_str += ".G#G#....G...G.....###.........................................#.......................";
 		level_raw_str += ".....G#G#.....#....###.........................................###.....................";
-		level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG.##########.####....###############################";
+		level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG.##########.####....############################.B#";
 		level_raw_str += "........................############.#...............###...............................";
 		level_raw_str += "........................#............#............###..................................";
 		level_raw_str += "........................#............#.........###.....................................";
