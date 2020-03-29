@@ -111,10 +111,10 @@ void Game::UpdateGameObjects()
 		player_ptr_->MoveX();
 	}
 	//if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable()) {
-		//SetJumpKeyPressable(false);
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
+		SetJumpKeyPressable(false);
 		player_ptr_->setAccelerationY(-Globals::sJumpForce);
-		//player_ptr_->SetGrounded(false);
+		player_ptr_->SetGrounded(false);
 	}
 
 	player_ptr_->update();
