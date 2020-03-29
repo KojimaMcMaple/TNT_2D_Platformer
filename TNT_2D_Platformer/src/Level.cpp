@@ -92,28 +92,28 @@ int Level::CheckLevelCollision(GameObject* obj_ptr)
 		for (int col = (obj_col < 0 ? 0 : obj_col); col < ((obj_col + 2) > GetLevelNumOfColumns() ? GetLevelNumOfColumns() : (obj_col + 2)); col++)
 		{
 			auto tile = level_world_tile_list_[row][col];
-			if (level_world_tile_list_[row][col] != nullptr && level_world_tile_list_[row][col]->IsCollidable() && SDL_HasIntersection(obj_ptr->getHitBox(), level_world_tile_list_[row][col]->GetWorldRect()))
+			if (tile != nullptr && tile->IsCollidable() && SDL_HasIntersection(obj_ptr->getHitBox(), tile->GetWorldRect()))
 			{
-				if ((obj_ptr->getHitBoxLowermostY()) - obj_ptr->getVelocityY() <= level_world_tile_list_[row][col]->GetWorldRect()->y)
+				if ((obj_ptr->getHitBoxLowermostY()) - obj_ptr->getVelocityY() <= tile->GetWorldRect()->y)
 				{ // Collision from top.
 					obj_ptr->SetGrounded(true);
 					obj_ptr->setVelocityY(0.0); // Stop the player from moving vertically. We aren't modifying gravity.
-					obj_ptr->SetHitBoxYAndWorld(level_world_tile_list_[row][col]->GetWorldRect()->y - obj_ptr->getHitBox()->h);
+					obj_ptr->SetHitBoxYAndWorld(tile->GetWorldRect()->y - obj_ptr->getHitBox()->h);
 				}
-				else if (obj_ptr->getHitBox()->y - obj_ptr->getVelocityY() >= level_world_tile_list_[row][col]->GetWorldRect()->y + level_world_tile_list_[row][col]->GetWorldRect()->h)
+				else if (obj_ptr->getHitBox()->y - obj_ptr->getVelocityY() >= tile->GetWorldRect()->y + tile->GetWorldRect()->h)
 				{ // Collision from bottom.
 					obj_ptr->setVelocityY(0.0); // Stop the player from moving vertically. We aren't modifying gravity.
-					obj_ptr->SetHitBoxYAndWorld(level_world_tile_list_[row][col]->GetWorldRect()->y + level_world_tile_list_[row][col]->GetWorldRect()->h);
+					obj_ptr->SetHitBoxYAndWorld(tile->GetWorldRect()->y + tile->GetWorldRect()->h);
 				}
-				else if ((obj_ptr->getHitBoxRightmostX()) - obj_ptr->getVelocityX() <= level_world_tile_list_[row][col]->GetWorldRect()->x)
+				else if ((obj_ptr->getHitBoxRightmostX()) - obj_ptr->getVelocityX() <= tile->GetWorldRect()->x)
 				{ // Collision from left.
 					obj_ptr->setVelocityX(0.0); // Stop the player from moving horizontally.
-					obj_ptr->SetHitBoxXAndWorld(level_world_tile_list_[row][col]->GetWorldRect()->x - obj_ptr->getHitBox()->w);
+					obj_ptr->SetHitBoxXAndWorld(tile->GetWorldRect()->x - obj_ptr->getHitBox()->w);
 				}
-				else if (obj_ptr->getHitBox()->x - obj_ptr->getVelocityX() >= level_world_tile_list_[row][col]->GetWorldRect()->x + level_world_tile_list_[row][col]->GetWorldRect()->w)
+				else if (obj_ptr->getHitBox()->x - obj_ptr->getVelocityX() >= tile->GetWorldRect()->x + tile->GetWorldRect()->w)
 				{ // Collision from right.
 					obj_ptr->setVelocityX(0.0); // Stop the player from moving horizontally.
-					obj_ptr->SetHitBoxXAndWorld(level_world_tile_list_[row][col]->GetWorldRect()->x + level_world_tile_list_[row][col]->GetWorldRect()->w);
+					obj_ptr->SetHitBoxXAndWorld(tile->GetWorldRect()->x + tile->GetWorldRect()->w);
 				}
 			}
 		}
