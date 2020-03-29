@@ -8,11 +8,15 @@
 #include <SDL.h>
 
 #include "Globals.h"
+#include "Util.h"
 #include "GameObjectType.h"
 #include "SteeringState.h"
 
 class GameObject {
 private:
+	// POSITIONING
+	SDL_Rect world_rect_; //"real" rect
+	
 	// RENDERING
 	SDL_Rect src_, dst_;
 	std::string texture_id_;
@@ -37,9 +41,9 @@ private:
 	SDL_Rect hit_box_;
 	int hit_box_manual_offset_x_ = 0;
 	int hit_box_manual_offset_y_ = 0;
-	bool is_hit_box_visible_ = false;
+	bool is_hit_box_visible_ = true;
 	bool is_grounded_ = false;
-	bool m_isColliding;
+	bool is_collidable_;
 	GameObjectType m_type;
 	SteeringState m_state;
 
@@ -80,6 +84,11 @@ public:
 	virtual void clean() = 0;
 
 	// getters for common variables
+	SDL_Rect* GetWorldRect();
+	int GetWorldRectRightmostX();
+	int GetWorldRectLowermostY();
+	int GetWorldRectCenterX();
+	int GetWorldRectCenterY();
 	SDL_Rect* getSrc();
 	SDL_Rect* getDst();
 	int getDstX();
@@ -101,9 +110,9 @@ public:
 	int getHitBoxCenterY();
 	int getHitBoxOffsetX();
 	int getHitBoxOffsetY();
-	bool isHitBoxVisible();
-	bool isGrounded();
-	bool getIsColliding();
+	bool IsHitBoxVisible();
+	bool IsGrounded();
+	bool IsCollidable();
 	std::string getTextureId();
 	int getCustomPivotX();
 	int getCustomPivotY();
@@ -129,21 +138,26 @@ public:
 	int getHeight();
 
 	// setters for common variables
+	void SetWorldRect(int x, int y, int w, int h);
+	void SetWorldRectX(int coord);
+	void SetWorldRectY(int coord);
 	void setSrc(SDL_Rect src_ptr);
 	void setSrc(int x, int y, int w, int h);
 	void setDst(int x, int y, int w, int h);
 	void setDstX(int x);
 	void setDstY(int y);
-	void setDstXAndHitBox(int x);
-	void setDstYAndHitBox(int y);
+	void SetWorldXAndHitBox(int coord);
+	void SetWorldYAndHitBox(int coord);
+	void SetHitBoxXAndWorld(int coord);
+	void SetHitBoxYAndWorld(int coord);
 	void setHitBox(int x, int y, int w, int h);
 	void setHitBoxX(int coord);
 	void setHitBoxY(int coord);	
 	void setHitBoxOffsetX(int coord);
 	void setHitBoxOffsetY(int coord);
-	void setHitBoxVisibility(bool toggle);
-	void setGrounded(bool toggle);
-	void setIsColliding(bool collision);
+	void SetHitBoxVisibility(bool toggle);
+	void SetGrounded(bool toggle);
+	void SetCollidable(bool toggle);
 	void setTextureId(std::string id); //cleanup is done by manager
 	void addSfxId(std::string id); //cleanup is done by manager
 	void setCustomPivotX(int coord);

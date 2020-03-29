@@ -32,8 +32,7 @@ private:
 	int level_num_of_rows_;
 	Tile* tileset_texture_list_[NUM_OF_TILESET_ID];
 	Tile* tile_texture_list_[NUM_OF_TILE_ID];
-	std::vector<std::vector<Tile*>> level_world_tile_list_;
-	std::vector<std::vector<Tile*>> visible_tile_list_; //only used for display
+	std::vector<std::vector<SDL_Rect>> visible_tile_list_;
 	int level_tile_width_;
 	int level_tile_height_;
 	int cam_pos_x_;
@@ -49,35 +48,36 @@ public:
 	void draw() override;
 	void clean() override;
 
-	int CheckLevelCollision(GameObject* obj_ptr);
-	void MapAllTileNeighbors();
-	void BuildTileTextureDatabase();
-	void MapAllTileTextureIdAndCollision();
 	void LoadLevel(std::string level_id);
+	char GetTileChar(int x_index, int y_index);
+	SDL_Rect* GetVisibleTileObj(int x_index, int y_index);
+	int IsTileCharCollidable(char tile_char); //0=solid block, 1=air/background, 2=consummables
+	void CollisionDebug(SDL_Rect* game_obj);
 	int GetLevelNumOfColumns();
 	int GetLevelNumOfRows();
-	int GetLevelTileWidth();
-	int GetLevelTileHeight();
 	int GetLevelMaxPosX();
 	int GetLevelMaxPosY();
-	int GetTileIndexFromPosX(int coord);
-	int GetTileIndexFromPosY(int coord);
-	int GetVisibleTilesNumOfColumns();
-	int GetVisibleTilesNumOfRows();
+	int GetLevelTileWidth();
+	int GetLevelTileHeight();
 	int GetCamPosX();
 	int GetCamPosY();
 	int GetCamCenterX();
 	int GetCamCenterY();
+	int GetVisibleTilesNumOfColumns();
+	int GetVisibleTilesNumOfRows();
+	int GetTileOffsetX();
+	int GetTileOffsetY();
+	int GetTileIndexFromPosX(int coord);
+	int GetTileIndexFromPosY(int coord);
 
 	void SetLevelRawStr(std::string raw_str);
-	void SetLevelNumOfColumns(int total_columns);
-	void SetLevelNumOfRows(int total_rows);
+	void SetTileChar(int x, int y, char in_char);
+	void SetLevelNumOfColumns(int width);
+	void SetLevelNumOfRows(int height);
 	void SetLevelTileWidth(int width);
 	void SetLevelTileHeight(int height);
 	void SetCamPosX(int x_coord);
 	void SetCamPosY(int y_coord);
-
-	friend class Camera;
 };
 
 #endif

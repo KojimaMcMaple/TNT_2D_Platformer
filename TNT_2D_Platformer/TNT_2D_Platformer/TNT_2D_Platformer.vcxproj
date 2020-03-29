@@ -185,6 +185,7 @@
     <ClInclude Include="..\src\SteeringState.h" />
     <ClInclude Include="..\src\TextureManager.h" />
     <ClInclude Include="..\src\Tile.h" />
+    <ClInclude Include="..\src\TileNeighbour.h" />
     <ClInclude Include="..\src\UI.h" />
     <ClInclude Include="..\src\Util.h" />
   </ItemGroup>

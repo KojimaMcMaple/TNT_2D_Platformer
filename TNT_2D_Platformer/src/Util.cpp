@@ -260,4 +260,14 @@ float Util::dot(glm::vec2 lhs, glm::vec2 rhs)
 	return lhs.x * rhs.x + lhs.y * rhs.y;
 }
 
+int Util::XCenterRect(SDL_Rect* rect)
+{
+	return (int)(rect->x + rect->w / 2);
+}
+
+int Util::YCenterRect(SDL_Rect* rect)
+{
+	return (int)(rect->y + rect->h / 2);
+}
+
 
