@@ -5,11 +5,11 @@
 class AnimSprite
 {
 private:
-	AnimState anim_id;
-	int start_col;
-	int start_row;
-	int num_frames;
-	int max_sheet_col;
+	AnimState anim_id_;
+	int start_col_;
+	int start_row_;
+	int num_frames_;
+	int max_sheet_col_;
 public:
 	AnimSprite();
 	~AnimSprite();

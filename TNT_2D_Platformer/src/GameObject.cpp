@@ -288,6 +288,11 @@ AnimState GameObject::getAnimState()
 	return m_state;
 }
 
+std::vector<AnimSprite*>& GameObject::GetAnimList()
+{
+	return anim_list_;
+}
+
 void GameObject::SetWorldRect(int x, int y, int w, int h)
 {
 	world_rect_ = { x,y,w,h };
@@ -510,6 +515,13 @@ void GameObject::setNumFrames(int value)
 void GameObject::setAnimState(AnimState newState)
 {
 	m_state = newState;
+}
+
+void GameObject::InitAnimList()
+{
+	for (int i = 0; i < NUM_OF_ANIM_STATES; i++) {
+		anim_list_[i] = nullptr;
+	}
 }
 
 void GameObject::setAcceleration(glm::vec2 newAcceleration)

@@ -11,6 +11,7 @@
 #include "Util.h"
 #include "GameObjectType.h"
 #include "AnimState.h"
+#include "AnimSprite.h"
 
 class GameObject {
 private:
@@ -69,7 +70,7 @@ private:
 	int m_currentFrame;
 	int m_numFrames;
 	AnimState m_state;
-	std::vector<std::vector<AnimSprite*>> anim_list_;
+	std::vector<AnimSprite*> anim_list_;
 
 public:
 	GameObject();
@@ -133,6 +134,7 @@ public:
 	int getNumFrames();
 	GameObjectType getType();
 	AnimState getAnimState();
+	std::vector<AnimSprite*>& GetAnimList();
 	glm::vec2 getPosition();
 	glm::vec2 getRotation();
 	glm::vec2 getScale();
@@ -182,6 +184,7 @@ public:
 	void setCurrFrame(int value);
 	void setNumFrames(int value);
 	void setAnimState(AnimState newState);
+	void InitAnimList();
 	void setAcceleration(glm::vec2 newAcceleration);
 	void setPosition(glm::vec2 newPosition);
 	void setWidth(int newWidth);

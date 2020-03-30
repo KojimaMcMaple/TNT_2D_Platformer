@@ -28,10 +28,8 @@ Player::Player()
 	setType(GameObjectType::PLAYER);
 	setAnimState(AnimState::IDLE);
 
-	/*TheSoundManager::Instance()->load("../Assets/audio/engine.ogg",
-		"engine", sound_type::SOUND_MUSIC);
-
-	TheSoundManager::Instance()->playMusic("engine", -1);*/
+	// ANIM INIT
+	
 }
 
 Player::~Player()
