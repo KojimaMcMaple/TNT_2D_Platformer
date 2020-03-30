@@ -105,16 +105,19 @@ void Game::UpdateGameObjects()
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
 		player_ptr_->setMoveDirection(-1);
 		player_ptr_->MoveX();
+		player_ptr_->setAnimState(AnimState::RUN);
 	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
 		player_ptr_->setMoveDirection(1);
 		player_ptr_->MoveX();
+		player_ptr_->setAnimState(AnimState::RUN);
 	}
 	//if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
 		SetJumpKeyPressable(false);
 		player_ptr_->setAccelerationY(-Globals::sJumpForce);
 		player_ptr_->SetGrounded(false);
+		player_ptr_->setAnimState(AnimState::JUMP);
 	}
 
 	player_ptr_->update();

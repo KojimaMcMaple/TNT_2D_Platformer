@@ -26,6 +26,7 @@ Player::Player()
 	setDrag(0.9);
 	setMoveDirection(1);
 	setType(GameObjectType::PLAYER);
+	setAnimState(AnimState::IDLE);
 
 	/*TheSoundManager::Instance()->load("../Assets/audio/engine.ogg",
 		"engine", sound_type::SOUND_MUSIC);
@@ -55,15 +56,17 @@ void Player::update()
 	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY() * 3), getMaxVelocityY()));
 	SetWorldYAndHitBox(GetWorldRect()->y + (int)getVelocityY());
 	//std::cout << "getVelocityY = " << getVelocityY() << std::endl;
-	
-	//// UPDATE HITBOX
-	//setHitBoxX(GetWorldRectCenterX() - getHitBoxW() / 2);
-	//setHitBoxY(GetWorldRectCenterY() - getHitBoxH() / 2);
 }
 
 void Player::draw()
 {
-	TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
+	switch (getAnimState()) {
+	case IDLE:
+		setNumFrames(4);
+
+		TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
+	}
+	
 }
 
 void Player::clean()

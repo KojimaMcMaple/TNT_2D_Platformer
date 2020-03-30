@@ -223,6 +223,21 @@ int GameObject::getMoveDirection()
 	return move_direction_;
 }
 
+int GameObject::getCurrRow()
+{
+	return m_currentRow;
+}
+
+int GameObject::getCurrFrame()
+{
+	return m_currentFrame;
+}
+
+int GameObject::getNumFrames()
+{
+	return m_numFrames;
+}
+
 glm::vec2 GameObject::getPosition()
 {
 	return m_position;
@@ -268,7 +283,7 @@ GameObjectType GameObject::getType()
 	return m_type;
 }
 
-SteeringState GameObject::getSteeringState()
+AnimState GameObject::getAnimState()
 {
 	return m_state;
 }
@@ -477,7 +492,22 @@ void GameObject::setType(GameObjectType newType)
 	m_type = newType;
 }
 
-void GameObject::setSteeringState(SteeringState newState)
+void GameObject::setCurrRow(int value)
+{
+	m_currentRow = value;
+}
+
+void GameObject::setCurrFrame(int value)
+{
+	m_currentFrame = value;
+}
+
+void GameObject::setNumFrames(int value)
+{
+	m_numFrames = value;
+}
+
+void GameObject::setAnimState(AnimState newState)
 {
 	m_state = newState;
 }

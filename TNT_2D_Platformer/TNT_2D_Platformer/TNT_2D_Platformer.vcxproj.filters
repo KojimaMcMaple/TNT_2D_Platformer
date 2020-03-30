@@ -66,6 +66,9 @@
     <ClCompile Include="..\src\Level.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\AnimSprite.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Game.h">
@@ -92,9 +95,6 @@
     <ClInclude Include="..\src\GameObjectType.h">
       <Filter>Enums</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SteeringState.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Camera.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -115,6 +115,12 @@
     </ClInclude>
     <ClInclude Include="..\src\TileNeighbour.h">
       <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AnimState.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\AnimSprite.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

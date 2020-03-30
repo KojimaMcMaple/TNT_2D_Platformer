@@ -10,7 +10,7 @@
 #include "Globals.h"
 #include "Util.h"
 #include "GameObjectType.h"
-#include "SteeringState.h"
+#include "AnimState.h"
 
 class GameObject {
 private:
@@ -45,7 +45,6 @@ private:
 	bool is_grounded_ = false;
 	bool is_collidable_;
 	GameObjectType m_type;
-	SteeringState m_state;
 
 	// TRANSFORM
 	int custom_pivot_x_;
@@ -69,6 +68,8 @@ private:
 	int m_currentRow;
 	int m_currentFrame;
 	int m_numFrames;
+	AnimState m_state;
+	std::vector<std::vector<AnimSprite*>> anim_list_;
 
 public:
 	GameObject();
@@ -127,8 +128,11 @@ public:
 	float getDrag();
 	float getGravity();
 	int getMoveDirection();
+	int getCurrRow();
+	int getCurrFrame();
+	int getNumFrames();
 	GameObjectType getType();
-	SteeringState getSteeringState();
+	AnimState getAnimState();
 	glm::vec2 getPosition();
 	glm::vec2 getRotation();
 	glm::vec2 getScale();
@@ -174,7 +178,10 @@ public:
 	void setGravity(float value);
 	void setMoveDirection(int value);
 	void setType(GameObjectType newType);
-	void setSteeringState(SteeringState newState);
+	void setCurrRow(int value);
+	void setCurrFrame(int value);
+	void setNumFrames(int value);
+	void setAnimState(AnimState newState);
 	void setAcceleration(glm::vec2 newAcceleration);
 	void setPosition(glm::vec2 newPosition);
 	void setWidth(int newWidth);
