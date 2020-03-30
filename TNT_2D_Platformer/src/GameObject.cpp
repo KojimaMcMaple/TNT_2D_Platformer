@@ -13,6 +13,23 @@ GameObject::~GameObject()
 {
 }
 
+void GameObject::Animate()
+{
+	auto anim_db = GetAnimList()[anim_state_];
+	if (curr_frame_ > anim_db->GetNumFrames() - 1) {
+		curr_frame_ = 0;
+	}
+	curr_col_ = anim_db->GetStartCol() + curr_frame_;
+	if (curr_col_ > anim_db->GetMaxSheetCol() - 1) {
+		curr_col_ -= anim_db->GetMaxSheetCol();
+	}
+	curr_row_ = anim_db->GetStartRow() + (int)(curr_frame_ / anim_db->GetMaxSheetCol()); //if frame exceeds GetMaxSheetCol, go to the next row
+	setSrcX(curr_col_ * getSrc()->w);
+	setSrcY(curr_row_ * getSrc()->h);
+
+	curr_frame_++;
+}
+
 SDL_Rect* GameObject::GetWorldRect()
 {
 	return &world_rect_;
@@ -223,19 +240,19 @@ int GameObject::getMoveDirection()
 	return move_direction_;
 }
 
-int GameObject::getCurrRow()
-{
-	return m_currentRow;
-}
-
 int GameObject::getCurrFrame()
 {
-	return m_currentFrame;
+	return curr_frame_;
 }
 
-int GameObject::getNumFrames()
+int GameObject::getCurrRow()
 {
-	return m_numFrames;
+	return curr_row_;
+}
+
+int GameObject::getCurrCol()
+{
+	return curr_col_;
 }
 
 glm::vec2 GameObject::getPosition()
@@ -285,7 +302,7 @@ GameObjectType GameObject::getType()
 
 AnimState GameObject::getAnimState()
 {
-	return m_state;
+	return anim_state_;
 }
 
 std::vector<AnimSprite*>& GameObject::GetAnimList()
@@ -318,19 +335,29 @@ void GameObject::setSrc(int x, int y, int w, int h)
 	src_ = { x,y,w,h };
 }
 
+void GameObject::setSrcX(int coord)
+{
+	src_.x = coord;
+}
+
+void GameObject::setSrcY(int coord)
+{
+	src_.y = coord;
+}
+
 void GameObject::setDst(int x, int y, int w, int h)
 {
 	dst_ = { x,y,w,h };
 }
 
-void GameObject::setDstX(int x)
+void GameObject::setDstX(int coord)
 {
-	dst_.x = x;
+	dst_.x = coord;
 }
 
-void GameObject::setDstY(int y)
+void GameObject::setDstY(int coord)
 {
-	dst_.y = y;
+	dst_.y = coord;
 }
 
 void GameObject::SetWorldXAndHitBox(int coord)
@@ -497,30 +524,30 @@ void GameObject::setType(GameObjectType newType)
 	m_type = newType;
 }
 
-void GameObject::setCurrRow(int value)
-{
-	m_currentRow = value;
-}
-
 void GameObject::setCurrFrame(int value)
 {
-	m_currentFrame = value;
+	curr_frame_ = value;
 }
 
-void GameObject::setNumFrames(int value)
+void GameObject::setCurrRow(int value)
 {
-	m_numFrames = value;
+	curr_row_ = value;
+}
+
+void GameObject::setCurrCol(int value)
+{
+	curr_col_ = value;
 }
 
 void GameObject::setAnimState(AnimState newState)
 {
-	m_state = newState;
+	anim_state_ = newState;
 }
 
 void GameObject::InitAnimList()
 {
 	for (int i = 0; i < NUM_OF_ANIM_STATES; i++) {
-		anim_list_[i] = nullptr;
+		anim_list_.push_back(new AnimSprite());
 	}
 }
 

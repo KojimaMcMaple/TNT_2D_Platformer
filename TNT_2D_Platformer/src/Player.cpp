@@ -29,7 +29,13 @@ Player::Player()
 	setAnimState(AnimState::IDLE);
 
 	// ANIM INIT
-	
+	InitAnimList();
+	GetAnimList()[IDLE]->SetAnimId(IDLE);
+	GetAnimList()[IDLE]->SetStartRow(0);
+	GetAnimList()[IDLE]->SetStartCol(0);
+	GetAnimList()[IDLE]->SetNumFrames(4);
+	GetAnimList()[IDLE]->SetMaxSheetRow(16);
+	GetAnimList()[IDLE]->SetMaxSheetCol(7);
 }
 
 Player::~Player()
@@ -60,8 +66,7 @@ void Player::draw()
 {
 	switch (getAnimState()) {
 	case IDLE:
-		setNumFrames(4);
-
+		Animate();
 		TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
 	}
 	

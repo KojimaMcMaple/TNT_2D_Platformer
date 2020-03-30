@@ -66,10 +66,10 @@ private:
 	int m_height;
 
 	// animation variables
-	int m_currentRow;
-	int m_currentFrame;
-	int m_numFrames;
-	AnimState m_state;
+	int curr_frame_;
+	int curr_row_;
+	int curr_col_;
+	AnimState anim_state_;
 	std::vector<AnimSprite*> anim_list_;
 
 public:
@@ -81,6 +81,7 @@ public:
 
 	// Draw the object
 	virtual void draw() = 0;
+	void Animate();
 
 	// remove anything that needs to be deleted
 	virtual void clean() = 0;
@@ -129,9 +130,9 @@ public:
 	float getDrag();
 	float getGravity();
 	int getMoveDirection();
-	int getCurrRow();
 	int getCurrFrame();
-	int getNumFrames();
+	int getCurrRow();
+	int getCurrCol();
 	GameObjectType getType();
 	AnimState getAnimState();
 	std::vector<AnimSprite*>& GetAnimList();
@@ -149,9 +150,11 @@ public:
 	void SetWorldRectY(int coord);
 	void setSrc(SDL_Rect src_ptr);
 	void setSrc(int x, int y, int w, int h);
+	void setSrcX(int coord);
+	void setSrcY(int coord);
 	void setDst(int x, int y, int w, int h);
-	void setDstX(int x);
-	void setDstY(int y);
+	void setDstX(int coord);
+	void setDstY(int coord);
 	void SetWorldXAndHitBox(int coord);
 	void SetWorldYAndHitBox(int coord);
 	void SetHitBoxXAndWorld(int coord);
@@ -180,9 +183,9 @@ public:
 	void setGravity(float value);
 	void setMoveDirection(int value);
 	void setType(GameObjectType newType);
-	void setCurrRow(int value);
 	void setCurrFrame(int value);
-	void setNumFrames(int value);
+	void setCurrRow(int value);
+	void setCurrCol(int value);
 	void setAnimState(AnimState newState);
 	void InitAnimList();
 	void setAcceleration(glm::vec2 newAcceleration);
