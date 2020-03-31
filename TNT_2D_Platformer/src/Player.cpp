@@ -34,6 +34,7 @@ Player::Player()
 	GetAnimList()[IDLE]->SetStartRow(0);
 	GetAnimList()[IDLE]->SetStartCol(0);
 	GetAnimList()[IDLE]->SetNumFrames(4);
+	GetAnimList()[IDLE]->SetAnimSpeed(0.15f);
 	GetAnimList()[IDLE]->SetMaxSheetRow(16);
 	GetAnimList()[IDLE]->SetMaxSheetCol(7);
 }

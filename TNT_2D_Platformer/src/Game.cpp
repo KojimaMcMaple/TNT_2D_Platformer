@@ -17,6 +17,11 @@ glm::vec2 Game::getTargetPosition()
 	return glm::vec2(0,0);
 }
 
+Uint32 Game::getFrames() const
+{
+	return m_frames;
+}
+
 SDL_Renderer* Game::getRenderer()
 {
 	return m_pRenderer;
@@ -25,16 +30,6 @@ SDL_Renderer* Game::getRenderer()
 FSM& Game::GetFSM()
 {
 	return *fsm_;
-}
-
-int Game::GetOffsetPositionX()
-{
-	return offset_position_x_;
-}
-
-int Game::GetOffsetPositionY()
-{
-	return offset_position_y_;
 }
 
 bool Game::IsJumpKeyPressable()
@@ -54,14 +49,9 @@ UI& Game::GetPauseScreen()
 	return *pause_screen_ptr_;
 }
 
-void Game::SetOffsetPositionX(int x_distance)
+void Game::setFrames(Uint32 frames)
 {
-	offset_position_x_ = x_distance;
-}
-
-void Game::SetOffsetPositionY(int y_distance)
-{
-	offset_position_y_ = y_distance;
+	m_frames = frames;
 }
 
 void Game::SetJumpKeyPressable(bool toggle)

@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Game.h"
 
 GameObject::GameObject()
 {
@@ -16,18 +17,22 @@ GameObject::~GameObject()
 void GameObject::Animate()
 {
 	auto anim_db = GetAnimList()[anim_state_];
-	if (curr_frame_ > anim_db->GetNumFrames() - 1) {
-		curr_frame_ = 0;
-	}
-	curr_col_ = anim_db->GetStartCol() + curr_frame_;
-	if (curr_col_ > anim_db->GetMaxSheetCol() - 1) {
-		curr_col_ -= anim_db->GetMaxSheetCol();
-	}
-	curr_row_ = anim_db->GetStartRow() + (int)(curr_frame_ / anim_db->GetMaxSheetCol()); //if frame exceeds GetMaxSheetCol, go to the next row
-	setSrcX(curr_col_ * getSrc()->w);
-	setSrcY(curr_row_ * getSrc()->h);
+	int animationRate = round(anim_db->GetNumFrames() / 2 / anim_db->GetAnimSpeed());
+	if (TheGame::Instance()->getFrames() % animationRate == 0)
+	{
+		if (curr_frame_ > anim_db->GetNumFrames() - 1) {
+			curr_frame_ = 0;
+		}
+		curr_col_ = anim_db->GetStartCol() + curr_frame_;
+		if (curr_col_ > anim_db->GetMaxSheetCol() - 1) {
+			curr_col_ -= anim_db->GetMaxSheetCol();
+		}
+		curr_row_ = anim_db->GetStartRow() + (int)(curr_frame_ / anim_db->GetMaxSheetCol()); //if frame exceeds GetMaxSheetCol, go to the next row
+		setSrcX(curr_col_ * getSrc()->w);
+		setSrcY(curr_row_ * getSrc()->h);
 
-	curr_frame_++;
+		curr_frame_++;
+	}
 }
 
 SDL_Rect* GameObject::GetWorldRect()

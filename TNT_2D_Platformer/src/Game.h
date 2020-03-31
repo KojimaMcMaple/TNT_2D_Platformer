@@ -31,7 +31,7 @@ private:
 	FSM* fsm_;
 
 	static Game* s_pInstance;
-	int m_currentFrame;
+	Uint32 m_frames;
 	bool m_bRunning;
 	const Uint8* key_states_ = nullptr;
 
@@ -44,8 +44,6 @@ private:
 	
 	// Movement offset
 	bool is_jump_key_pressable_ = true;
-	int offset_position_x_;
-	int offset_position_y_;
 
 	// REDUNDANT
 	glm::vec2 m_mousePosition;
@@ -82,17 +80,15 @@ public:
 	void RenderGameObjects();
 
 	// getters
+	Uint32 getFrames() const;
 	SDL_Renderer* getRenderer();
 	FSM& GetFSM();
-	int GetOffsetPositionX();
-	int GetOffsetPositionY();
 	bool IsJumpKeyPressable();
 	UI& GetTitleScreen();
 	UI& GetPauseScreen();
 
 	// setters
-	void SetOffsetPositionX(int x_distance);
-	void SetOffsetPositionY(int y_distance);
+	void setFrames(Uint32 frames);
 	void SetJumpKeyPressable(bool toggle);
 
 	// REDUNDANT
