@@ -9,8 +9,8 @@ Player::Player()
 	SetWorldRect(0, 0, 50 * 3, 37 * 3);
 	setDst(0, 0, 50 * 3, 37 * 3);
 	setHitBox(0, 0, 45, 85);
-	setHitBoxOffsetX(-4);
-	setHitBoxOffsetY(10);
+	//setHitBoxOffsetX(-4);
+	//setHitBoxOffsetY(10);
 	//SetHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
 	SetCollidable(true);
 	SetGrounded(false);
@@ -22,7 +22,7 @@ Player::Player()
 	setMaxAccelerationX(2.0);
 	setMaxAccelerationY(2.0);
 	setMaxVelocityX(6.0);
-	setMaxVelocityY(getGravity());
+	setMaxVelocityY(14.5);
 	setDrag(0.9);
 	setMoveDirection(1);
 	setType(GameObjectType::PLAYER);
@@ -35,8 +35,36 @@ Player::Player()
 	GetAnimList()[IDLE]->SetStartCol(0);
 	GetAnimList()[IDLE]->SetNumFrames(4);
 	GetAnimList()[IDLE]->SetAnimSpeed(0.15f);
-	GetAnimList()[IDLE]->SetMaxSheetRow(16);
-	GetAnimList()[IDLE]->SetMaxSheetCol(7);
+	GetAnimList()[IDLE]->SetLooping(true);
+	GetAnimList()[IDLE]->SetMaxSheetRow(16); //same for all anim states since there's only one sheet
+	GetAnimList()[IDLE]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
+
+	GetAnimList()[RUN]->SetAnimId(RUN);
+	GetAnimList()[RUN]->SetStartRow(1);
+	GetAnimList()[RUN]->SetStartCol(1);
+	GetAnimList()[RUN]->SetNumFrames(6);
+	GetAnimList()[RUN]->SetAnimSpeed(0.45f);
+	GetAnimList()[RUN]->SetLooping(true);
+	GetAnimList()[RUN]->SetMaxSheetRow(16); //same for all anim states since there's only one sheet
+	GetAnimList()[RUN]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
+	
+	GetAnimList()[JUMP]->SetAnimId(JUMP);
+	GetAnimList()[JUMP]->SetStartRow(2);
+	GetAnimList()[JUMP]->SetStartCol(2);
+	GetAnimList()[JUMP]->SetNumFrames(2);
+	GetAnimList()[JUMP]->SetAnimSpeed(0.20f);
+	GetAnimList()[JUMP]->SetLooping(false);
+	GetAnimList()[JUMP]->SetMaxSheetRow(16); //same for all anim states since there's only one sheet
+	GetAnimList()[JUMP]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
+
+	GetAnimList()[FALL]->SetAnimId(FALL);
+	GetAnimList()[FALL]->SetStartRow(3);
+	GetAnimList()[FALL]->SetStartCol(1);
+	GetAnimList()[FALL]->SetNumFrames(2);
+	GetAnimList()[FALL]->SetAnimSpeed(0.20f);
+	GetAnimList()[FALL]->SetLooping(true);
+	GetAnimList()[FALL]->SetMaxSheetRow(16); //same for all anim states since there's only one sheet
+	GetAnimList()[FALL]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
 }
 
 Player::~Player()
@@ -57,18 +85,22 @@ void Player::update()
 	SetWorldXAndHitBox(GetWorldRect()->x + (int)getVelocityX());
 	//std::cout << "getVelocityX = " << getVelocityX() << std::endl;
 
-	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity() / 3));
-	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY() * 3), getMaxVelocityY()));
+	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity()/5));
+	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY()*10), getMaxVelocityY()));
 	SetWorldYAndHitBox(GetWorldRect()->y + (int)getVelocityY());
 	//std::cout << "getVelocityY = " << getVelocityY() << std::endl;
 }
 
 void Player::draw()
 {
-	switch (getAnimState()) {
-	case IDLE:
-		Animate();
+	Animate();
+	switch (getMoveDirection()) {
+	case -1:
+		TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_HORIZONTAL);
+		break;
+	default:
 		TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
+		break;
 	}
 	
 }

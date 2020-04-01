@@ -6,6 +6,7 @@ enum AnimState {
 	IDLE,
 	RUN,
 	JUMP,
+	FALL,
 	ATTACK,
 	NUM_OF_ANIM_STATES
 };

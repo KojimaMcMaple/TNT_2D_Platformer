@@ -33,6 +33,11 @@ float AnimSprite::GetAnimSpeed()
 	return anim_speed_;
 }
 
+bool AnimSprite::IsLooping()
+{
+	return is_looping_;
+}
+
 int AnimSprite::GetMaxSheetRow()
 {
 	return max_sheet_row_;
@@ -66,6 +71,11 @@ void AnimSprite::SetNumFrames(int value)
 void AnimSprite::SetAnimSpeed(float value)
 {
 	anim_speed_ = value;
+}
+
+void AnimSprite::SetLooping(bool toggle)
+{
+	is_looping_ = toggle;
 }
 
 void AnimSprite::SetMaxSheetRow(int value)

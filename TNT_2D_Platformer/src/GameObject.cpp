@@ -20,8 +20,18 @@ void GameObject::Animate()
 	int animationRate = round(anim_db->GetNumFrames() / 2 / anim_db->GetAnimSpeed());
 	if (TheGame::Instance()->getFrames() % animationRate == 0)
 	{
-		if (curr_frame_ > anim_db->GetNumFrames() - 1) {
+		if (curr_anim_state_ != anim_state_) {
+			curr_anim_state_ = anim_state_;
 			curr_frame_ = 0;
+		}
+		
+		if (curr_frame_ > anim_db->GetNumFrames() - 1) {
+			if (anim_db->IsLooping()) {
+				curr_frame_ = 0;
+			}
+			else {
+				curr_frame_ = anim_db->GetNumFrames() - 1;
+			}
 		}
 		curr_col_ = anim_db->GetStartCol() + curr_frame_;
 		if (curr_col_ > anim_db->GetMaxSheetCol() - 1) {
