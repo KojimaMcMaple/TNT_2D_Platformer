@@ -65,6 +65,15 @@ Player::Player()
 	GetAnimList()[FALL]->SetLooping(true);
 	GetAnimList()[FALL]->SetMaxSheetRow(16); //same for all anim states since there's only one sheet
 	GetAnimList()[FALL]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
+
+	GetAnimList()[ATTACK]->SetAnimId(ATTACK);
+	GetAnimList()[ATTACK]->SetStartRow(5);
+	GetAnimList()[ATTACK]->SetStartCol(6);
+	GetAnimList()[ATTACK]->SetNumFrames(7);
+	GetAnimList()[ATTACK]->SetAnimSpeed(0.80f);
+	GetAnimList()[ATTACK]->SetLooping(false);
+	GetAnimList()[ATTACK]->SetMaxSheetRow(16); //same for all anim states since there's only one sheet
+	GetAnimList()[ATTACK]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
 }
 
 Player::~Player()

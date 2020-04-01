@@ -92,6 +92,7 @@ void Game::CheckCollision()
 
 void Game::UpdateGameObjects()
 {
+	// INPUT HANDLE
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
 		player_ptr_->setMoveDirection(-1);
 		player_ptr_->MoveX();
@@ -106,17 +107,25 @@ void Game::UpdateGameObjects()
 			player_ptr_->setAnimState(AnimState::RUN);
 		}
 	}
-	//if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
 		SetJumpKeyPressable(false);
 		player_ptr_->setAccelerationY(-Globals::sJumpForce);
 		player_ptr_->SetGrounded(false);
 		player_ptr_->setAnimState(AnimState::JUMP);
 	}
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_RSHIFT) && player_ptr_->IsGrounded()) {
+		player_ptr_->setAnimState(AnimState::ATTACK);
+	}
+
+	// POST PROCESSING
+	if (player_ptr_->getAnimState() == AnimState::ATTACK) {
+		if (player_ptr_->getCurrFrame() == player_ptr_->GetAnimList()[player_ptr_->getAnimState()]->GetNumFrames() - 1) { //anim ended
+			player_ptr_->setAnimState(AnimState::IDLE);
+		}
+	}
 
 	player_ptr_->update();
 	player_ptr_->setAccelerationY(0);
-	//std::cout << "vel Y = " << player_ptr_->getVelocityY() << std::endl;
 
 	if (!player_ptr_->IsGrounded() && player_ptr_->getVelocityY() > 0) {
 		player_ptr_->setAnimState(AnimState::FALL);
@@ -124,8 +133,11 @@ void Game::UpdateGameObjects()
 
 	CheckCollision();
 
-	if (player_ptr_->IsGrounded() && player_ptr_->getAnimState() != AnimState::RUN) {
+	if (player_ptr_->IsGrounded() 
+		&& player_ptr_->getAnimState() != AnimState::RUN
+		&& player_ptr_->getAnimState() != AnimState::ATTACK) {
 		player_ptr_->setAnimState(AnimState::IDLE);
+		
 	}
 
 	camera_ptr_->RefocusCamera(player_ptr_, level_ptr_);

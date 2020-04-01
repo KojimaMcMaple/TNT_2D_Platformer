@@ -37,7 +37,8 @@ void GameObject::Animate()
 		if (curr_col_ > anim_db->GetMaxSheetCol() - 1) {
 			curr_col_ -= anim_db->GetMaxSheetCol();
 		}
-		curr_row_ = anim_db->GetStartRow() + (int)(curr_frame_ / anim_db->GetMaxSheetCol()); //if frame exceeds GetMaxSheetCol, go to the next row
+		// if frame exceeds GetMaxSheetCol, go to the next row
+		curr_row_ = anim_db->GetStartRow() + (int)((curr_frame_+ anim_db->GetStartCol()) / anim_db->GetMaxSheetCol()); //bug fixed: must add anim_db->GetStartCol() to curr_frame_ because GetStartCol is an offset
 		setSrcX(curr_col_ * getSrc()->w);
 		setSrcY(curr_row_ * getSrc()->h);
 
