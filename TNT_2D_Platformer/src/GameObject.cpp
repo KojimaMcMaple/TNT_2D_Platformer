@@ -20,8 +20,8 @@ void GameObject::Animate()
 	int animationRate = round(anim_db->GetNumFrames() / 2 / anim_db->GetAnimSpeed());
 	if (TheGame::Instance()->getFrames() % animationRate == 0)
 	{
-		if (curr_anim_state_ != anim_state_) {
-			curr_anim_state_ = anim_state_;
+		if (checking_anim_state_ != anim_state_) {
+			checking_anim_state_ = anim_state_;
 			curr_frame_ = 0;
 		}
 		

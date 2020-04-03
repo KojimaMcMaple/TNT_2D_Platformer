@@ -69,7 +69,7 @@ private:
 	int curr_frame_;
 	int curr_row_;
 	int curr_col_;
-	int curr_anim_state_ = -1; //checking var to reset curr_frame_
+	int checking_anim_state_ = -1; //checking var to reset curr_frame_
 	AnimState anim_state_;
 	std::vector<AnimSprite*> anim_list_;
 

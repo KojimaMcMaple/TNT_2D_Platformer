@@ -48,7 +48,7 @@ void Level::update()
 		int world_row = row + row_idx_start;
 		for (int col = 0; col < GetVisibleTilesNumOfColumns()+2; col++) {
 			int world_col = col + col_idx_start;
-			if (world_row < GetLevelNumOfRows() - 1 && world_col < GetLevelNumOfColumns() - 1) { //bound check
+			if (world_row < GetLevelNumOfRows() && world_col < GetLevelNumOfColumns()) { //bound check
 				auto world_tile = level_world_tile_list_[world_row][world_col];
 				auto tile = visible_tile_list_[row][col];
 				tile->setDstX(world_tile->GetWorldRect()->x - cam_pos_x_);
@@ -80,8 +80,28 @@ void Level::clean()
 }
 
 
+int Level::CheckWorldBounds(GameObject* obj_ptr)
+{
+	int result = -1;
+
+	if (obj_ptr->getHitBoxX() < 0) {
+		obj_ptr->setVelocityX(0.0); // Stop the player from moving horizontally.
+		obj_ptr->SetHitBoxXAndWorld(0);
+		result = LEFT;
+	}
+	else if (obj_ptr->getHitBoxRightmostX() > GetLevelMaxPosX()) {
+		obj_ptr->setVelocityX(0.0); // Stop the player from moving horizontally.
+		obj_ptr->SetHitBoxXAndWorld(GetLevelMaxPosX() - obj_ptr->getHitBoxW());
+		result = RIGHT;
+	}
+
+	return result;
+}
+
 int Level::CheckLevelCollision(GameObject* obj_ptr)
 {
+	CheckWorldBounds(obj_ptr);
+	
 	int result = -1;
 
 	int obj_col = GetTileIndexFromPosX(obj_ptr->getHitBoxX());
@@ -99,62 +119,29 @@ int Level::CheckLevelCollision(GameObject* obj_ptr)
 					obj_ptr->SetGrounded(true);
 					obj_ptr->setVelocityY(0.0); // Stop the player from moving vertically. We aren't modifying gravity.
 					obj_ptr->SetHitBoxYAndWorld(tile->GetWorldRect()->y - obj_ptr->getHitBox()->h);
+					result = DOWN;
 				}
 				else if (obj_ptr->getHitBox()->y - obj_ptr->getVelocityY() >= tile->GetWorldRect()->y + tile->GetWorldRect()->h)
 				{ // Collision from bottom.
 					obj_ptr->setVelocityY(0.0); // Stop the player from moving vertically. We aren't modifying gravity.
 					obj_ptr->SetHitBoxYAndWorld(tile->GetWorldRect()->y + tile->GetWorldRect()->h);
+					result = UP;
 				}
 				else if ((obj_ptr->getHitBoxRightmostX()) - obj_ptr->getVelocityX() <= tile->GetWorldRect()->x)
 				{ // Collision from left.
 					obj_ptr->setVelocityX(0.0); // Stop the player from moving horizontally.
 					obj_ptr->SetHitBoxXAndWorld(tile->GetWorldRect()->x - obj_ptr->getHitBox()->w);
+					result = RIGHT;
 				}
 				else if (obj_ptr->getHitBox()->x - obj_ptr->getVelocityX() >= tile->GetWorldRect()->x + tile->GetWorldRect()->w)
 				{ // Collision from right.
 					obj_ptr->setVelocityX(0.0); // Stop the player from moving horizontally.
 					obj_ptr->SetHitBoxXAndWorld(tile->GetWorldRect()->x + tile->GetWorldRect()->w);
+					result = LEFT;
 				}
 			}
 		}
 	}
-
-	/*
-	int row = GetTileIndexFromPosY(obj_ptr->getHitBoxY());
-	int col = GetTileIndexFromPosX(obj_ptr->getHitBoxX());
-	Tile* tile = level_world_tile_list_[row][col];
-
-	for (int i = 0; i < NUM_OF_NEIGHBOURS; i++) {
-		Tile* nbour = tile->getNeighbours()[i];
-		if (nbour != nullptr) {
-			if (SDL_HasIntersection(obj_ptr->getHitBox(), nbour->GetWorldRect()) && nbour->IsCollidable()) {
-				if (i == UP) {
-					obj_ptr->setVelocityY(0);
-					obj_ptr->SetHitBoxYAndWorld(nbour->GetWorldRectLowermostY());
-				}
-				else if (i == DOWN) {
-					obj_ptr->SetGrounded(true);
-					obj_ptr->setVelocityY(0);
-					obj_ptr->SetHitBoxYAndWorld(nbour->GetWorldRect()->y - obj_ptr->getHitBoxH());
-				}
-				else if (i == LEFT) {
-					obj_ptr->setVelocityX(0);
-					obj_ptr->SetHitBoxXAndWorld(nbour->GetWorldRectRightmostX());
-				}
-				else if (i == RIGHT) {
-					obj_ptr->setVelocityX(0);
-					obj_ptr->SetHitBoxXAndWorld(nbour->GetWorldRect()->x - obj_ptr->getHitBoxW());
-				}
-				result = i;
-
-				std::cout << result << std::endl;
-				std::cout << row << std::endl;
-				std::cout << col << std::endl;
-				std::cout << ".........." << std::endl;
-				return result;
-			}
-		}
-	}*/
 
 	return result;
 }

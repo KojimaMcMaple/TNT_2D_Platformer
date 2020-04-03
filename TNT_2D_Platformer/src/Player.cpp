@@ -92,12 +92,10 @@ void Player::update()
 	setVelocityX((getVelocityX() + getAccelerationX()) * getDrag());
 	setVelocityX(std::min(std::max(getVelocityX(), -getMaxVelocityX()), getMaxVelocityX()));
 	SetWorldXAndHitBox(GetWorldRect()->x + (int)getVelocityX());
-	//std::cout << "getVelocityX = " << getVelocityX() << std::endl;
 
 	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity()/5));
 	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY()*10), getMaxVelocityY()));
 	SetWorldYAndHitBox(GetWorldRect()->y + (int)getVelocityY());
-	//std::cout << "getVelocityY = " << getVelocityY() << std::endl;
 }
 
 void Player::draw()
