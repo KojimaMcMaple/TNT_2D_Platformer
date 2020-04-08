@@ -73,8 +73,11 @@ void Game::createGameObjects()
 	level_ptr_->LoadLevel("church");
 
 	player_ptr_ = new Player();
-	player_ptr_->SetWorldXAndHitBox(4 * level_ptr_->GetLevelTileWidth() + level_ptr_->GetLevelTileWidth() / 2 - player_ptr_->getDstW() / 2);
-	player_ptr_->SetWorldYAndHitBox(4 * level_ptr_->GetLevelTileHeight() + level_ptr_->GetLevelTileHeight() / 2 - player_ptr_->getDstH() / 2);
+	player_ptr_->SetWorldXAndHitBox(4 * level_ptr_->GetLevelTileWidth());
+	player_ptr_->SetWorldYAndHitBox(4 * level_ptr_->GetLevelTileHeight());
+
+	enemy_list_.push_back(new Enemy(SKELETON_SWORD, 6 * level_ptr_->GetLevelTileWidth(), 3 * level_ptr_->GetLevelTileHeight()));
+	//std::cout << enemy_list_.back()->GetWorldRect()->x << std::endl;
 
 	// CENTER CAM TO PLAYER
 	camera_ptr_ = new Camera();
@@ -86,7 +89,11 @@ void Game::createGameObjects()
 
 void Game::CheckCollision()
 {
-	int direction = level_ptr_->CheckLevelCollision(player_ptr_);
+	level_ptr_->CheckLevelCollision(player_ptr_);
+	for (int i = 0; i < enemy_list_.size(); i++) {
+		level_ptr_->CheckLevelCollision(enemy_list_[i]);
+	}
+	
 
 }
 
@@ -118,6 +125,7 @@ void Game::UpdateGameObjects()
 	}
 
 	// POST PROCESSING
+	// PLAYER
 	if (player_ptr_->getAnimState() == AnimState::ATTACK) {
 		if (player_ptr_->getCurrFrame() == player_ptr_->GetAnimList()[player_ptr_->getAnimState()]->GetNumFrames() - 1) { //anim ended
 			player_ptr_->setAnimState(AnimState::IDLE);
@@ -137,19 +145,30 @@ void Game::UpdateGameObjects()
 		&& player_ptr_->getAnimState() != AnimState::RUN
 		&& player_ptr_->getAnimState() != AnimState::ATTACK) {
 		player_ptr_->setAnimState(AnimState::IDLE);
-		
 	}
 
+	// ENEMIES
+	for (int i = 0; i < enemy_list_.size(); i++) {
+		enemy_list_[i]->update();
+	}
+
+	// CAMERA
 	camera_ptr_->RefocusCamera(player_ptr_, level_ptr_);
 	
+	// LEVEL
 	level_ptr_->SetCamPosX(camera_ptr_->GetWorldRect()->x);
 	level_ptr_->SetCamPosY(camera_ptr_->GetWorldRect()->y);
 	level_ptr_->update();
+
+	
 }
 
 void Game::RenderGameObjects()
 {
 	level_ptr_->draw();
+	for (int i = 0; i < enemy_list_.size(); i++) {
+		camera_ptr_->draw(enemy_list_[i]);
+	}
 	camera_ptr_->draw(player_ptr_);
 }
 

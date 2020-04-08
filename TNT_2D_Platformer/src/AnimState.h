@@ -8,6 +8,7 @@ enum AnimState {
 	JUMP,
 	FALL,
 	ATTACK,
+	ENEMY_PATROL,
 	NUM_OF_ANIM_STATES
 };
 

@@ -39,8 +39,21 @@ void GameObject::Animate()
 		}
 		// if frame exceeds GetMaxSheetCol, go to the next row
 		curr_row_ = anim_db->GetStartRow() + (int)((curr_frame_+ anim_db->GetStartCol()) / anim_db->GetMaxSheetCol()); //bug fixed: must add anim_db->GetStartCol() to curr_frame_ because GetStartCol is an offset
-		setSrcX(curr_col_ * getSrc()->w);
-		setSrcY(curr_row_ * getSrc()->h);
+		
+		// SET SRC, if GetFrameH or GetFrameW equals -1, there is one sprite sheet
+		if (anim_db->GetFrameH() == -1) {
+			setSrcY(curr_row_ * getSrc()->h);
+		}
+		else {
+			setSrcY(curr_row_ * anim_db->GetFrameH());
+		}
+
+		if (anim_db->GetFrameW() == -1) {
+			setSrcX(curr_col_ * getSrc()->w);
+		}
+		else {
+			setSrcX(curr_col_ * anim_db->GetFrameW());
+		}
 
 		curr_frame_++;
 	}

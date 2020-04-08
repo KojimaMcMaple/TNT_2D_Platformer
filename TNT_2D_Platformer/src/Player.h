@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __Player__
-#define __Player__
+#ifndef __PLAYER__
+#define __PLAYER__
 
 #include <iostream>
 #include <algorithm>

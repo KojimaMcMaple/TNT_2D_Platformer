@@ -109,7 +109,6 @@ void Player::draw()
 		TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
 		break;
 	}
-	
 }
 
 void Player::clean()

@@ -8,6 +8,11 @@ AnimSprite::~AnimSprite()
 {
 }
 
+std::string AnimSprite::GetSpriteTextureId()
+{
+	return texture_id_;
+}
+
 AnimState AnimSprite::GetAnimId()
 {
 	return anim_id_;
@@ -21,6 +26,16 @@ int AnimSprite::GetStartRow()
 int AnimSprite::GetStartCol()
 {
 	return start_col_;
+}
+
+int AnimSprite::GetFrameW()
+{
+	return frame_width_;
+}
+
+int AnimSprite::GetFrameH()
+{
+	return frame_height_;
 }
 
 int AnimSprite::GetNumFrames()
@@ -48,6 +63,11 @@ int AnimSprite::GetMaxSheetCol()
 	return max_sheet_col_;
 }
 
+void AnimSprite::SetSpriteTextureId(std::string value)
+{
+	texture_id_ = value;
+}
+
 void AnimSprite::SetAnimId(AnimState value)
 {
 	anim_id_ = value;
@@ -61,6 +81,16 @@ void AnimSprite::SetStartRow(int value)
 void AnimSprite::SetStartCol(int value)
 {
 	start_col_ = value;
+}
+
+void AnimSprite::SetFrameW(int value)
+{
+	frame_width_ = value;
+}
+
+void AnimSprite::SetFrameH(int value)
+{
+	frame_height_ = value;
 }
 
 void AnimSprite::SetNumFrames(int value)

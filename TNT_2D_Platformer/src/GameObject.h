@@ -20,7 +20,7 @@ private:
 	
 	// RENDERING
 	SDL_Rect src_, dst_;
-	std::string texture_id_;
+	std::string texture_id_ = "";
 
 	// SOUND
 	std::vector<std::string> sfx_id_list_;
