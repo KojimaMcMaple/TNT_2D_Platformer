@@ -127,6 +127,7 @@ void Game::UpdateGameObjects()
 	// POST PROCESSING
 	// PLAYER
 	if (player_ptr_->getAnimState() == AnimState::ATTACK) {
+		player_ptr_->StopX();
 		if (player_ptr_->getCurrFrame() == player_ptr_->GetAnimList()[player_ptr_->getAnimState()]->GetNumFrames() - 1) { //anim ended
 			player_ptr_->setAnimState(AnimState::IDLE);
 		}
@@ -272,8 +273,7 @@ void Game::handleEvents()
 			break;
 		case SDL_KEYUP:
 			if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_RIGHT) {
-				player_ptr_->setAccelerationX(0);
-				player_ptr_->setVelocityX(0);
+				player_ptr_->StopX();
 				if (player_ptr_->IsGrounded()) {
 					player_ptr_->setAnimState(AnimState::IDLE);
 				}

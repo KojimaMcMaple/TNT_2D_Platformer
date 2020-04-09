@@ -15,10 +15,12 @@ public:
 	Player();
 	~Player();
 	
-	void MoveX();
 	void update() override;
 	void draw() override;
 	void clean() override;
+
+	void MoveX();
+	void StopX();
 
 	friend class Camera;
 };

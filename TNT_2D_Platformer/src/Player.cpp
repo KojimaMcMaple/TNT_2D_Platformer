@@ -67,10 +67,10 @@ Player::Player()
 	GetAnimList()[FALL]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
 
 	GetAnimList()[ATTACK]->SetAnimId(ATTACK);
-	GetAnimList()[ATTACK]->SetStartRow(5);
-	GetAnimList()[ATTACK]->SetStartCol(6);
-	GetAnimList()[ATTACK]->SetNumFrames(7);
-	GetAnimList()[ATTACK]->SetAnimSpeed(0.80f);
+	GetAnimList()[ATTACK]->SetStartRow(6);
+	GetAnimList()[ATTACK]->SetStartCol(5);
+	GetAnimList()[ATTACK]->SetNumFrames(6);
+	GetAnimList()[ATTACK]->SetAnimSpeed(0.7f);
 	GetAnimList()[ATTACK]->SetLooping(false);
 	GetAnimList()[ATTACK]->SetMaxSheetRow(16); //same for all anim states since there's only one sheet
 	GetAnimList()[ATTACK]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
@@ -78,11 +78,6 @@ Player::Player()
 
 Player::~Player()
 {
-}
-
-void Player::MoveX() 
-{
-	setAccelerationX(getAccelerationX() + 0.1 * getMoveDirection());
 }
 
 void Player::update()
@@ -114,4 +109,15 @@ void Player::draw()
 void Player::clean()
 {
 	
+}
+
+void Player::MoveX()
+{
+	setAccelerationX(getAccelerationX() + 0.1 * getMoveDirection());
+}
+
+void Player::StopX()
+{
+	setAccelerationX(0);
+	setVelocityX(0);
 }

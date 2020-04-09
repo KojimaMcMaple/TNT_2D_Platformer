@@ -13,10 +13,10 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	setHitBox(0, 0, 45, 85);
 	SetSpawnPointX(world_x);
 	SetSpawnPointY(world_y);
-	std::cout <<GetWorldRect()->x << std::endl;
 	SetWorldXAndHitBox(world_x);
 	SetWorldYAndHitBox(world_y);
-	std::cout << GetWorldRect()->x << std::endl;
+	SetLineOfSight(50);
+	SetPatrolRadius(300);
 	//setHitBoxOffsetX(-4);
 	//setHitBoxOffsetY(10);
 	//SetHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
@@ -29,9 +29,9 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	setGravity(Globals::sGravity);
 	setMaxAccelerationX(2.0);
 	setMaxAccelerationY(2.0);
-	setMaxVelocityX(4.0);
+	setMaxVelocityX(1.0);
 	setMaxVelocityY(10.0);
-	setDrag(0.9);
+	setDrag(1.0);
 	setMoveDirection(-1);
 	setType(GameObjectType::ENEMY);
 	setAnimState(AnimState::ENEMY_PATROL);
@@ -78,12 +78,22 @@ void Enemy::update()
 		case ENEMY_PATROL:
 			// continue moving if not past patrol distance, else change direction
 			if (IsGrounded()) {
-				if (GetWorldRect()->x > GetPatrolMinX() && GetWorldRect()->x < GetPatrolMaxX()) {
-					//MoveX();
+				std::cout << "GetWorldRect()->x " << GetWorldRect()->x << std::endl;
+				std::cout << "getMoveDirection() " << getMoveDirection() << std::endl;
+				std::cout << "GetPatrolMaxX() " << GetPatrolMaxX() << std::endl;
+				std::cout << "GetPatrolMinX() " << GetPatrolMinX() << std::endl;
+
+				if (getMoveDirection()==1) { // MOVE RIGHT
+					if (GetWorldRectRightmostX() + getVelocityX() > GetPatrolMaxX()) {
+						setMoveDirection(-1);
+					}
 				}
-				else {
-					setMoveDirection(-getMoveDirection());
+				else { // MOVE LEFT
+					if (GetWorldRect()->x + getVelocityX() < GetPatrolMinX()) {
+						setMoveDirection(1);
+					}
 				}
+				MoveX();
 			}
 			
 			UpdatePosition();
@@ -116,15 +126,16 @@ void Enemy::clean()
 
 void Enemy::MoveX()
 {
-	setAccelerationX(getAccelerationX() + 0.1 * getMoveDirection());
+	//setAccelerationX(getAccelerationX() + 0.1 * getMoveDirection());
+	setVelocityX(getMaxAccelerationX() * getMoveDirection());
 }
 
 void Enemy::UpdatePosition()
 {
 	// UPDATE POSITION
-	setAccelerationX(std::min(std::max(getAccelerationX(), -getMaxAccelerationX()), getMaxAccelerationX()));
-	setVelocityX((getVelocityX() + getAccelerationX()) * getDrag());
-	setVelocityX(std::min(std::max(getVelocityX(), -getMaxVelocityX()), getMaxVelocityX()));
+	//setAccelerationX(std::min(std::max(getAccelerationX(), -getMaxAccelerationX()), getMaxAccelerationX()));
+	//setVelocityX((getVelocityX() + getAccelerationX()) * getDrag());
+	//setVelocityX(std::min(std::max(getVelocityX(), -getMaxVelocityX()), getMaxVelocityX()));
 	SetWorldXAndHitBox(GetWorldRect()->x + (int)getVelocityX());
 
 	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity() / 5));
