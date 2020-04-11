@@ -29,7 +29,7 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	setGravity(Globals::sGravity);
 	setMaxAccelerationX(2.0);
 	setMaxAccelerationY(2.0);
-	setMaxVelocityX(1.0);
+	setMaxVelocityX(0.8);
 	setMaxVelocityY(10.0);
 	setDrag(1.0);
 	setMoveDirection(-1);
@@ -42,7 +42,7 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	GetAnimList()[ENEMY_PATROL]->SetStartRow(7);
 	GetAnimList()[ENEMY_PATROL]->SetStartCol(4);
 	GetAnimList()[ENEMY_PATROL]->SetNumFrames(6);
-	GetAnimList()[ENEMY_PATROL]->SetAnimSpeed(0.15f);
+	GetAnimList()[ENEMY_PATROL]->SetAnimSpeed(0.2f);
 	GetAnimList()[ENEMY_PATROL]->SetLooping(true);
 	GetAnimList()[ENEMY_PATROL]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
 	GetAnimList()[ENEMY_PATROL]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
@@ -78,11 +78,6 @@ void Enemy::update()
 		case ENEMY_PATROL:
 			// continue moving if not past patrol distance, else change direction
 			if (IsGrounded()) {
-				std::cout << "GetWorldRect()->x " << GetWorldRect()->x << std::endl;
-				std::cout << "getMoveDirection() " << getMoveDirection() << std::endl;
-				std::cout << "GetPatrolMaxX() " << GetPatrolMaxX() << std::endl;
-				std::cout << "GetPatrolMinX() " << GetPatrolMinX() << std::endl;
-
 				if (getMoveDirection()==1) { // MOVE RIGHT
 					if (GetWorldRectRightmostX() + getVelocityX() > GetPatrolMaxX()) {
 						setMoveDirection(-1);

@@ -26,7 +26,7 @@ Player::Player()
 	setDrag(0.9);
 	setMoveDirection(1);
 	setType(GameObjectType::PLAYER);
-	setAnimState(AnimState::IDLE);
+	setAnimState(AnimState::IDLE); //default anim state
 
 	// ANIM INIT
 	InitAnimList();
@@ -67,13 +67,17 @@ Player::Player()
 	GetAnimList()[FALL]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
 
 	GetAnimList()[ATTACK]->SetAnimId(ATTACK);
-	GetAnimList()[ATTACK]->SetStartRow(6);
+	GetAnimList()[ATTACK]->SetStartRow(6); //2nd attack in texture sheet
 	GetAnimList()[ATTACK]->SetStartCol(5);
 	GetAnimList()[ATTACK]->SetNumFrames(6);
+	//GetAnimList()[ATTACK]->SetAnimSpeed(0.2f);
 	GetAnimList()[ATTACK]->SetAnimSpeed(0.7f);
 	GetAnimList()[ATTACK]->SetLooping(false);
 	GetAnimList()[ATTACK]->SetMaxSheetRow(16); //same for all anim states since there's only one sheet
 	GetAnimList()[ATTACK]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
+	GetAnimList()[ATTACK]->SetAtkStartFrame(3);
+	GetAnimList()[ATTACK]->SetAtkNumFrames(2);
+	SetAtkHitBox(0, 0, 60, 85);
 }
 
 Player::~Player()

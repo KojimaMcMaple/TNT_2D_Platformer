@@ -17,6 +17,9 @@ private:
 	bool is_looping_ = true;
 	int max_sheet_row_;
 	int max_sheet_col_;
+	int atk_start_frame_ = -1;
+	int atk_num_frames_ = 0;
+
 public:
 	AnimSprite();
 	~AnimSprite();
@@ -32,6 +35,9 @@ public:
 	bool IsLooping();
 	int GetMaxSheetRow();
 	int GetMaxSheetCol();
+	int GetAtkStartFrame();
+	int GetAtkEndFrame();
+	int GetAtkNumFrames();
 
 	void SetSpriteTextureId(std::string value);
 	void SetAnimId(AnimState value);
@@ -44,4 +50,6 @@ public:
 	void SetLooping(bool toggle);
 	void SetMaxSheetRow(int value);
 	void SetMaxSheetCol(int value);
+	void SetAtkStartFrame(int value);
+	void SetAtkNumFrames(int value);
 };

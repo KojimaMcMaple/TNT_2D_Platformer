@@ -46,6 +46,13 @@ void Camera::draw(GameObject* obj_ptr)
 
 		SDL_Rect temp_rect = { obj_ptr->getHitBoxX() - cam_x,obj_ptr->getHitBoxY() - cam_y, obj_ptr->getHitBoxW(), obj_ptr->getHitBoxH() };
 		SDL_RenderFillRect(TheGame::Instance()->getRenderer(), &temp_rect);
+
+		if (obj_ptr->IsAtkHitBoxActive()) {
+			SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), 150, 0, 0, 50);
+
+			SDL_Rect atk_temp_rect = { obj_ptr->GetAtkHitBox()->x - cam_x,obj_ptr->GetAtkHitBox()->y - cam_y, obj_ptr->GetAtkHitBox()->w, obj_ptr->GetAtkHitBox()->h };
+			SDL_RenderFillRect(TheGame::Instance()->getRenderer(), &atk_temp_rect);
+		}
 	}
 }
 

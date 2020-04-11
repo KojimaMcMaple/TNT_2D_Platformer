@@ -63,6 +63,21 @@ int AnimSprite::GetMaxSheetCol()
 	return max_sheet_col_;
 }
 
+int AnimSprite::GetAtkStartFrame()
+{
+	return atk_start_frame_;
+}
+
+int AnimSprite::GetAtkEndFrame()
+{
+	return atk_start_frame_ + atk_num_frames_;
+}
+
+int AnimSprite::GetAtkNumFrames()
+{
+	return atk_num_frames_;
+}
+
 void AnimSprite::SetSpriteTextureId(std::string value)
 {
 	texture_id_ = value;
@@ -116,4 +131,14 @@ void AnimSprite::SetMaxSheetRow(int value)
 void AnimSprite::SetMaxSheetCol(int value)
 {
 	max_sheet_col_ = value;
+}
+
+void AnimSprite::SetAtkStartFrame(int value)
+{
+	atk_start_frame_ = value;
+}
+
+void AnimSprite::SetAtkNumFrames(int value)
+{
+	atk_num_frames_ = value;
 }

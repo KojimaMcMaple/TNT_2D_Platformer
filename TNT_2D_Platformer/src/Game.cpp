@@ -128,9 +128,23 @@ void Game::UpdateGameObjects()
 	// PLAYER
 	if (player_ptr_->getAnimState() == AnimState::ATTACK) {
 		player_ptr_->StopX();
-		if (player_ptr_->getCurrFrame() == player_ptr_->GetAnimList()[player_ptr_->getAnimState()]->GetNumFrames() - 1) { //anim ended
+		if (player_ptr_->IsAtkHitBoxActive()) {
+			if (player_ptr_->getMoveDirection() == 1) { //facing right
+				player_ptr_->SetAtkHitBoxX(player_ptr_->getHitBoxRightmostX());
+				player_ptr_->SetAtkHitBoxY(player_ptr_->getHitBoxY());
+			}
+			else { //facing left
+				player_ptr_->SetAtkHitBoxX(player_ptr_->getHitBoxX() - player_ptr_->GetAtkHitBox()->w);
+				player_ptr_->SetAtkHitBoxY(player_ptr_->getHitBoxY());
+			}
+		}
+		if (player_ptr_->getCurrFrame() == player_ptr_->GetAnimList()[player_ptr_->getAnimState()]->GetNumFrames()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
 			player_ptr_->setAnimState(AnimState::IDLE);
 		}
+	}
+
+	if (player_ptr_->getAnimState() != AnimState::ATTACK) { //force atk hit box to turn off 
+		player_ptr_->SetAtkHitBoxActive(false);
 	}
 
 	player_ptr_->update();

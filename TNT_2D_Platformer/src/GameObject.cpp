@@ -24,7 +24,8 @@ void GameObject::Animate()
 			checking_anim_state_ = anim_state_;
 			curr_frame_ = 0;
 		}
-		
+
+		// PROCESS VISUAL ANIM
 		if (curr_frame_ > anim_db->GetNumFrames() - 1) {
 			if (anim_db->IsLooping()) {
 				curr_frame_ = 0;
@@ -53,6 +54,14 @@ void GameObject::Animate()
 		}
 		else {
 			setSrcX(curr_col_ * anim_db->GetFrameW());
+		}
+
+		// PROCESS ATK HITBOX
+		if (curr_frame_ == anim_db->GetAtkStartFrame()) {
+			is_atk_hit_box_active_ = true;
+		}
+		if (curr_frame_ == anim_db->GetAtkEndFrame()) {
+			is_atk_hit_box_active_ = false;
 		}
 
 		curr_frame_++;
@@ -192,6 +201,16 @@ int GameObject::getHitBoxOffsetY()
 bool GameObject::IsHitBoxVisible()
 {
 	return is_hit_box_visible_;
+}
+
+SDL_Rect* GameObject::GetAtkHitBox()
+{
+	return &atk_hit_box_;
+}
+
+bool GameObject::IsAtkHitBoxActive()
+{
+	return is_atk_hit_box_active_;
 }
 
 bool GameObject::IsGrounded()
@@ -441,6 +460,26 @@ void GameObject::setHitBoxOffsetY(int coord)
 void GameObject::SetHitBoxVisibility(bool toggle)
 {
 	is_hit_box_visible_ = toggle;
+}
+
+void GameObject::SetAtkHitBox(int x, int y, int w, int h)
+{
+	atk_hit_box_ = { x,y,w,h };
+}
+
+void GameObject::SetAtkHitBoxX(int value)
+{
+	atk_hit_box_.x = value;
+}
+
+void GameObject::SetAtkHitBoxY(int value)
+{
+	atk_hit_box_.y = value;
+}
+
+void GameObject::SetAtkHitBoxActive(bool toggle)
+{
+	is_atk_hit_box_active_ = toggle;
 }
 
 void GameObject::SetGrounded(bool toggle)
