@@ -139,9 +139,10 @@ public:
 	int getCurrFrame();
 	int getCurrRow();
 	int getCurrCol();
-	GameObjectType getType();
+	bool HasEndedAnimation();
 	AnimState getAnimState();
 	std::vector<AnimSprite*>& GetAnimList();
+	GameObjectType getType();
 	glm::vec2 getPosition();
 	glm::vec2 getRotation();
 	glm::vec2 getScale();

@@ -46,6 +46,15 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	GetAnimList()[ENEMY_PATROL]->SetLooping(true);
 	GetAnimList()[ENEMY_PATROL]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
 	GetAnimList()[ENEMY_PATROL]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
+
+	GetAnimList()[ENEMY_HIT]->SetAnimId(ENEMY_HIT);
+	GetAnimList()[ENEMY_HIT]->SetStartRow(4);
+	GetAnimList()[ENEMY_HIT]->SetStartCol(2);
+	GetAnimList()[ENEMY_HIT]->SetNumFrames(3);
+	GetAnimList()[ENEMY_HIT]->SetAnimSpeed(0.3f);
+	GetAnimList()[ENEMY_HIT]->SetLooping(false);
+	GetAnimList()[ENEMY_HIT]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
+	GetAnimList()[ENEMY_HIT]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
 }
 
 void Enemy::RenderSkeletonSword()
@@ -90,10 +99,20 @@ void Enemy::update()
 				}
 				MoveX();
 			}
-			
 			UpdatePosition();
 			break;
+
+		case ENEMY_HIT:
+			StopX();
+			break;
 		}
+		
+		if (getAnimState() == AnimState::ENEMY_HIT) {
+			if (HasEndedAnimation()) {
+				setAnimState(AnimState::ENEMY_PATROL);
+			}
+		}
+		
 		break;
 	}
 }
@@ -123,6 +142,12 @@ void Enemy::MoveX()
 {
 	//setAccelerationX(getAccelerationX() + 0.1 * getMoveDirection());
 	setVelocityX(getMaxAccelerationX() * getMoveDirection());
+}
+
+void Enemy::StopX()
+{
+	setAccelerationX(0);
+	setVelocityX(0);
 }
 
 void Enemy::UpdatePosition()

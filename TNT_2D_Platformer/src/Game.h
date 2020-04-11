@@ -43,6 +43,7 @@ private:
 	Camera* camera_ptr_;
 	Player* player_ptr_;
 	std::vector<Enemy*> enemy_list_;
+	std::vector<Enemy*> dead_enemy_list_;
 
 	// Movement offset
 	bool is_jump_key_pressable_ = true;

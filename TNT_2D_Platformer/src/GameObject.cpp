@@ -303,6 +303,16 @@ int GameObject::getCurrCol()
 	return curr_col_;
 }
 
+bool GameObject::HasEndedAnimation()
+{
+	if (getCurrFrame() == GetAnimList()[getAnimState()]->GetNumFrames()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 glm::vec2 GameObject::getPosition()
 {
 	return m_position;
@@ -343,11 +353,6 @@ bool GameObject::IsCollidable()
 	return is_collidable_;
 }
 
-GameObjectType GameObject::getType()
-{
-	return m_type;
-}
-
 AnimState GameObject::getAnimState()
 {
 	return anim_state_;
@@ -356,6 +361,11 @@ AnimState GameObject::getAnimState()
 std::vector<AnimSprite*>& GameObject::GetAnimList()
 {
 	return anim_list_;
+}
+
+GameObjectType GameObject::getType()
+{
+	return m_type;
 }
 
 void GameObject::SetWorldRect(int x, int y, int w, int h)

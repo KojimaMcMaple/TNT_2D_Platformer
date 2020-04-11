@@ -89,12 +89,17 @@ void Game::createGameObjects()
 
 void Game::CheckCollision()
 {
+	// PLAYER COLLI
 	level_ptr_->CheckLevelCollision(player_ptr_);
-	for (int i = 0; i < enemy_list_.size(); i++) {
-		level_ptr_->CheckLevelCollision(enemy_list_[i]);
-	}
 	
-
+	// ENEMY COLLI
+	for (int i = 0; i < enemy_list_.size(); i++) {
+		Enemy* enemy = enemy_list_[i];
+		level_ptr_->CheckLevelCollision(enemy);
+		if (player_ptr_->IsAtkHitBoxActive() && SDL_HasIntersection(player_ptr_->GetAtkHitBox(), enemy->getHitBox())) {
+			enemy->setAnimState(AnimState::ENEMY_HIT);
+		}
+	}
 }
 
 void Game::UpdateGameObjects()
@@ -138,7 +143,7 @@ void Game::UpdateGameObjects()
 				player_ptr_->SetAtkHitBoxY(player_ptr_->getHitBoxY());
 			}
 		}
-		if (player_ptr_->getCurrFrame() == player_ptr_->GetAnimList()[player_ptr_->getAnimState()]->GetNumFrames()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
+		if (player_ptr_->HasEndedAnimation()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
 			player_ptr_->setAnimState(AnimState::IDLE);
 		}
 	}
@@ -156,15 +161,13 @@ void Game::UpdateGameObjects()
 
 	CheckCollision();
 
-	if (player_ptr_->IsGrounded() 
-		&& player_ptr_->getAnimState() != AnimState::RUN
-		&& player_ptr_->getAnimState() != AnimState::ATTACK) {
+	if (player_ptr_->IsGrounded() && player_ptr_->getAnimState() != AnimState::RUN && player_ptr_->getAnimState() != AnimState::ATTACK) {
 		player_ptr_->setAnimState(AnimState::IDLE);
 	}
 
 	// ENEMIES
 	for (int i = 0; i < enemy_list_.size(); i++) {
-		enemy_list_[i]->update();
+		enemy_list_[i]->update(); //implement enemy behaviors in Enemy class, since there is no control input handling
 	}
 
 	// CAMERA

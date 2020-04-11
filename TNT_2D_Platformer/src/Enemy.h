@@ -29,6 +29,7 @@ public:
 	void clean() override;
 
 	void MoveX();
+	void StopX();
 	void UpdatePosition();
 
 	int GetSpawnPointX();
