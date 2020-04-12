@@ -89,6 +89,8 @@ public:
 	bool IsJumpKeyPressable();
 	UI& GetTitleScreen();
 	UI& GetPauseScreen();
+	Camera* GetCamera();
+	Level* GetLevel();
 
 	// setters
 	void setFrames(Uint32 frames);

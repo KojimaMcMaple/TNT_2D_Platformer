@@ -69,11 +69,6 @@ void RunningState::Update()
 		TheGame::Instance()->GetFSM().ChangeState(new TitleState());
 	}
 
-	// Test Purpose --> Will be deleted soon
-	if (TheGame::Instance()->isKeyDown(SDL_SCANCODE_F)) {
-		TheGame::Instance()->GetWindowManager()->toggleFullScreen();
-	}
-
 }
 
 void RunningState::Render()

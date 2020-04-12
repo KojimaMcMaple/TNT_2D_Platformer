@@ -2,7 +2,7 @@
 
 #include <SDL.h>
 
-enum WinAspect
+enum class WinAspect
 {
 	_16x9,
 	_21x9,
@@ -15,7 +15,9 @@ class WindowManager
 private:
 	bool _fullScreen;
 	SDL_Window* _mainWindow;
-	
+	WinAspect _aspect;
+	int base_w;
+	int base_h;
 
 public:
 	WindowManager(const char* title, int x, int y, int width, int height, bool fullscreen);
@@ -23,6 +25,10 @@ public:
 	void resizeMainWindow(int width, int height);
 	void toggleFullScreen();
 
+	// Setter
+	void SetAspect(WinAspect aspect);
+
+	// Getter
 	SDL_Window* GetMainWindow();
 	bool GetFullScreen();
 };

@@ -55,6 +55,8 @@ public:
 	void BuildTileTextureDatabase();
 	void MapAllTileTextureIdAndCollision();
 	void LoadLevel(std::string level_id);
+	void UpdateVisibleTileList();
+
 	int GetLevelNumOfColumns();
 	int GetLevelNumOfRows();
 	int GetLevelTileWidth();

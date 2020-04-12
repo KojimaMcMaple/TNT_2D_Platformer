@@ -54,6 +54,17 @@ UI& Game::GetPauseScreen()
 	return *pause_screen_ptr_;
 }
 
+Camera* Game::GetCamera()
+{
+	// TODO: insert return statement here
+	return camera_ptr_;
+}
+
+Level* Game::GetLevel()
+{
+	return level_ptr_;
+}
+
 void Game::setFrames(Uint32 frames)
 {
 	m_frames = frames;
