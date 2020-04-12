@@ -1,5 +1,5 @@
 #include "UI.h"
-#include "Game.h"
+#include "..\Game.h"
 
 UI::UI(std::string texture_id, std::string texture_path, int src_x, int src_y, int src_w, int src_h, int dst_x, int dst_y, int dst_w, int dst_h)
 {

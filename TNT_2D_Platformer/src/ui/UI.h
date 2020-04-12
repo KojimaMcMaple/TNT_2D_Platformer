@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "GameObject.h"
-#include "TextureManager.h"
+#include "..\GameObject.h"
+#include "..\TextureManager.h"
 
 class UI :public GameObject
 {

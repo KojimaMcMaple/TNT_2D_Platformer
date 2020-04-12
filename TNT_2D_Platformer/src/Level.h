@@ -10,7 +10,7 @@
 #include "TextureManager.h"
 #include "SoundManager.h"
 #include "Tile.h"
-#include "UI.h"
+#include "ui/UI.h"
 
 enum TileSetId {
 	CHURCH_TILESET_01,

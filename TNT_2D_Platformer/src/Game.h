@@ -10,12 +10,13 @@
 #include <SDL_image.h>
 
 // Game Managers
+#include "ui/WindowManager.h"
 #include "TextureManager.h"
 #include "CollisionManager.h"
 #include "FSM.h"
 
 // Game Objects
-#include "UI.h"
+#include "ui/UI.h"
 #include "Level.h"
 #include "Camera.h"
 #include "Player.h"
@@ -28,6 +29,7 @@ private:
 
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
+	WindowManager* m_wm;
 	FSM* fsm_;
 
 	static Game* s_pInstance;
@@ -83,6 +85,7 @@ public:
 	Uint32 getFrames() const;
 	SDL_Renderer* getRenderer();
 	FSM& GetFSM();
+	WindowManager* GetWindowManager();
 	bool IsJumpKeyPressable();
 	UI& GetTitleScreen();
 	UI& GetPauseScreen();

@@ -32,6 +32,11 @@ FSM& Game::GetFSM()
 	return *fsm_;
 }
 
+WindowManager* Game::GetWindowManager()
+{
+	return m_wm;
+}
+
 bool Game::IsJumpKeyPressable()
 {
 	return is_jump_key_pressable_;
@@ -155,20 +160,14 @@ void Game::RenderGameObjects()
 
 bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
-	int flags = 0;
-
-	if (fullscreen)
-	{
-		flags = SDL_WINDOW_FULLSCREEN;
-	}
-
 	// initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) >= 0)
 	{
 		std::cout << "SDL Init success" << std::endl;
-
+		
+		m_wm = new WindowManager(title, xpos, ypos, width, height, fullscreen);
 		// if succeeded create our window
-		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+		m_pWindow = m_wm->GetMainWindow();
 
 		// if window creation successful create our renderer
 		if (m_pWindow != 0)
