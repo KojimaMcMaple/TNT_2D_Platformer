@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __Player__
-#define __Player__
+#ifndef __PLAYER__
+#define __PLAYER__
 
 #include <iostream>
 #include <algorithm>
@@ -15,10 +15,12 @@ public:
 	Player();
 	~Player();
 	
-	void MoveX();
 	void update() override;
 	void draw() override;
 	void clean() override;
+
+	void MoveX();
+	void StopX();
 
 	friend class Camera;
 };

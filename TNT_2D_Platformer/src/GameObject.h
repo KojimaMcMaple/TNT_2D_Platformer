@@ -20,7 +20,7 @@ private:
 	
 	// RENDERING
 	SDL_Rect src_, dst_;
-	std::string texture_id_;
+	std::string texture_id_ = "";
 
 	// SOUND
 	std::vector<std::string> sfx_id_list_;
@@ -42,9 +42,12 @@ private:
 	SDL_Rect hit_box_;
 	int hit_box_manual_offset_x_ = 0;
 	int hit_box_manual_offset_y_ = 0;
-	bool is_hit_box_visible_ = true;
+	bool is_hit_box_visible_ = false;
 	bool is_grounded_ = false;
 	bool is_collidable_;
+
+	SDL_Rect atk_hit_box_;
+	bool is_atk_hit_box_active_ = false;
 	GameObjectType m_type;
 
 	// TRANSFORM
@@ -115,6 +118,8 @@ public:
 	int getHitBoxOffsetX();
 	int getHitBoxOffsetY();
 	bool IsHitBoxVisible();
+	SDL_Rect* GetAtkHitBox();
+	bool IsAtkHitBoxActive();
 	bool IsGrounded();
 	bool IsCollidable();
 	std::string getTextureId();
@@ -134,9 +139,10 @@ public:
 	int getCurrFrame();
 	int getCurrRow();
 	int getCurrCol();
-	GameObjectType getType();
+	bool HasEndedAnimation();
 	AnimState getAnimState();
 	std::vector<AnimSprite*>& GetAnimList();
+	GameObjectType getType();
 	glm::vec2 getPosition();
 	glm::vec2 getRotation();
 	glm::vec2 getScale();
@@ -166,6 +172,10 @@ public:
 	void setHitBoxOffsetX(int coord);
 	void setHitBoxOffsetY(int coord);
 	void SetHitBoxVisibility(bool toggle);
+	void SetAtkHitBox(int x, int y, int w, int h);
+	void SetAtkHitBoxX(int value);
+	void SetAtkHitBoxY(int value);
+	void SetAtkHitBoxActive(bool toggle);
 	void SetGrounded(bool toggle);
 	void SetCollidable(bool toggle);
 	void setTextureId(std::string id); //cleanup is done by manager

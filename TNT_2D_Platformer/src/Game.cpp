@@ -70,11 +70,17 @@ void Game::createGameObjects()
 	pause_screen_ptr_ = new UI("pause", "../Assets/textures/Pause_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
 
 	level_ptr_ = new Level();
-	level_ptr_->LoadLevel("church");
+	level_ptr_->LoadLevel(LevelId::CHURCH);
 
 	player_ptr_ = new Player();
-	player_ptr_->SetWorldXAndHitBox(4 * level_ptr_->GetLevelTileWidth() + level_ptr_->GetLevelTileWidth() / 2 - player_ptr_->getDstW() / 2);
-	player_ptr_->SetWorldYAndHitBox(4 * level_ptr_->GetLevelTileHeight() + level_ptr_->GetLevelTileHeight() / 2 - player_ptr_->getDstH() / 2);
+	player_ptr_->SetWorldXAndHitBox(1 * level_ptr_->GetLevelTileWidth());
+	player_ptr_->SetWorldYAndHitBox(6 * level_ptr_->GetLevelTileHeight());
+
+	enemy_list_.clear();
+	enemy_list_.resize(0);
+	enemy_list_.shrink_to_fit();
+	enemy_list_.push_back(new Enemy(SKELETON_SWORD, 10 * level_ptr_->GetLevelTileWidth(), 6 * level_ptr_->GetLevelTileHeight()));
+	//std::cout << enemy_list_.back()->GetWorldRect()->x << std::endl;
 
 	// CENTER CAM TO PLAYER
 	camera_ptr_ = new Camera();
@@ -86,8 +92,17 @@ void Game::createGameObjects()
 
 void Game::CheckCollision()
 {
-	int direction = level_ptr_->CheckLevelCollision(player_ptr_);
-
+	// PLAYER COLLI
+	level_ptr_->CheckLevelCollision(player_ptr_);
+	
+	// ENEMY COLLI
+	for (int i = 0; i < enemy_list_.size(); i++) {
+		Enemy* enemy = enemy_list_[i];
+		level_ptr_->CheckLevelCollision(enemy);
+		if (player_ptr_->IsAtkHitBoxActive() && SDL_HasIntersection(player_ptr_->GetAtkHitBox(), enemy->getHitBox())) {
+			enemy->setAnimState(AnimState::ENEMY_HIT);
+		}
+	}
 }
 
 void Game::UpdateGameObjects()
@@ -118,10 +133,26 @@ void Game::UpdateGameObjects()
 	}
 
 	// POST PROCESSING
+	// PLAYER
 	if (player_ptr_->getAnimState() == AnimState::ATTACK) {
-		if (player_ptr_->getCurrFrame() == player_ptr_->GetAnimList()[player_ptr_->getAnimState()]->GetNumFrames() - 1) { //anim ended
+		player_ptr_->StopX();
+		if (player_ptr_->IsAtkHitBoxActive()) {
+			if (player_ptr_->getMoveDirection() == 1) { //facing right
+				player_ptr_->SetAtkHitBoxX(player_ptr_->getHitBoxRightmostX());
+				player_ptr_->SetAtkHitBoxY(player_ptr_->getHitBoxY());
+			}
+			else { //facing left
+				player_ptr_->SetAtkHitBoxX(player_ptr_->getHitBoxX() - player_ptr_->GetAtkHitBox()->w);
+				player_ptr_->SetAtkHitBoxY(player_ptr_->getHitBoxY());
+			}
+		}
+		if (player_ptr_->HasEndedAnimation()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
 			player_ptr_->setAnimState(AnimState::IDLE);
 		}
+	}
+
+	if (player_ptr_->getAnimState() != AnimState::ATTACK) { //force atk hit box to turn off 
+		player_ptr_->SetAtkHitBoxActive(false);
 	}
 
 	player_ptr_->update();
@@ -133,23 +164,32 @@ void Game::UpdateGameObjects()
 
 	CheckCollision();
 
-	if (player_ptr_->IsGrounded() 
-		&& player_ptr_->getAnimState() != AnimState::RUN
-		&& player_ptr_->getAnimState() != AnimState::ATTACK) {
+	if (player_ptr_->IsGrounded() && player_ptr_->getAnimState() != AnimState::RUN && player_ptr_->getAnimState() != AnimState::ATTACK) {
 		player_ptr_->setAnimState(AnimState::IDLE);
-		
 	}
 
+	// ENEMIES
+	for (int i = 0; i < enemy_list_.size(); i++) {
+		enemy_list_[i]->update(); //implement enemy behaviors in Enemy class, since there is no control input handling
+	}
+
+	// CAMERA
 	camera_ptr_->RefocusCamera(player_ptr_, level_ptr_);
 	
+	// LEVEL
 	level_ptr_->SetCamPosX(camera_ptr_->GetWorldRect()->x);
 	level_ptr_->SetCamPosY(camera_ptr_->GetWorldRect()->y);
 	level_ptr_->update();
+
+	
 }
 
 void Game::RenderGameObjects()
 {
 	level_ptr_->draw();
+	for (int i = 0; i < enemy_list_.size(); i++) {
+		camera_ptr_->draw(enemy_list_[i]);
+	}
 	camera_ptr_->draw(player_ptr_);
 }
 
@@ -253,8 +293,7 @@ void Game::handleEvents()
 			break;
 		case SDL_KEYUP:
 			if (event.key.keysym.sym == SDLK_a || event.key.keysym.sym == SDLK_d || event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_RIGHT) {
-				player_ptr_->setAccelerationX(0);
-				player_ptr_->setVelocityX(0);
+				player_ptr_->StopX();
 				if (player_ptr_->IsGrounded()) {
 					player_ptr_->setAnimState(AnimState::IDLE);
 				}
