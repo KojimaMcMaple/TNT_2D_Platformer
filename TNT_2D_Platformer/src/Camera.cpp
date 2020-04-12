@@ -41,7 +41,10 @@ void Camera::draw(GameObject* obj_ptr)
 	}
 
 	// HITBOX RENDERING
+	SDL_Color original_bkg_color;
 	if (obj_ptr->IsHitBoxVisible()) {
+		SDL_GetRenderDrawColor(TheGame::Instance()->getRenderer(), &original_bkg_color.r, &original_bkg_color.g, &original_bkg_color.b, &original_bkg_color.a);
+
 		SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), 0, 150, 0, 50);
 
 		SDL_Rect temp_rect = { obj_ptr->getHitBoxX() - cam_x,obj_ptr->getHitBoxY() - cam_y, obj_ptr->getHitBoxW(), obj_ptr->getHitBoxH() };
@@ -53,6 +56,8 @@ void Camera::draw(GameObject* obj_ptr)
 			SDL_Rect atk_temp_rect = { obj_ptr->GetAtkHitBox()->x - cam_x,obj_ptr->GetAtkHitBox()->y - cam_y, obj_ptr->GetAtkHitBox()->w, obj_ptr->GetAtkHitBox()->h };
 			SDL_RenderFillRect(TheGame::Instance()->getRenderer(), &atk_temp_rect);
 		}
+
+		SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), original_bkg_color.r, original_bkg_color.g, original_bkg_color.b, original_bkg_color.a);
 	}
 }
 

@@ -61,6 +61,8 @@ void Level::update()
 
 void Level::draw()
 {
+	SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), bkg_r_value_, bkg_g_value_, bkg_b_value_, bkg_a_value_);
+	
 	for (int row = 0; row < GetVisibleTilesNumOfRows()+2; row++) {
 		for (int col = 0; col < GetVisibleTilesNumOfColumns()+2; col++) {
 			auto tile = visible_tile_list_[row][col];
@@ -172,17 +174,33 @@ void Level::BuildTileTextureDatabase()
 	tile_texture_list_[CHURCH_BKG_01]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
 	tile_texture_list_[CHURCH_BKG_01]->setSrc(128, 16, 15, 15);
 
+	tile_texture_list_[CHURCH_CEILING_00] = new Tile();
+	tile_texture_list_[CHURCH_CEILING_00]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
+	tile_texture_list_[CHURCH_CEILING_00]->setSrc(48, 32, 31, 31);
+
+	tile_texture_list_[CHURCH_GROUND_00] = new Tile();
+	tile_texture_list_[CHURCH_GROUND_00]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
+	tile_texture_list_[CHURCH_GROUND_00]->setSrc(0, 167, 47, 39);
+	
 	tile_texture_list_[CHURCH_GROUND_01] = new Tile();
 	tile_texture_list_[CHURCH_GROUND_01]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
-	tile_texture_list_[CHURCH_GROUND_01]->setSrc(64, 168, 47, 39);
+	tile_texture_list_[CHURCH_GROUND_01]->setSrc(64, 167, 47, 39);
 
 	tile_texture_list_[CHURCH_GROUND_02] = new Tile();
 	tile_texture_list_[CHURCH_GROUND_02]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
-	tile_texture_list_[CHURCH_GROUND_02]->setSrc(128, 168, 47, 39);
+	tile_texture_list_[CHURCH_GROUND_02]->setSrc(128, 167, 47, 39);
+
+	tile_texture_list_[CHURCH_BLOCK_00] = new Tile();
+	tile_texture_list_[CHURCH_BLOCK_00]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
+	tile_texture_list_[CHURCH_BLOCK_00]->setSrc(16, 112, 31, 31);
 
 	tile_texture_list_[CHURCH_BLOCK_01] = new Tile();
 	tile_texture_list_[CHURCH_BLOCK_01]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
-	tile_texture_list_[CHURCH_BLOCK_01]->setSrc(16, 112, 31, 31);
+	tile_texture_list_[CHURCH_BLOCK_01]->setSrc(64, 112, 31, 31);
+
+	tile_texture_list_[CHURCH_BLOCK_02] = new Tile();
+	tile_texture_list_[CHURCH_BLOCK_02]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
+	tile_texture_list_[CHURCH_BLOCK_02]->setSrc(288, 96, 31, 31);
 }
 
 void Level::MapAllTileTextureIdAndCollision() //determine which char is responsible for which texture_id
@@ -192,6 +210,14 @@ void Level::MapAllTileTextureIdAndCollision() //determine which char is responsi
 			auto tile = level_world_tile_list_[row][col];
 			switch (tile->GetTileChar())
 			{
+			case 'C':
+				tile->SetTileTextureId(CHURCH_CEILING_00);
+				tile->SetCollidable(true);
+				break;
+			case '=':
+				tile->SetTileTextureId(CHURCH_GROUND_00);
+				tile->SetCollidable(true);
+				break;
 			case 'G':
 				tile->SetTileTextureId(CHURCH_GROUND_01);
 				tile->SetCollidable(true);
@@ -200,8 +226,16 @@ void Level::MapAllTileTextureIdAndCollision() //determine which char is responsi
 				tile->SetTileTextureId(CHURCH_GROUND_02);
 				tile->SetCollidable(true);
 				break;
+			case '@':
+				tile->SetTileTextureId(CHURCH_BLOCK_00);
+				tile->SetCollidable(true);
+				break;
 			case 'B':
 				tile->SetTileTextureId(CHURCH_BLOCK_01);
+				tile->SetCollidable(true);
+				break;
+			case '&':
+				tile->SetTileTextureId(CHURCH_BLOCK_02);
 				tile->SetCollidable(true);
 				break;
 			default:
@@ -213,7 +247,7 @@ void Level::MapAllTileTextureIdAndCollision() //determine which char is responsi
 	}
 }
 
-void Level::LoadLevel(std::string level_id)
+void Level::LoadLevel(LevelId level_id)
 {
 	// NUKE PREVIOUS LEVEL (IF ANY)
 	std::string level_raw_str = "";
@@ -229,7 +263,30 @@ void Level::LoadLevel(std::string level_id)
 	}
 
 	// PROCESS RAW STRING
-	if (level_id == "church") {
+	switch (level_id) {
+	case CHURCH:
+		SetBkgColor(22, 22, 51, 255);
+
+		
+		level_raw_str += "CCCCCCCCCB..BCCCCCCCCCCCC";
+		level_raw_str += "...........BB...........B";
+		level_raw_str += "........................B";
+		level_raw_str += "........................B";
+		level_raw_str += ".........BB.............B";
+		level_raw_str += ".....BBBB...............B";
+		level_raw_str += "...B....................B";
+		level_raw_str += "@.......................B";
+		level_raw_str += "&B.....................BB";
+		level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGG";
+
+		SetLevelRawStr(level_raw_str);
+		SetLevelNumOfRows(10);
+		SetLevelNumOfColumns(level_raw_str.size() / GetLevelNumOfRows());
+		break;
+
+	default:
+		SetBkgColor(22, 22, 51, 255);
+		
 		level_raw_str += ".......................................................................................";
 		level_raw_str += ".......................................................................................";
 		level_raw_str += ".......................................................................................";
@@ -256,7 +313,8 @@ void Level::LoadLevel(std::string level_id)
 
 		SetLevelRawStr(level_raw_str);
 		SetLevelNumOfRows(23);
-		SetLevelNumOfColumns(level_raw_str.size()/GetLevelNumOfRows());
+		SetLevelNumOfColumns(level_raw_str.size() / GetLevelNumOfRows());
+		break;
 	}
 
 	std::vector<std::vector<char>> level_raw_str_list;
@@ -359,6 +417,14 @@ int Level::GetCamCenterX()
 int Level::GetCamCenterY()
 {
 	return cam_pos_y_ + Globals::sWindowHeight / 2;
+}
+
+void Level::SetBkgColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
+	bkg_r_value_ = r;
+	bkg_g_value_ = g;
+	bkg_b_value_ = b;
+	bkg_a_value_ = a;
 }
 
 void Level::SetLevelRawStr(std::string raw_str)
