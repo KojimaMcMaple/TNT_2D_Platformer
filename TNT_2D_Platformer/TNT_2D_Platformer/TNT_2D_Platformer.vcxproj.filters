@@ -60,15 +60,23 @@
     <ClCompile Include="..\src\FSM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\UI.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Level.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\AnimSprite.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ui\UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\UIManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\WindowManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ui\Title.cpp">
+      <Filter>Source Files</Filter>
     <ClCompile Include="..\src\Enemy.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -110,9 +118,6 @@
     <ClInclude Include="..\src\FSM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\UI.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Level.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -125,6 +130,17 @@
     <ClInclude Include="..\src\AnimSprite.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\ui\UI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\UIManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\WindowManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ui\Title.h">
+      <Filter>Header Files</Filter>
     <ClInclude Include="..\src\Enemy.h">
       <Filter>Objects</Filter>
     </ClInclude>

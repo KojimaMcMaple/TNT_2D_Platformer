@@ -270,4 +270,34 @@ int Util::YCenterRect(SDL_Rect* rect)
 	return (int)(rect->y + rect->h / 2);
 }
 
+/**
+* Generating intermidiate frames of object between two positions.
+* Mainly use for animation effect
+* Ref: http://www.davetech.co.uk/gamemakereasingandtweeningfunctions
+*/
+float Util::tween(TweenType type, float start, float end, float amount, float bounce)
+{
+	float mid = (start + end) / 2;
+	float change = end - start;
+	switch (type)
+	{
+		case TweenType::LINEAR:
+			return lerp(start, end, amount);
+			break;
+		case TweenType::INOUT_BACK:
+			return ( amount < 0.5 ) ? tween(TweenType::IN_BACK, start, mid, amount * 2, bounce)
+									: tween(TweenType::OUT_BACK, mid, end, (amount - .5) * 2, bounce);
+			break;
+		case TweenType::IN_BACK:
+			return (change * amount * amount * ((bounce + 1) * amount - bounce) + start);
+			break;
+		case TweenType::OUT_BACK:
+			amount -= 1;
+			return (change * (amount * amount * ((bounce + 1) * amount + bounce) + 1) + start);
+			break;
+	}
+	return 0.0f;
+}
+
+
 

@@ -11,7 +11,7 @@
 #include "SoundManager.h"
 #include "LevelId.h"
 #include "Tile.h"
-#include "UI.h"
+#include "ui/UI.h"
 
 enum TileSetId {
 	CHURCH_TILESET_01,
@@ -64,6 +64,7 @@ public:
 	void MapAllTileNeighbors();
 	void BuildTileTextureDatabase();
 	void MapAllTileTextureIdAndCollision();
+	void UpdateVisibleTileList();
 	void LoadLevel(LevelId level_id);
 	int GetLevelNumOfColumns();
 	int GetLevelNumOfRows();

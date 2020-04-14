@@ -32,9 +32,19 @@ FSM& Game::GetFSM()
 	return *fsm_;
 }
 
+WindowManager* Game::GetWindowManager()
+{
+	return m_wm;
+}
+
 bool Game::IsJumpKeyPressable()
 {
 	return is_jump_key_pressable_;
+}
+
+bool Game::IsEnterKeyPressable()
+{
+	return is_enter_key_pressable_;
 }
 
 UI& Game::GetTitleScreen()
@@ -49,6 +59,17 @@ UI& Game::GetPauseScreen()
 	return *pause_screen_ptr_;
 }
 
+Camera* Game::GetCamera()
+{
+	// TODO: insert return statement here
+	return camera_ptr_;
+}
+
+Level* Game::GetLevel()
+{
+	return level_ptr_;
+}
+
 void Game::setFrames(Uint32 frames)
 {
 	m_frames = frames;
@@ -59,6 +80,11 @@ void Game::SetJumpKeyPressable(bool toggle)
 	is_jump_key_pressable_ = toggle;
 }
 
+void Game::SetEnterPressable(bool toggle)
+{
+	is_enter_key_pressable_ = toggle;
+}
+
 glm::vec2 Game::getMousePosition()
 {
 	return m_mousePosition;
@@ -66,7 +92,7 @@ glm::vec2 Game::getMousePosition()
 
 void Game::createGameObjects()
 {
-	title_screen_ptr_ = new UI("title", "../Assets/textures/Title_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
+	title_screen_ptr_ = new UI("title", "../Assets/textures/bg_4x3.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
 	pause_screen_ptr_ = new UI("pause", "../Assets/textures/Pause_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
 
 	level_ptr_ = new Level();
@@ -195,20 +221,14 @@ void Game::RenderGameObjects()
 
 bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
-	int flags = 0;
-
-	if (fullscreen)
-	{
-		flags = SDL_WINDOW_FULLSCREEN;
-	}
-
 	// initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) >= 0)
 	{
 		std::cout << "SDL Init success" << std::endl;
-
+		
+		m_wm = new WindowManager(title, xpos, ypos, width, height, fullscreen);
 		// if succeeded create our window
-		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+		m_pWindow = m_wm->GetMainWindow();
 
 		// if window creation successful create our renderer
 		if (m_pWindow != 0)
@@ -300,6 +320,10 @@ void Game::handleEvents()
 			}
 			if (event.key.keysym.sym == SDLK_SPACE) {
 				SetJumpKeyPressable(true);
+			}
+			if (event.key.keysym.sym == SDLK_RETURN)
+			{
+				SetEnterPressable(true);
 			}
 			break;
 		default:

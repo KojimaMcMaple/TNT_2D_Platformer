@@ -64,7 +64,7 @@ void Level::draw()
 	SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), bkg_r_value_, bkg_g_value_, bkg_b_value_, bkg_a_value_);
 	
 	for (int row = 0; row < GetVisibleTilesNumOfRows()+2; row++) {
-		for (int col = 0; col < GetVisibleTilesNumOfColumns()+2; col++) {
+		for (int col = 0; col < GetVisibleTilesNumOfColumns()+2; col++) {	
 			auto tile = visible_tile_list_[row][col];
 			TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(),
 				tile_texture_list_[tile->GetTileTextureId()]->getTextureId(),
@@ -341,9 +341,17 @@ void Level::LoadLevel(LevelId level_id)
 	// TRANSLATE CHAR TO TEXTURE ID
 	MapAllTileTextureIdAndCollision();
 
-	visible_tile_list_.resize(GetVisibleTilesNumOfRows()+2, std::vector<Tile*>(GetVisibleTilesNumOfColumns()+2, nullptr)); //overdraw by +2 rows/columns
-	for (int row = 0; row < GetVisibleTilesNumOfRows()+2; row++) {
-		for (int col = 0; col < GetVisibleTilesNumOfColumns()+2; col++) {
+	UpdateVisibleTileList();
+}
+
+void Level::UpdateVisibleTileList()
+{
+	visible_tile_list_.resize(GetVisibleTilesNumOfRows() + 2, std::vector<Tile*>(GetVisibleTilesNumOfColumns() + 2, nullptr)); //overdraw by +2 rows/columns
+
+	for (int row = 0; row < GetVisibleTilesNumOfRows() + 2; row++) {
+		// This resize method for columns is better
+		visible_tile_list_[row].resize(GetVisibleTilesNumOfColumns() + 2);
+		for (int col = 0; col < GetVisibleTilesNumOfColumns() + 2; col++) {
 			/*SDL_Rect temp_rect = { col * GetLevelTileWidth(), row * GetLevelTileHeight(), GetLevelTileWidth(), GetLevelTileHeight() };
 			visible_tile_list_[row][col] = &temp_rect;*/
 			visible_tile_list_[row][col] = new Tile(col * GetLevelTileWidth(), row * GetLevelTileHeight(), GetLevelTileWidth(), GetLevelTileHeight(), DST_RECT);
