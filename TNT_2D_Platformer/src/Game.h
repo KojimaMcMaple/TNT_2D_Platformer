@@ -20,6 +20,7 @@
 #include "Level.h"
 #include "Camera.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class Game
 {
@@ -43,7 +44,9 @@ private:
 	Level* level_ptr_;
 	Camera* camera_ptr_;
 	Player* player_ptr_;
-	
+	std::vector<Enemy*> enemy_list_;
+	std::vector<Enemy*> dead_enemy_list_;
+
 	// Movement offset
 	bool is_jump_key_pressable_ = true;
 

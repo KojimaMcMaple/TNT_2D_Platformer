@@ -24,7 +24,8 @@ void GameObject::Animate()
 			checking_anim_state_ = anim_state_;
 			curr_frame_ = 0;
 		}
-		
+
+		// PROCESS VISUAL ANIM
 		if (curr_frame_ > anim_db->GetNumFrames() - 1) {
 			if (anim_db->IsLooping()) {
 				curr_frame_ = 0;
@@ -39,8 +40,29 @@ void GameObject::Animate()
 		}
 		// if frame exceeds GetMaxSheetCol, go to the next row
 		curr_row_ = anim_db->GetStartRow() + (int)((curr_frame_+ anim_db->GetStartCol()) / anim_db->GetMaxSheetCol()); //bug fixed: must add anim_db->GetStartCol() to curr_frame_ because GetStartCol is an offset
-		setSrcX(curr_col_ * getSrc()->w);
-		setSrcY(curr_row_ * getSrc()->h);
+		
+		// SET SRC, if GetFrameH or GetFrameW equals -1, there is one sprite sheet
+		if (anim_db->GetFrameH() == -1) {
+			setSrcY(curr_row_ * getSrc()->h);
+		}
+		else {
+			setSrcY(curr_row_ * anim_db->GetFrameH());
+		}
+
+		if (anim_db->GetFrameW() == -1) {
+			setSrcX(curr_col_ * getSrc()->w);
+		}
+		else {
+			setSrcX(curr_col_ * anim_db->GetFrameW());
+		}
+
+		// PROCESS ATK HITBOX
+		if (curr_frame_ == anim_db->GetAtkStartFrame()) {
+			is_atk_hit_box_active_ = true;
+		}
+		if (curr_frame_ == anim_db->GetAtkEndFrame()) {
+			is_atk_hit_box_active_ = false;
+		}
 
 		curr_frame_++;
 	}
@@ -181,6 +203,16 @@ bool GameObject::IsHitBoxVisible()
 	return is_hit_box_visible_;
 }
 
+SDL_Rect* GameObject::GetAtkHitBox()
+{
+	return &atk_hit_box_;
+}
+
+bool GameObject::IsAtkHitBoxActive()
+{
+	return is_atk_hit_box_active_;
+}
+
 bool GameObject::IsGrounded()
 {
 	return is_grounded_;
@@ -271,6 +303,16 @@ int GameObject::getCurrCol()
 	return curr_col_;
 }
 
+bool GameObject::HasEndedAnimation()
+{
+	if (getCurrFrame() == GetAnimList()[getAnimState()]->GetNumFrames()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 glm::vec2 GameObject::getPosition()
 {
 	return m_position;
@@ -311,11 +353,6 @@ bool GameObject::IsCollidable()
 	return is_collidable_;
 }
 
-GameObjectType GameObject::getType()
-{
-	return m_type;
-}
-
 AnimState GameObject::getAnimState()
 {
 	return anim_state_;
@@ -324,6 +361,11 @@ AnimState GameObject::getAnimState()
 std::vector<AnimSprite*>& GameObject::GetAnimList()
 {
 	return anim_list_;
+}
+
+GameObjectType GameObject::getType()
+{
+	return m_type;
 }
 
 void GameObject::SetWorldRect(int x, int y, int w, int h)
@@ -428,6 +470,26 @@ void GameObject::setHitBoxOffsetY(int coord)
 void GameObject::SetHitBoxVisibility(bool toggle)
 {
 	is_hit_box_visible_ = toggle;
+}
+
+void GameObject::SetAtkHitBox(int x, int y, int w, int h)
+{
+	atk_hit_box_ = { x,y,w,h };
+}
+
+void GameObject::SetAtkHitBoxX(int value)
+{
+	atk_hit_box_.x = value;
+}
+
+void GameObject::SetAtkHitBoxY(int value)
+{
+	atk_hit_box_.y = value;
+}
+
+void GameObject::SetAtkHitBoxActive(bool toggle)
+{
+	is_atk_hit_box_active_ = toggle;
 }
 
 void GameObject::SetGrounded(bool toggle)

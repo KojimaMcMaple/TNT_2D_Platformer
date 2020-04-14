@@ -77,6 +77,8 @@
     </ClCompile>
     <ClCompile Include="..\src\ui\Title.cpp">
       <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\Enemy.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +141,14 @@
     </ClInclude>
     <ClInclude Include="..\src\ui\Title.h">
       <Filter>Header Files</Filter>
+    <ClInclude Include="..\src\Enemy.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EnemyType.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LevelId.h">
+      <Filter>Enums</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
