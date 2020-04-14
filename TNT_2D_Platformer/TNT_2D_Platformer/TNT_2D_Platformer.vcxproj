@@ -169,6 +169,7 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Player.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
+    <ClCompile Include="..\src\ui\Title.cpp" />
     <ClCompile Include="..\src\ui\UI.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="..\src\TextureManager.h" />
     <ClInclude Include="..\src\Tile.h" />
     <ClInclude Include="..\src\TileNeighbour.h" />
+    <ClInclude Include="..\src\ui\Title.h" />
     <ClInclude Include="..\src\ui\UI.h" />
     <ClInclude Include="..\src\ui\UIManager.h" />
     <ClInclude Include="..\src\ui\WindowManager.h" />

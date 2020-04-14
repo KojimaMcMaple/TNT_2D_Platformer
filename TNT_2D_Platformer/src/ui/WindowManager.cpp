@@ -45,18 +45,38 @@ void WindowManager::SetAspect(WinAspect aspect)
 		case WinAspect::_16x9:
 			Globals::sWindowHeight = this->base_h;
 			Globals::sWindowWidth = this->base_h * (16.0f / 9);
+			TheGame::Instance()->GetTitleScreen().reloadUI("title", "../Assets/textures/bg_16x9.png",
+															0, 0,
+															Globals::sWindowWidth / 2, Globals::sWindowHeight / 2,
+															0, 0,
+															Globals::sWindowWidth, Globals::sWindowHeight);
 			break;
 		case WinAspect::_21x9:
 			Globals::sWindowHeight = this->base_h;
 			Globals::sWindowWidth = this->base_h * (21.0f / 9);
+			TheGame::Instance()->GetTitleScreen().reloadUI("title", "../Assets/textures/bg_21x9.png",
+															0, 0,
+															Globals::sWindowWidth / 2, Globals::sWindowHeight / 2,
+															0, 0,
+															Globals::sWindowWidth, Globals::sWindowHeight);
 			break;
 		case WinAspect::_4x3:
 			Globals::sWindowHeight = this->base_h;
 			Globals::sWindowWidth = this->base_h * (4.0f / 3);
+			TheGame::Instance()->GetTitleScreen().reloadUI("title", "../Assets/textures/bg_4x3.png",
+															0, 0,
+															Globals::sWindowWidth / 2, Globals::sWindowHeight / 2,
+															0, 0,
+															Globals::sWindowWidth, Globals::sWindowHeight);
 			break;
 		case WinAspect::_1x1:
 			Globals::sWindowHeight = this->base_h;
 			Globals::sWindowWidth = this->base_h;
+			TheGame::Instance()->GetTitleScreen().reloadUI("title", "../Assets/textures/bg_1x1.png",
+															0, 0,
+															Globals::sWindowWidth / 2, Globals::sWindowHeight / 2,
+															0, 0,
+															Globals::sWindowWidth, Globals::sWindowHeight);
 			break;
 	}
 

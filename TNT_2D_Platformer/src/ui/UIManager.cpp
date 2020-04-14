@@ -116,33 +116,33 @@ void UIManager::UpdateElementPos()
 	{
 		// Top
 		case UIGrid::TOP_LEFT:
-			setPosition({ _posx[UIAlignment::LEFT], _posy[UIAlignment::TOP] });
+			setPosition({ _posx[UIAlignment::ALEFT], _posy[UIAlignment::ATOP] });
 			break;
 		case UIGrid::TOP_CENTER:
-			setPosition({ _posx[UIAlignment::CENTER], _posy[UIAlignment::TOP] });
+			setPosition({ _posx[UIAlignment::ACENTER], _posy[UIAlignment::ATOP] });
 			break;
 		case UIGrid::TOP_RIGHT:
-			setPosition({ _posx[UIAlignment::RIGHT], _posy[UIAlignment::TOP] });
+			setPosition({ _posx[UIAlignment::ARIGHT], _posy[UIAlignment::ATOP] });
 			break;
 		// Middle		 
 		case UIGrid::MID_LEFT:
-			setPosition({ _posx[UIAlignment::LEFT], _posy[UIAlignment::MID] });
+			setPosition({ _posx[UIAlignment::ALEFT], _posy[UIAlignment::AMID] });
 			break;
 		case UIGrid::MID_CENTER:
-			setPosition({ _posx[UIAlignment::CENTER], _posy[UIAlignment::MID] });
+			setPosition({ _posx[UIAlignment::ACENTER], _posy[UIAlignment::AMID] });
 			break;
 		case UIGrid::MID_RIGHT:
-			setPosition({ _posx[UIAlignment::RIGHT], _posy[UIAlignment::MID] });
+			setPosition({ _posx[UIAlignment::ARIGHT], _posy[UIAlignment::AMID] });
 			break;
 		// Bot		 
 		case UIGrid::BOT_LEFT:
-			setPosition({ _posx[UIAlignment::LEFT], _posy[UIAlignment::BOT] });
+			setPosition({ _posx[UIAlignment::ALEFT], _posy[UIAlignment::ABOT] });
 			break;
 		case UIGrid::BOT_CENTER:
-			setPosition({ _posx[UIAlignment::CENTER], _posy[UIAlignment::BOT] });
+			setPosition({ _posx[UIAlignment::ACENTER], _posy[UIAlignment::ABOT] });
 			break;
 		case UIGrid::BOT_RIGHT:
-			setPosition({ _posx[UIAlignment::RIGHT], _posy[UIAlignment::BOT] });
+			setPosition({ _posx[UIAlignment::ARIGHT], _posy[UIAlignment::ABOT] });
 			break;
 	}
 
@@ -157,7 +157,7 @@ UIGrid UIManager::GetUIGrid()
 
 UIState UIManager::GetUIState()
 {
-	return UIState();
+	return this->_state;
 }
 
 int UIManager::GetLength()
@@ -186,6 +186,7 @@ void UIManager::SetUIGrid(UIGrid grid)
 
 void UIManager::SetUIState(UIState state)
 {
+	this->_state = state;
 }
 
 void UIManager::SetLength(int length)

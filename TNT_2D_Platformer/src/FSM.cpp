@@ -100,6 +100,9 @@ TitleState::TitleState()
 void TitleState::Enter()
 {
 	std::cout << "Entering Title..." << std::endl;
+
+	if (!this->_t_menu) this->_t_menu = new TitleMenu();
+	this->_t_menu->GetText()->SetUIState(UIState::ACTIVATING);
 }
 
 void TitleState::Update()
@@ -107,13 +110,43 @@ void TitleState::Update()
 	if (TheGame::Instance()->isKeyDown(SDL_SCANCODE_N)) {
 		TheGame::Instance()->GetFSM().ChangeState(new RunningState());
 	}
+	
+	if (TheGame::Instance()->isKeyDown(SDL_SCANCODE_RETURN) && TheGame::Instance()->IsEnterKeyPressable()) {
+		TheGame::Instance()->SetEnterPressable(false);
+		switch (this->_t_menu->GetMenuState())
+		{
+			case TitleMenuState::TITLE:
+			{
+				this->_t_menu->SetMenuState(TitleMenuState::NEWGAME);
+				break;
+			}
+			case TitleMenuState::NEWGAME:
+			{
+				TheGame::Instance()->GetFSM().ChangeState(new RunningState());
+				break;
+			}
+			case TitleMenuState::CONFIG:
+			{
+				break;
+			}
+			case TitleMenuState::QUIT:
+			{
+				TheGame::Instance()->setRunning(false);
+				break;
+			}
+		}
+
+		
+	}
 }
 
 void TitleState::Render()
 {
 	std::cout << "Rendering Title..." << std::endl;
 	SDL_RenderClear(TheGame::Instance()->getRenderer()); // clear the renderer to the draw colour
+	
 	TheGame::Instance()->GetTitleScreen().draw();
+	this->_t_menu->draw();
 	GameState::Render();
 }
 

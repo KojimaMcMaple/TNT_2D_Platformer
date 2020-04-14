@@ -42,6 +42,11 @@ bool Game::IsJumpKeyPressable()
 	return is_jump_key_pressable_;
 }
 
+bool Game::IsEnterKeyPressable()
+{
+	return is_enter_key_pressable_;
+}
+
 UI& Game::GetTitleScreen()
 {
 	// TODO: insert return statement here
@@ -75,6 +80,11 @@ void Game::SetJumpKeyPressable(bool toggle)
 	is_jump_key_pressable_ = toggle;
 }
 
+void Game::SetEnterPressable(bool toggle)
+{
+	is_enter_key_pressable_ = toggle;
+}
+
 glm::vec2 Game::getMousePosition()
 {
 	return m_mousePosition;
@@ -82,7 +92,7 @@ glm::vec2 Game::getMousePosition()
 
 void Game::createGameObjects()
 {
-	title_screen_ptr_ = new UI("title", "../Assets/textures/Title_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
+	title_screen_ptr_ = new UI("title", "../Assets/textures/bg_4x3.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
 	pause_screen_ptr_ = new UI("pause", "../Assets/textures/Pause_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
 
 	level_ptr_ = new Level();
@@ -271,6 +281,10 @@ void Game::handleEvents()
 			}
 			if (event.key.keysym.sym == SDLK_SPACE) {
 				SetJumpKeyPressable(true);
+			}
+			if (event.key.keysym.sym == SDLK_RETURN)
+			{
+				SetEnterPressable(true);
 			}
 			break;
 		default:

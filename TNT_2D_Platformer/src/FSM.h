@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "ui/Title.h"
 
 class GameState
 {
@@ -33,6 +34,8 @@ public:
 };
 
 class TitleState :public GameState {
+private:
+	TitleMenu* _t_menu;
 public:
 	TitleState();
 	void Enter();

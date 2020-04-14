@@ -1,4 +1,6 @@
 #pragma once
+#ifndef __WINMANAGER_H__
+#define __WINMANAGER_H__
 
 #include <SDL.h>
 
@@ -33,3 +35,4 @@ public:
 	bool GetFullScreen();
 };
 
+#endif //__WINMANAGER_H__

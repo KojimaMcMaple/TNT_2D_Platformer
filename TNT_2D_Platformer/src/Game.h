@@ -47,6 +47,11 @@ private:
 	// Movement offset
 	bool is_jump_key_pressable_ = true;
 
+	// Control cheat
+	// TODO(@nghialam): check with Kyle if it's OK to write a controller
+	bool is_enter_key_pressable_ = true;
+
+
 	// REDUNDANT
 	glm::vec2 m_mousePosition;
 
@@ -75,6 +80,7 @@ public:
 
 	// a function to access the private running variable
 	bool running() { return m_bRunning; }
+	void setRunning(bool toggle) { this->m_bRunning = toggle; }
 
 	void createGameObjects();
 	void CheckCollision();
@@ -87,6 +93,7 @@ public:
 	FSM& GetFSM();
 	WindowManager* GetWindowManager();
 	bool IsJumpKeyPressable();
+	bool IsEnterKeyPressable();
 	UI& GetTitleScreen();
 	UI& GetPauseScreen();
 	Camera* GetCamera();
@@ -95,6 +102,7 @@ public:
 	// setters
 	void setFrames(Uint32 frames);
 	void SetJumpKeyPressable(bool toggle);
+	void SetEnterPressable(bool toggle);
 
 	// REDUNDANT
 	glm::vec2 getMousePosition();

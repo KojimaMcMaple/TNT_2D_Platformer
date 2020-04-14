@@ -2,7 +2,6 @@
 #ifndef __UIMANAGER__
 #define __UIMANAGER__
 
-#include "..\Util.h"
 #include "..\GameObject.h"
 
 // UIGrid is used for manage UI location based on dividing the view into 9 grids
@@ -24,8 +23,8 @@ enum class UIGrid
 };
 enum UIAlignment
 {
-	TOP = 0, MID = 1, BOT = 2,
-	LEFT = 0, CENTER = 1, RIGHT = 2
+	ATOP = 0, AMID = 1, ABOT = 2,
+	ALEFT = 0, ACENTER = 1, ARIGHT = 2
 };
 enum class UIState
 {
@@ -39,7 +38,7 @@ enum class UIState
 // Manage all UI elements that appears on the screen.
 // This class is helpful for consistent position of UI elements when changing windows size or windows aspect ratio
 class UIManager : public GameObject {
-private:
+protected:
 	UIGrid _grid;
 	UIState _state;
 
