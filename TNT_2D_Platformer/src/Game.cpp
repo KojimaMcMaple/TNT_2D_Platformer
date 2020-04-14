@@ -73,16 +73,13 @@ void Game::createGameObjects()
 	level_ptr_->LoadLevel(LevelId::CHURCH);
 
 	player_ptr_ = new Player();
-	player_ptr_->SetWorldXAndHitBox(11 * level_ptr_->GetLevelTileWidth());
-	player_ptr_->SetWorldYAndHitBox(5 * level_ptr_->GetLevelTileHeight());
+	player_ptr_->SetWorldXAndHitBox(1 * level_ptr_->GetLevelTileWidth());
+	player_ptr_->SetWorldYAndHitBox(6 * level_ptr_->GetLevelTileHeight());
 
 	enemy_list_.clear();
 	enemy_list_.resize(0);
 	enemy_list_.shrink_to_fit();
-	enemy_list_.push_back(new Enemy(SKELETON_SWORD, 24 * level_ptr_->GetLevelTileWidth(), 25 * level_ptr_->GetLevelTileHeight()));
-	enemy_list_.push_back(new Enemy(SKELETON_SWORD, 8 * level_ptr_->GetLevelTileWidth(), 14 * level_ptr_->GetLevelTileHeight()));
-	enemy_list_.push_back(new Enemy(SKELETON_SWORD, 11 * level_ptr_->GetLevelTileWidth(), 5 * level_ptr_->GetLevelTileHeight()));
-	enemy_list_.push_back(new Enemy(SKELETON_SWORD, 30 * level_ptr_->GetLevelTileWidth(), 5 * level_ptr_->GetLevelTileHeight()));
+	enemy_list_.push_back(new Enemy(SKELETON_SWORD, 10 * level_ptr_->GetLevelTileWidth(), 6 * level_ptr_->GetLevelTileHeight()));
 	//std::cout << enemy_list_.back()->GetWorldRect()->x << std::endl;
 
 	// CENTER CAM TO PLAYER

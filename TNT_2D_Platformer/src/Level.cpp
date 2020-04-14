@@ -267,37 +267,20 @@ void Level::LoadLevel(LevelId level_id)
 	case CHURCH:
 		SetBkgColor(22, 22, 51, 255);
 
-		level_raw_str += "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCB";
-		level_raw_str += "BB................................B";
-		level_raw_str += "BB................................B";
-		level_raw_str += "BB................................B";
-		level_raw_str += "BB................................B";
-		level_raw_str += "BB................................B";
-		level_raw_str += "BB................................B";
-		level_raw_str += "BBB..GGGGGGGGGGGGG......GGGGGGGGGGG";
-		level_raw_str += "BB..GGGGGGGGGGGGGGG.....GGGGGGGGGGG";
-		level_raw_str += "BB..GGGGGGGGGGGGGGG.....GGGGGGGGGGG";
-		level_raw_str += "BBB.GGGGGGGGGGGGGGGGGG..GGGGGGGGGGG";
-		level_raw_str += "BB............B........G..........B";
-		level_raw_str += "BB................................B";
-		level_raw_str += "BB..@...........BBBBBB............B";
-		level_raw_str += "BB.............@......B...........B";
-		level_raw_str += "GGG...................B...........B";
-		level_raw_str += "GGGGGGGGGGGGG.........BGGG........B";
-		level_raw_str += "GGGGGGGGGGGGGGGGGGGG..BGGG........B";
-		level_raw_str += "GGGGGGGGGGCCCCCCCCCC..CCCCCCCCCCCCC";
-		level_raw_str += "GGGGGGGGGG...........BB...........B";
-		level_raw_str += "GGGGGGGGGG........................B";
-		level_raw_str += "GGGGGGGGGG........................B";
-		level_raw_str += "GGGGGGGGGG.........BB.............B";
-		level_raw_str += "...............BBBB...............B";
-		level_raw_str += ".............@....................B";
-		level_raw_str += "GGGGGGGGGG@.......................B";
-		level_raw_str += "GGGGGGGGGG&B.....................BB";
-		level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG";
+		
+		level_raw_str += "CCCCCCCCCB..BCCCCCCCCCCCC";
+		level_raw_str += "...........BB...........B";
+		level_raw_str += "........................B";
+		level_raw_str += "........................B";
+		level_raw_str += ".........BB.............B";
+		level_raw_str += ".....BBBB...............B";
+		level_raw_str += "...B....................B";
+		level_raw_str += "@.......................B";
+		level_raw_str += "&B.....................BB";
+		level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGG";
 
 		SetLevelRawStr(level_raw_str);
-		SetLevelNumOfRows(28);
+		SetLevelNumOfRows(10);
 		SetLevelNumOfColumns(level_raw_str.size() / GetLevelNumOfRows());
 		break;
 
