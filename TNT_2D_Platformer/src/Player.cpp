@@ -78,6 +78,9 @@ Player::Player()
 	GetAnimList()[ATTACK]->SetAtkStartFrame(3);
 	GetAnimList()[ATTACK]->SetAtkNumFrames(2);
 	SetAtkHitBox(0, 0, 60, 85);
+
+	// Player HUD
+	m_statusBar = new StatusBar(getDst(), 100);
 }
 
 Player::~Player()
@@ -95,6 +98,9 @@ void Player::update()
 	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity()/5));
 	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY()*10), getMaxVelocityY()));
 	SetWorldYAndHitBox(GetWorldRect()->y + (int)getVelocityY());
+
+	// UPDATE PLAYER HUD
+	m_statusBar->update(getDst());
 }
 
 void Player::draw()
@@ -108,11 +114,15 @@ void Player::draw()
 		TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
 		break;
 	}
+
+	// Draw player HUD
+	m_statusBar->draw();
 }
 
 void Player::clean()
 {
-	
+	//delete m_statusBar;
+	//m_statusBar = nullptr;
 }
 
 void Player::MoveX()
