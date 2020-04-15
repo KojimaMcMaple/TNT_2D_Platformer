@@ -87,6 +87,7 @@ void UIManager::update()
 
 void UIManager::draw()
 {
+
 }
 
 void UIManager::clean()

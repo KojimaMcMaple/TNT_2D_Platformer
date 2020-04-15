@@ -92,3 +92,8 @@ bool WindowManager::GetFullScreen()
 {
 	return this->_fullScreen;
 }
+
+WinAspect WindowManager::GetAspect()
+{
+	return this->_aspect;
+}

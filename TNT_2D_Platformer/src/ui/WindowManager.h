@@ -33,6 +33,7 @@ public:
 	// Getter
 	SDL_Window* GetMainWindow();
 	bool GetFullScreen();
+	WinAspect GetAspect();
 };
 
 #endif //__WINMANAGER_H__

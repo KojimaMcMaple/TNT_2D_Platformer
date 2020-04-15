@@ -18,8 +18,6 @@ Controller::Controller()
 
 Controller::~Controller()
 {
-	delete(this->_key_state);
-	this->_key_state = nullptr;
 }
 
 void Controller::handleKeyboardEvent(SDL_Event event)

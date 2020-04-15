@@ -343,6 +343,8 @@ void Game::clean()
 	std::cout << "cleaning game" << std::endl;
 	//fsm_->Clean();
 	GetFSM().Clean();
+	delete m_controller;
+	delete m_wm;
 	delete fsm_;
 	//fsm_ = nullptr;
 

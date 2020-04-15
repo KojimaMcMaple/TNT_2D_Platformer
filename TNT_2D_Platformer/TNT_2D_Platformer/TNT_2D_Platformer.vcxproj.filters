@@ -22,6 +22,7 @@
     <ClCompile Include="..\src\Util.cpp" />
     <ClCompile Include="..\src\StatusBar.cpp" />
     <ClCompile Include="..\src\Controller.cpp" />
+    <ClCompile Include="..\src\ui\Config.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\AnimSprite.h" />
@@ -49,5 +50,6 @@
     <ClInclude Include="..\src\Util.h" />
     <ClInclude Include="..\src\StatusBar.h" />
     <ClInclude Include="..\src\Controller.h" />
+    <ClInclude Include="..\src\ui\Config.h" />
   </ItemGroup>
 </Project>

@@ -172,6 +172,7 @@
     <ClCompile Include="..\src\Player.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
     <ClCompile Include="..\src\StatusBar.cpp" />
+    <ClCompile Include="..\src\ui\Config.cpp" />
     <ClCompile Include="..\src\ui\Title.cpp" />
     <ClCompile Include="..\src\ui\UI.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="..\src\TextureManager.h" />
     <ClInclude Include="..\src\Tile.h" />
     <ClInclude Include="..\src\TileNeighbour.h" />
+    <ClInclude Include="..\src\ui\Config.h" />
     <ClInclude Include="..\src\ui\Title.h" />
     <ClInclude Include="..\src\ui\UI.h" />
     <ClInclude Include="..\src\ui\UIManager.h" />
