@@ -1,154 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Objects">
-      <UniqueIdentifier>{4cc583ad-9d18-4942-8d27-5cb5642dd304}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Managers">
-      <UniqueIdentifier>{5b739336-bbaa-4da6-b590-4819b33fde38}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enums">
-      <UniqueIdentifier>{b54f0419-9444-444d-adff-33a4ada0589e}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="..\src\AnimSprite.cpp" />
+    <ClCompile Include="..\src\Camera.cpp" />
+    <ClCompile Include="..\src\CollisionManager.cpp" />
+    <ClCompile Include="..\src\Enemy.cpp" />
+    <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\GameObject.cpp" />
+    <ClCompile Include="..\src\FSM.cpp" />
+    <ClCompile Include="..\src\Globals.cpp" />
+    <ClCompile Include="..\src\Level.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\Player.cpp" />
+    <ClCompile Include="..\src\SoundManager.cpp" />
+    <ClCompile Include="..\src\ui\Title.cpp" />
+    <ClCompile Include="..\src\ui\UI.cpp" />
+    <ClCompile Include="..\src\TextureManager.cpp" />
+    <ClCompile Include="..\src\Tile.cpp" />
+    <ClCompile Include="..\src\ui\UIManager.cpp" />
+    <ClCompile Include="..\src\ui\WindowManager.cpp" />
+    <ClCompile Include="..\src\Util.cpp" />
+    <ClCompile Include="..\src\StatusBar.cpp" />
+    <ClCompile Include="..\src\Controller.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Player.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextureManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\SoundManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CollisionManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Camera.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Globals.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Tile.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FSM.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Level.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\AnimSprite.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ui\UI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ui\UIManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ui\WindowManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ui\Title.cpp">
-      <Filter>Source Files</Filter>
-    <ClCompile Include="..\src\Enemy.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Player.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\CollisionManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\SoundManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\TextureManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameObjectType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Camera.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Globals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Tile.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\FSM.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Level.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\TileNeighbour.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\AnimState.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\AnimSprite.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ui\UI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ui\UIManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ui\WindowManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ui\Title.h">
-      <Filter>Header Files</Filter>
-    <ClInclude Include="..\src\Enemy.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\EnemyType.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\LevelId.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
+    <ClInclude Include="..\src\AnimSprite.h" />
+    <ClInclude Include="..\src\AnimState.h" />
+    <ClInclude Include="..\src\Camera.h" />
+    <ClInclude Include="..\src\CollisionManager.h" />
+    <ClInclude Include="..\src\Enemy.h" />
+    <ClInclude Include="..\src\EnemyType.h" />
+    <ClInclude Include="..\src\Game.h" />
+    <ClInclude Include="..\src\GameObject.h" />
+    <ClInclude Include="..\src\GameObjectType.h" />
+    <ClInclude Include="..\src\FSM.h" />
+    <ClInclude Include="..\src\Globals.h" />
+    <ClInclude Include="..\src\Level.h" />
+    <ClInclude Include="..\src\LevelId.h" />
+    <ClInclude Include="..\src\Player.h" />
+    <ClInclude Include="..\src\SoundManager.h" />
+    <ClInclude Include="..\src\TextureManager.h" />
+    <ClInclude Include="..\src\Tile.h" />
+    <ClInclude Include="..\src\TileNeighbour.h" />
+    <ClInclude Include="..\src\ui\Title.h" />
+    <ClInclude Include="..\src\ui\UI.h" />
+    <ClInclude Include="..\src\ui\UIManager.h" />
+    <ClInclude Include="..\src\ui\WindowManager.h" />
+    <ClInclude Include="..\src\Util.h" />
+    <ClInclude Include="..\src\StatusBar.h" />
+    <ClInclude Include="..\src\Controller.h" />
   </ItemGroup>
 </Project>

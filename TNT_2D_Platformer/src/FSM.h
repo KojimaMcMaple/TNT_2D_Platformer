@@ -36,6 +36,8 @@ public:
 class TitleState :public GameState {
 private:
 	TitleMenu* _t_menu;
+	bool _is_config;
+
 public:
 	TitleState();
 	void Enter();
@@ -43,6 +45,7 @@ public:
 	void Render();
 	void Exit();
 };
+
 
 class FSM {
 private:

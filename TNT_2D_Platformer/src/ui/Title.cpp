@@ -14,6 +14,7 @@ TitleText::TitleText()
 	this->_state = UIState::ACTIVE;
 	this->_length = 10;
 	this->_timer = 10;
+	this->_active_position = { 0, 0 };
 	this->_inactive_offset = { 0, 200 };
 	this->_active_type = TweenType::OUT_BACK;
 	this->_deactive_type = TweenType::IN_BACK;

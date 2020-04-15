@@ -94,6 +94,7 @@ void RunningState::Resume()
 // TITLE
 TitleState::TitleState()
 {
+	this->_is_config = false;
 }
 
 void TitleState::Enter()
@@ -110,42 +111,67 @@ void TitleState::Update()
 		TheGame::Instance()->GetFSM().ChangeState(new RunningState());
 	}
 	
-	if (TheGame::Instance()->isKeyDown(SDL_SCANCODE_RETURN) && TheGame::Instance()->IsEnterKeyPressable()) {
-		TheGame::Instance()->SetEnterPressable(false);
+	// Handle input with each title menu state
+	if (_is_config) {
+	
+	}
+	else {
 		switch (this->_t_menu->GetMenuState())
 		{
 			case TitleMenuState::TITLE:
 			{
-				this->_t_menu->SetMenuState(TitleMenuState::NEWGAME);
+				if (TheGame::Instance()->GetController()->isPressed(SDL_SCANCODE_RETURN))
+					this->_t_menu->SetMenuState(TitleMenuState::NEWGAME);
 				break;
 			}
 			case TitleMenuState::NEWGAME:
 			{
-				TheGame::Instance()->GetFSM().ChangeState(new RunningState());
+				if (TheGame::Instance()->GetController()->isPressed(SDL_SCANCODE_RETURN))
+					TheGame::Instance()->GetFSM().ChangeState(new RunningState());
+				if (TheGame::Instance()->GetController()->isPressed(SDL_SCANCODE_UP))
+					this->_t_menu->SetMenuState(TitleMenuState::QUIT);
+				if (TheGame::Instance()->GetController()->isPressed(SDL_SCANCODE_DOWN))
+					this->_t_menu->SetMenuState(TitleMenuState::CONFIG);
 				break;
 			}
 			case TitleMenuState::CONFIG:
 			{
+				// TODO(@nghialam): Option UI or State
+					
+				if (TheGame::Instance()->GetController()->isPressed(SDL_SCANCODE_UP))
+					this->_t_menu->SetMenuState(TitleMenuState::NEWGAME);
+				if (TheGame::Instance()->GetController()->isPressed(SDL_SCANCODE_DOWN))
+					this->_t_menu->SetMenuState(TitleMenuState::QUIT);
 				break;
 			}
 			case TitleMenuState::QUIT:
 			{
-				TheGame::Instance()->setRunning(false);
+				if (TheGame::Instance()->GetController()->isPressed(SDL_SCANCODE_RETURN))
+					TheGame::Instance()->setRunning(false);
+				if (TheGame::Instance()->GetController()->isPressed(SDL_SCANCODE_UP))
+					this->_t_menu->SetMenuState(TitleMenuState::CONFIG);
+				if (TheGame::Instance()->GetController()->isPressed(SDL_SCANCODE_DOWN))
+					this->_t_menu->SetMenuState(TitleMenuState::NEWGAME);
 				break;
 			}
+			return;
 		}
-
-		
 	}
 }
 
 void TitleState::Render()
 {
-	std::cout << "Rendering Title..." << std::endl;
 	SDL_RenderClear(TheGame::Instance()->getRenderer()); // clear the renderer to the draw colour
 	
 	TheGame::Instance()->GetTitleScreen().draw();
-	this->_t_menu->draw();
+	if (_is_config)
+	{
+
+	}
+	else
+	{
+		this->_t_menu->draw();
+	}
 	GameState::Render();
 }
 

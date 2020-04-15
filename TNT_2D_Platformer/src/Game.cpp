@@ -5,7 +5,7 @@ Game* Game::s_pInstance = 0;
 
 Game::Game()
 {
-	SetJumpKeyPressable(true);
+	this->m_bRunning = true;
 }
 
 Game::~Game()
@@ -37,14 +37,9 @@ WindowManager* Game::GetWindowManager()
 	return m_wm;
 }
 
-bool Game::IsJumpKeyPressable()
+Controller* Game::GetController()
 {
-	return is_jump_key_pressable_;
-}
-
-bool Game::IsEnterKeyPressable()
-{
-	return is_enter_key_pressable_;
+	return this->m_controller;
 }
 
 UI& Game::GetTitleScreen()
@@ -73,16 +68,6 @@ Level* Game::GetLevel()
 void Game::setFrames(Uint32 frames)
 {
 	m_frames = frames;
-}
-
-void Game::SetJumpKeyPressable(bool toggle)
-{
-	is_jump_key_pressable_ = toggle;
-}
-
-void Game::SetEnterPressable(bool toggle)
-{
-	is_enter_key_pressable_ = toggle;
 }
 
 glm::vec2 Game::getMousePosition()
@@ -134,27 +119,26 @@ void Game::CheckCollision()
 void Game::UpdateGameObjects()
 {
 	// INPUT HANDLE
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
+	if (s_pInstance->GetController()->isHold(SDL_SCANCODE_A) || s_pInstance->GetController()->isHold(SDL_SCANCODE_LEFT)) {
 		player_ptr_->setMoveDirection(-1);
 		player_ptr_->MoveX();
 		if (player_ptr_->IsGrounded()) {
 			player_ptr_->setAnimState(AnimState::RUN);
 		}
 	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
+	if (s_pInstance->GetController()->isHold(SDL_SCANCODE_D) || s_pInstance->GetController()->isHold(SDL_SCANCODE_RIGHT)) {
 		player_ptr_->setMoveDirection(1);
 		player_ptr_->MoveX();
 		if (player_ptr_->IsGrounded()) {
 			player_ptr_->setAnimState(AnimState::RUN);
 		}
 	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
-		SetJumpKeyPressable(false);
+	if (s_pInstance->GetController()->isPressed(SDL_SCANCODE_SPACE) && player_ptr_->IsGrounded()) {
 		player_ptr_->setAccelerationY(-Globals::sJumpForce);
 		player_ptr_->SetGrounded(false);
 		player_ptr_->setAnimState(AnimState::JUMP);
 	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_RSHIFT) && player_ptr_->IsGrounded()) {
+	if (s_pInstance->GetController()->isHold(SDL_SCANCODE_RSHIFT) && player_ptr_->IsGrounded()) {
 		player_ptr_->setAnimState(AnimState::ATTACK);
 	}
 
@@ -227,6 +211,7 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		std::cout << "SDL Init success" << std::endl;
 		
 		m_wm = new WindowManager(title, xpos, ypos, width, height, fullscreen);
+		m_controller = new Controller();
 		// if succeeded create our window
 		m_pWindow = m_wm->GetMainWindow();
 
@@ -318,13 +303,7 @@ void Game::handleEvents()
 					player_ptr_->setAnimState(AnimState::IDLE);
 				}
 			}
-			if (event.key.keysym.sym == SDLK_SPACE) {
-				SetJumpKeyPressable(true);
-			}
-			if (event.key.keysym.sym == SDLK_RETURN)
-			{
-				SetEnterPressable(true);
-			}
+			m_controller->handleKeyboardEvent(event);
 			break;
 		default:
 			break;

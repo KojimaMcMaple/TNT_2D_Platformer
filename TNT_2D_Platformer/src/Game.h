@@ -13,6 +13,7 @@
 #include "ui/WindowManager.h"
 #include "TextureManager.h"
 #include "CollisionManager.h"
+#include "Controller.h"
 #include "FSM.h"
 
 // Game Objects
@@ -31,6 +32,7 @@ private:
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
 	WindowManager* m_wm;
+	Controller* m_controller;
 	FSM* fsm_;
 
 	static Game* s_pInstance;
@@ -47,14 +49,6 @@ private:
 	std::vector<Enemy*> enemy_list_;
 	std::vector<Enemy*> dead_enemy_list_;
 
-	// Movement offset
-	bool is_jump_key_pressable_ = true;
-
-	// Control cheat
-	// TODO(@nghialam): check with Kyle if it's OK to write a controller
-	bool is_enter_key_pressable_ = true;
-
-
 	// REDUNDANT
 	glm::vec2 m_mousePosition;
 
@@ -70,7 +64,7 @@ public:
 	}
 
 	// simply set the running variable to true
-	void init() { m_bRunning = true; }
+	void init() {}
 
 	bool init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
@@ -95,8 +89,7 @@ public:
 	SDL_Renderer* getRenderer();
 	FSM& GetFSM();
 	WindowManager* GetWindowManager();
-	bool IsJumpKeyPressable();
-	bool IsEnterKeyPressable();
+	Controller* GetController();
 	UI& GetTitleScreen();
 	UI& GetPauseScreen();
 	Camera* GetCamera();
@@ -104,8 +97,6 @@ public:
 
 	// setters
 	void setFrames(Uint32 frames);
-	void SetJumpKeyPressable(bool toggle);
-	void SetEnterPressable(bool toggle);
 
 	// REDUNDANT
 	glm::vec2 getMousePosition();
