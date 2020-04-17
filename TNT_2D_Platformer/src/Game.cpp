@@ -122,23 +122,23 @@ void Game::UpdateGameObjects()
 			player_ptr_->setAnimState(AnimState::RUN);
 		}
 	}
-	else if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
 		player_ptr_->setMoveDirection(1);
 		player_ptr_->MoveX();
 		if (player_ptr_->IsGrounded()) {
 			player_ptr_->setAnimState(AnimState::RUN);
 		}
 	}
-	else if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
 		SetJumpKeyPressable(false);
 		player_ptr_->setAccelerationY(-Globals::sJumpForce);
 		player_ptr_->SetGrounded(false);
 		player_ptr_->setAnimState(AnimState::JUMP);
 	}
-	else if (s_pInstance->isKeyDown(SDL_SCANCODE_K) && player_ptr_->IsGrounded()) {
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_K) && player_ptr_->IsGrounded()) {
 		player_ptr_->setAnimState(AnimState::ATTACK);
 	}
-	else if (s_pInstance->isKeyDown(SDL_SCANCODE_L) && player_ptr_->IsGrounded()) {
+	if (s_pInstance->isKeyDown(SDL_SCANCODE_L) && player_ptr_->IsGrounded()) {
 		player_ptr_->setAnimState(AnimState::ATTACK_RANGED);
 	}
 
@@ -160,18 +160,17 @@ void Game::UpdateGameObjects()
 			player_ptr_->setAnimState(AnimState::IDLE);
 		}
 	}
-	else { 
+	else {
 		player_ptr_->SetAtkHitBoxActive(false); //force atk hit box to turn off 
+	}
 
-	if (player_ptr_->getAnimState() != AnimState::ATTACK) { //force atk hit box to turn off 
-		player_ptr_->SetAtkHitBoxActive(false);
-		if (player_ptr_->getAnimState() == AnimState::ATTACK_RANGED) {
-			if (player_ptr_->HasEndedAnimation()) { //anim ended
-				player_ptr_->setAnimState(AnimState::IDLE);
-			}
+	if (player_ptr_->getAnimState() == AnimState::ATTACK_RANGED) {
+		if (player_ptr_->HasEndedAnimation()) { //anim ended
+			player_ptr_->setAnimState(AnimState::IDLE);
 		}
 	}
-	
+
+	//if (!player_ptr_->IsGrounded() && player_ptr_->getVelocityY() > 0) {
 	if (player_ptr_->getVelocityY() > 2) { //natural falling
 		player_ptr_->setAnimState(AnimState::FALL);
 	}
@@ -180,7 +179,10 @@ void Game::UpdateGameObjects()
 
 	CheckCollision();
 
-	if (player_ptr_->IsGrounded() && player_ptr_->getAnimState() != AnimState::RUN && player_ptr_->getAnimState() != AnimState::ATTACK) {
+	if (player_ptr_->IsGrounded() 
+		&& player_ptr_->getAnimState() != AnimState::RUN 
+		&& player_ptr_->getAnimState() != AnimState::ATTACK
+		&& player_ptr_->getAnimState() != AnimState::ATTACK_RANGED) {
 		player_ptr_->setAnimState(AnimState::IDLE);
 	}
 
@@ -197,7 +199,6 @@ void Game::UpdateGameObjects()
 	level_ptr_->SetCamPosY(camera_ptr_->GetWorldRect()->y);
 	level_ptr_->update();
 
-	
 }
 
 void Game::RenderGameObjects()

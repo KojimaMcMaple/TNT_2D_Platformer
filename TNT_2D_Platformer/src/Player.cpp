@@ -83,9 +83,7 @@ Player::Player()
 	GetAnimList()[ATTACK]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
 	GetAnimList()[ATTACK]->SetAtkStartFrame(3);
 	GetAnimList()[ATTACK]->SetAtkNumFrames(2);
-<<<<<<< HEAD
 	SetAtkHitBox(0, 0, 70, 85);
-=======
 
 	GetAnimList()[ATTACK_RANGED]->SetAnimId(ATTACK_RANGED);
 	GetAnimList()[ATTACK_RANGED]->SetStartRow(0); 
@@ -98,7 +96,6 @@ Player::Player()
 
 	// Player HUD
 	m_statusBar = new StatusBar(getDst(), 100);
->>>>>>> e57bf1aa28a4028fbb04b8f302a94e45642a5603
 }
 
 Player::~Player()
@@ -134,7 +131,7 @@ void Player::draw()
 		else
 		{
 			TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_HORIZONTAL);
-		}		
+		}
 		break;
 	default:
 		// TO UPDATE TEXTURE PACK
@@ -145,7 +142,7 @@ void Player::draw()
 		else
 		{
 			TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
-		}		
+		}
 		break;
 	}
 

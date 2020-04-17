@@ -11,12 +11,7 @@ enum AnimState {
 	ASSAULTED,
 	DEATH,
 	ENEMY_PATROL,
-<<<<<<< HEAD
-=======
-	ENEMY_HIT,
-	ENEMY_DEAD,
 	ATTACK_RANGED,
->>>>>>> e57bf1aa28a4028fbb04b8f302a94e45642a5603
 	NUM_OF_ANIM_STATES
 };
 

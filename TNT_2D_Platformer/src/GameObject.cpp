@@ -36,6 +36,7 @@ void GameObject::Animate()
 		}
 		curr_col_ = anim_db->GetStartCol() + curr_frame_;
 		if (curr_col_ > anim_db->GetMaxSheetCol() - 1) {
+			//curr_col_ -= anim_db->GetMaxSheetCol();
 			curr_col_ %= anim_db->GetMaxSheetCol();
 		}
 		// if frame exceeds GetMaxSheetCol, go to the next row
@@ -320,7 +321,13 @@ int GameObject::getCurrCol()
 
 bool GameObject::HasEndedAnimation()
 {
-	return animationEnded;
+	if (getCurrFrame() == GetAnimList()[getAnimState()]->GetNumFrames()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
+		return true;
+	}
+	else {
+		return false;
+	}
+	//return animationEnded;
 }
 
 glm::vec2 GameObject::getPosition()
