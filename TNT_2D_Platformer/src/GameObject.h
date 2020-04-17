@@ -25,6 +25,7 @@ private:
 	// RENDERING
 	SDL_Rect src_, dst_;
 	std::string texture_id_ = "";
+	bool animationEnded = false;
 
 	// SOUND
 	std::vector<std::string> sfx_id_list_;
@@ -46,7 +47,7 @@ private:
 	SDL_Rect hit_box_;
 	int hit_box_manual_offset_x_ = 0;
 	int hit_box_manual_offset_y_ = 0;
-	bool is_hit_box_visible_ = true;
+	bool is_hit_box_visible_ = false;
 	bool is_grounded_ = false;
 	bool is_collidable_;
 

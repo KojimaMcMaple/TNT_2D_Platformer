@@ -72,6 +72,9 @@
     <ClCompile Include="..\src\Enemy.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\StatusBar.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Game.h">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="..\src\LevelId.h">
       <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\StatusBar.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

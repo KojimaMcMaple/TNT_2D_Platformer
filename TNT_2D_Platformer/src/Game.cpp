@@ -122,21 +122,24 @@ void Game::UpdateGameObjects()
 			player_ptr_->setAnimState(AnimState::RUN);
 		}
 	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
+	else if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
 		player_ptr_->setMoveDirection(1);
 		player_ptr_->MoveX();
 		if (player_ptr_->IsGrounded()) {
 			player_ptr_->setAnimState(AnimState::RUN);
 		}
 	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
+	else if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
 		SetJumpKeyPressable(false);
 		player_ptr_->setAccelerationY(-Globals::sJumpForce);
 		player_ptr_->SetGrounded(false);
 		player_ptr_->setAnimState(AnimState::JUMP);
 	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_RSHIFT) && player_ptr_->IsGrounded()) {
+	else if (s_pInstance->isKeyDown(SDL_SCANCODE_K) && player_ptr_->IsGrounded()) {
 		player_ptr_->setAnimState(AnimState::ATTACK);
+	}
+	else if (s_pInstance->isKeyDown(SDL_SCANCODE_L) && player_ptr_->IsGrounded()) {
+		player_ptr_->setAnimState(AnimState::ATTACK_RANGED);
 	}
 
 	// POST PROCESSING
@@ -157,17 +160,23 @@ void Game::UpdateGameObjects()
 			player_ptr_->setAnimState(AnimState::IDLE);
 		}
 	}
+	else { 
+		player_ptr_->SetAtkHitBoxActive(false); //force atk hit box to turn off 
 
 	if (player_ptr_->getAnimState() != AnimState::ATTACK) { //force atk hit box to turn off 
 		player_ptr_->SetAtkHitBoxActive(false);
+		if (player_ptr_->getAnimState() == AnimState::ATTACK_RANGED) {
+			if (player_ptr_->HasEndedAnimation()) { //anim ended
+				player_ptr_->setAnimState(AnimState::IDLE);
+			}
+		}
 	}
-
-	player_ptr_->update();
-	player_ptr_->setAccelerationY(0);
-
-	if (!player_ptr_->IsGrounded() && player_ptr_->getVelocityY() > 0) {
+	
+	if (player_ptr_->getVelocityY() > 2) { //natural falling
 		player_ptr_->setAnimState(AnimState::FALL);
 	}
+	player_ptr_->update();
+	player_ptr_->setAccelerationY(0);	
 
 	CheckCollision();
 

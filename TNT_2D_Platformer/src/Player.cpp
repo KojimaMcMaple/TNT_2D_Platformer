@@ -5,6 +5,10 @@ Player::Player()
 {
 	setTextureId("player");
 	TheTextureManager::Instance()->load("../Assets/textures/adventurer-v1.5-Sheet.png", getTextureId(), TheGame::Instance()->getRenderer());
+
+	// TO UPDATE TEXTURE PACK
+	TheTextureManager::Instance()->load("../Assets/textures/adventurer-bow-Sheet.png", "attack_ranged", TheGame::Instance()->getRenderer());
+
 	setSrc(0, 0, 50, 37);
 	SetWorldRect(0, 0, 50 * 3, 37 * 3);
 	setDst(0, 0, 50 * 3, 37 * 3);
@@ -79,7 +83,22 @@ Player::Player()
 	GetAnimList()[ATTACK]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
 	GetAnimList()[ATTACK]->SetAtkStartFrame(3);
 	GetAnimList()[ATTACK]->SetAtkNumFrames(2);
+<<<<<<< HEAD
 	SetAtkHitBox(0, 0, 70, 85);
+=======
+
+	GetAnimList()[ATTACK_RANGED]->SetAnimId(ATTACK_RANGED);
+	GetAnimList()[ATTACK_RANGED]->SetStartRow(0); 
+	GetAnimList()[ATTACK_RANGED]->SetStartCol(0);
+	GetAnimList()[ATTACK_RANGED]->SetNumFrames(9);
+	GetAnimList()[ATTACK_RANGED]->SetAnimSpeed(0.7f);
+	GetAnimList()[ATTACK_RANGED]->SetLooping(false);
+	GetAnimList()[ATTACK_RANGED]->SetMaxSheetRow(4); //same for all anim states since there's only one sheet
+	GetAnimList()[ATTACK_RANGED]->SetMaxSheetCol(4); //same for all anim states since there's only one sheet
+
+	// Player HUD
+	m_statusBar = new StatusBar(getDst(), 100);
+>>>>>>> e57bf1aa28a4028fbb04b8f302a94e45642a5603
 }
 
 Player::~Player()
@@ -97,6 +116,9 @@ void Player::update()
 	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity()/5));
 	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY()*10), getMaxVelocityY()));
 	SetWorldYAndHitBox(GetWorldRect()->y + (int)getVelocityY());
+
+	// UPDATE PLAYER HUD
+	m_statusBar->update(getDst());
 }
 
 void Player::draw()
@@ -104,17 +126,37 @@ void Player::draw()
 	Animate();
 	switch (getMoveDirection()) {
 	case -1:
-		TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_HORIZONTAL);
+		// TO UPDATE TEXTURE PACK
+		if (getAnimState() == ATTACK_RANGED)
+		{
+			TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), "attack_ranged", getSrc(), getDst(), 0.0, 0, SDL_FLIP_HORIZONTAL);
+		}
+		else
+		{
+			TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_HORIZONTAL);
+		}		
 		break;
 	default:
-		TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
+		// TO UPDATE TEXTURE PACK
+		if (getAnimState() == ATTACK_RANGED)
+		{
+			TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), "attack_ranged", getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
+		}
+		else
+		{
+			TheTextureManager::Instance()->draw(TheGame::Instance()->getRenderer(), getTextureId(), getSrc(), getDst(), 0.0, 0, SDL_FLIP_NONE);
+		}		
 		break;
 	}
+
+	// Draw player HUD
+	m_statusBar->draw();
 }
 
 void Player::clean()
 {
-	
+	//delete m_statusBar;
+	//m_statusBar = nullptr;
 }
 
 void Player::MoveX()

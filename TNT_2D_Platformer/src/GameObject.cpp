@@ -20,11 +20,10 @@ void GameObject::Animate()
 	int animationRate = round(anim_db->GetNumFrames() / 2 / anim_db->GetAnimSpeed());
 	if (TheGame::Instance()->getFrames() % animationRate == 0)
 	{
-		if (checking_anim_state_ != anim_state_) {
+		if (checking_anim_state_ != anim_state_) { //Just changed state
 			checking_anim_state_ = anim_state_;
 			curr_frame_ = 0;
 		}
-
 		// PROCESS VISUAL ANIM
 		if (curr_frame_ > anim_db->GetNumFrames() - 1) {
 			if (anim_db->IsLooping()) {
@@ -32,11 +31,12 @@ void GameObject::Animate()
 			}
 			else {
 				curr_frame_ = anim_db->GetNumFrames() - 1;
+				animationEnded = true;
 			}
 		}
 		curr_col_ = anim_db->GetStartCol() + curr_frame_;
 		if (curr_col_ > anim_db->GetMaxSheetCol() - 1) {
-			curr_col_ -= anim_db->GetMaxSheetCol();
+			curr_col_ %= anim_db->GetMaxSheetCol();
 		}
 		// if frame exceeds GetMaxSheetCol, go to the next row
 		curr_row_ = anim_db->GetStartRow() + (int)((curr_frame_+ anim_db->GetStartCol()) / anim_db->GetMaxSheetCol()); //bug fixed: must add anim_db->GetStartCol() to curr_frame_ because GetStartCol is an offset
@@ -320,12 +320,7 @@ int GameObject::getCurrCol()
 
 bool GameObject::HasEndedAnimation()
 {
-	if (getCurrFrame() == GetAnimList()[getAnimState()]->GetNumFrames()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
-		return true;
-	}
-	else {
-		return false;
-	}
+	return animationEnded;
 }
 
 glm::vec2 GameObject::getPosition()
@@ -654,6 +649,7 @@ void GameObject::setCurrCol(int value)
 void GameObject::setAnimState(AnimState newState)
 {
 	anim_state_ = newState;
+	animationEnded = false;
 }
 
 void GameObject::InitAnimList()

@@ -7,10 +7,11 @@
 #include "GameObject.h"
 #include "TextureManager.h"
 #include "SoundManager.h"
+#include "StatusBar.h"
 
 class Player : public GameObject {
 private:
-
+	StatusBar* m_statusBar;
 public:
 	Player();
 	~Player();
