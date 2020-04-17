@@ -168,13 +168,13 @@ void Game::UpdateGameObjects()
 			int x, y;
 			if (player_ptr_->getMoveDirection() == 1)
 			{
-				x = player_ptr_->getDst()->x + 29;
-				y = player_ptr_->getDst()->y + 23;
+				x = player_ptr_->GetWorldRect()->x + 29 * 3;
+				y = player_ptr_->GetWorldRect()->y + 22 * 3;
 			}
 			else
 			{
-				x = player_ptr_->getDst()->x + 22;
-				y = player_ptr_->getDst()->y + 23;
+				x = player_ptr_->GetWorldRect()->x + 22 * 3;
+				y = player_ptr_->GetWorldRect()->y + 22 * 3;
 			}
 			m_pArrowVec.push_back(new Arrow(x, y, player_ptr_->getMoveDirection()));
 			player_ptr_->setAnimState(AnimState::IDLE);
