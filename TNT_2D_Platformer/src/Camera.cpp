@@ -71,7 +71,17 @@ void Camera::RefocusCamera(Player* player_ptr, Level* level_ptr)
 	if (player_ptr->GetWorldRectCenterX() > Globals::sWindowWidth/2 && player_ptr->GetWorldRectCenterX() < level_ptr->GetLevelMaxPosX()- Globals::sWindowWidth / 2) {
 		SetWorldRectX(player_ptr->GetWorldRectCenterX() - GetWorldRect()->w / 2);
 	}
+	//if (player_ptr->GetWorldRectCenterY() > Globals::sWindowHeight / 2) {
+	//	/*std::cout << "1 is true !!!!!" << std::endl;*/
+	//}
+	//std::cout << "player_ptr->GetWorldRectCenterY()" << player_ptr->GetWorldRectCenterY() << std::endl;
+	//std::cout << "level_ptr->GetLevelMaxPosY()" << level_ptr->GetLevelMaxPosY() << std::endl;
+	//std::cout << "Globals::sWindowHeight / 2" << Globals::sWindowHeight / 2 << std::endl;
+	//if (player_ptr->GetWorldRectCenterY() < level_ptr->GetLevelMaxPosY() - Globals::sWindowHeight / 2) {
+	//	std::cout << "2 is true !!!!!" << std::endl;
+	//}
 	if (player_ptr->GetWorldRectCenterY() > Globals::sWindowHeight / 2 && player_ptr->GetWorldRectCenterY() < level_ptr->GetLevelMaxPosY() - Globals::sWindowHeight / 2) {
+		//std::cout << "...readjusting Y" << std::endl;
 		SetWorldRectY(player_ptr->GetWorldRectCenterY() - GetWorldRect()->h / 2);
 	}
 }

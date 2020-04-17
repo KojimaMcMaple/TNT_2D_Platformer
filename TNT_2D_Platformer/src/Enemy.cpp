@@ -29,12 +29,14 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	setGravity(Globals::sGravity);
 	setMaxAccelerationX(2.0);
 	setMaxAccelerationY(2.0);
-	setMaxVelocityX(0.8);
+	setMaxVelocityX(0.7);
 	setMaxVelocityY(10.0);
 	setDrag(1.0);
 	setMoveDirection(-1);
 	setType(GameObjectType::ENEMY);
 	setAnimState(AnimState::ENEMY_PATROL);
+	SetHP(40);
+	SetAtkPower(20);
 
 	// ANIM INIT
 	InitAnimList();
@@ -47,14 +49,24 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	GetAnimList()[ENEMY_PATROL]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
 	GetAnimList()[ENEMY_PATROL]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
 
-	GetAnimList()[ENEMY_HIT]->SetAnimId(ENEMY_HIT);
-	GetAnimList()[ENEMY_HIT]->SetStartRow(4);
-	GetAnimList()[ENEMY_HIT]->SetStartCol(2);
-	GetAnimList()[ENEMY_HIT]->SetNumFrames(3);
-	GetAnimList()[ENEMY_HIT]->SetAnimSpeed(0.3f);
-	GetAnimList()[ENEMY_HIT]->SetLooping(false);
-	GetAnimList()[ENEMY_HIT]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
-	GetAnimList()[ENEMY_HIT]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
+	GetAnimList()[ASSAULTED]->SetAnimId(ASSAULTED);
+	GetAnimList()[ASSAULTED]->SetStartRow(4);
+	GetAnimList()[ASSAULTED]->SetStartCol(2);
+	GetAnimList()[ASSAULTED]->SetNumFrames(3);
+	SetIFrames(3); //NOT YET IMPLEMENTED, IS USING SIMPLER SOLUTION
+	GetAnimList()[ASSAULTED]->SetAnimSpeed(0.3f);
+	GetAnimList()[ASSAULTED]->SetLooping(false);
+	GetAnimList()[ASSAULTED]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
+	GetAnimList()[ASSAULTED]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
+
+	GetAnimList()[DEATH]->SetAnimId(DEATH);
+	GetAnimList()[DEATH]->SetStartRow(3);
+	GetAnimList()[DEATH]->SetStartCol(2);
+	GetAnimList()[DEATH]->SetNumFrames(6);
+	GetAnimList()[DEATH]->SetAnimSpeed(0.5f);
+	GetAnimList()[DEATH]->SetLooping(false);
+	GetAnimList()[DEATH]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
+	GetAnimList()[DEATH]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
 }
 
 void Enemy::RenderSkeletonSword()
@@ -83,6 +95,7 @@ void Enemy::update()
 {
 	switch (enemy_type_) {
 	default:
+		// STATE UPDATE
 		switch (getAnimState()) {
 		case ENEMY_PATROL:
 			// continue moving if not past patrol distance, else change direction
@@ -101,15 +114,23 @@ void Enemy::update()
 			}
 			UpdatePosition();
 			break;
-
-		case ENEMY_HIT:
+		case ASSAULTED:
+			StopX();
+			break;
+		case DEATH:
 			StopX();
 			break;
 		}
 		
-		if (getAnimState() == AnimState::ENEMY_HIT) {
+		// STATE SWITCHING
+		if (getAnimState() == AnimState::ASSAULTED) {
 			if (HasEndedAnimation()) {
-				setAnimState(AnimState::ENEMY_PATROL);
+				if (GetHP() == 0) {
+					setAnimState(AnimState::DEATH);
+				}
+				else {
+					setAnimState(AnimState::ENEMY_PATROL);
+				}
 			}
 		}
 		

@@ -68,6 +68,16 @@ void GameObject::Animate()
 	}
 }
 
+int GameObject::GetHP()
+{
+	return hp_;
+}
+
+int GameObject::GetAtkPower()
+{
+	return atk_power_;
+}
+
 SDL_Rect* GameObject::GetWorldRect()
 {
 	return &world_rect_;
@@ -211,6 +221,11 @@ SDL_Rect* GameObject::GetAtkHitBox()
 bool GameObject::IsAtkHitBoxActive()
 {
 	return is_atk_hit_box_active_;
+}
+
+int GameObject::GetIFrames()
+{
+	return i_frames_;
 }
 
 bool GameObject::IsGrounded()
@@ -368,6 +383,20 @@ GameObjectType GameObject::getType()
 	return m_type;
 }
 
+void GameObject::SetHP(int value)
+{
+	hp_ = value;
+
+	if (hp_ < 0) {
+		hp_ = 0;
+	}
+}
+
+void GameObject::SetAtkPower(int value)
+{
+	atk_power_ = value;
+}
+
 void GameObject::SetWorldRect(int x, int y, int w, int h)
 {
 	world_rect_ = { x,y,w,h };
@@ -490,6 +519,11 @@ void GameObject::SetAtkHitBoxY(int value)
 void GameObject::SetAtkHitBoxActive(bool toggle)
 {
 	is_atk_hit_box_active_ = toggle;
+}
+
+void GameObject::SetIFrames(int value)
+{
+	i_frames_ = value;
 }
 
 void GameObject::SetGrounded(bool toggle)

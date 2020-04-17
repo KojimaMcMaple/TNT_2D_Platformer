@@ -74,7 +74,7 @@ void Game::createGameObjects()
 
 	player_ptr_ = new Player();
 	player_ptr_->SetWorldXAndHitBox(11 * level_ptr_->GetLevelTileWidth());
-	player_ptr_->SetWorldYAndHitBox(5 * level_ptr_->GetLevelTileHeight());
+	player_ptr_->SetWorldYAndHitBox(18 * level_ptr_->GetLevelTileHeight());
 
 	enemy_list_.clear();
 	enemy_list_.resize(0);
@@ -102,8 +102,12 @@ void Game::CheckCollision()
 	for (int i = 0; i < enemy_list_.size(); i++) {
 		Enemy* enemy = enemy_list_[i];
 		level_ptr_->CheckLevelCollision(enemy);
-		if (player_ptr_->IsAtkHitBoxActive() && SDL_HasIntersection(player_ptr_->GetAtkHitBox(), enemy->getHitBox())) {
-			enemy->setAnimState(AnimState::ENEMY_HIT);
+		//if player still attacking + enemy not dead + SDL_HasIntersection
+		if (player_ptr_->IsAtkHitBoxActive() && enemy->getAnimState() != AnimState::DEATH && SDL_HasIntersection(player_ptr_->GetAtkHitBox(), enemy->getHitBox())) {
+			if (enemy->getAnimState() != AnimState::ASSAULTED) {
+				enemy->SetHP(enemy->GetHP() - player_ptr_->GetAtkPower());
+			}
+			enemy->setAnimState(AnimState::ASSAULTED);
 		}
 	}
 }

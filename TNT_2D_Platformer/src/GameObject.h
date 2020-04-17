@@ -15,6 +15,10 @@
 
 class GameObject {
 private:
+	// GAME ATTR
+	int hp_;
+	int atk_power_;
+
 	// POSITIONING
 	SDL_Rect world_rect_; //"real" rect
 	
@@ -48,7 +52,9 @@ private:
 
 	SDL_Rect atk_hit_box_;
 	bool is_atk_hit_box_active_ = false;
-	GameObjectType m_type;
+	int i_frames_ = 0;
+
+	GameObjectType m_type; //redundant ?
 
 	// TRANSFORM
 	int custom_pivot_x_;
@@ -91,6 +97,8 @@ public:
 	virtual void clean() = 0;
 
 	// getters for common variables
+	int GetHP();
+	int GetAtkPower();
 	SDL_Rect* GetWorldRect();
 	int GetWorldRectRightmostX();
 	int GetWorldRectLowermostY();
@@ -120,6 +128,7 @@ public:
 	bool IsHitBoxVisible();
 	SDL_Rect* GetAtkHitBox();
 	bool IsAtkHitBoxActive();
+	int GetIFrames();
 	bool IsGrounded();
 	bool IsCollidable();
 	std::string getTextureId();
@@ -152,6 +161,8 @@ public:
 	int getHeight();
 
 	// setters for common variables
+	void SetHP(int value);
+	void SetAtkPower(int value);
 	void SetWorldRect(int x, int y, int w, int h);
 	void SetWorldRectX(int coord);
 	void SetWorldRectY(int coord);
@@ -176,6 +187,7 @@ public:
 	void SetAtkHitBoxX(int value);
 	void SetAtkHitBoxY(int value);
 	void SetAtkHitBoxActive(bool toggle);
+	void SetIFrames(int value);
 	void SetGrounded(bool toggle);
 	void SetCollidable(bool toggle);
 	void setTextureId(std::string id); //cleanup is done by manager

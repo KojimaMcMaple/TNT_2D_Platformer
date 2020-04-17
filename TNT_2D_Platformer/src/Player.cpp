@@ -27,6 +27,8 @@ Player::Player()
 	setMoveDirection(1);
 	setType(GameObjectType::PLAYER);
 	setAnimState(AnimState::IDLE); //default anim state
+	SetHP(100);
+	SetAtkPower(20);
 
 	// ANIM INIT
 	InitAnimList();
@@ -77,7 +79,7 @@ Player::Player()
 	GetAnimList()[ATTACK]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
 	GetAnimList()[ATTACK]->SetAtkStartFrame(3);
 	GetAnimList()[ATTACK]->SetAtkNumFrames(2);
-	SetAtkHitBox(0, 0, 60, 85);
+	SetAtkHitBox(0, 0, 70, 85);
 }
 
 Player::~Player()
