@@ -21,6 +21,7 @@ private:
 	// RENDERING
 	SDL_Rect src_, dst_;
 	std::string texture_id_ = "";
+	bool animationEnded = false;
 
 	// SOUND
 	std::vector<std::string> sfx_id_list_;
