@@ -434,6 +434,11 @@ void GameObject::setSrcY(int coord)
 	src_.y = coord;
 }
 
+void GameObject::setDst(SDL_Rect dst_ptr)
+{
+	dst_ = dst_ptr;
+}
+
 void GameObject::setDst(int x, int y, int w, int h)
 {
 	dst_ = { x,y,w,h };

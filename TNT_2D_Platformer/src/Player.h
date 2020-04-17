@@ -15,7 +15,6 @@ private:
 public:
 	Player();
 	~Player();
-	
 	void update() override;
 	void draw() override;
 	void clean() override;

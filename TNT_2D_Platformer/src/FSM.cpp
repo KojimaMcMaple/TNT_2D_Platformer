@@ -56,6 +56,8 @@ RunningState::RunningState()
 void RunningState::Enter()
 {
 	std::cout << "Entering Game..." << std::endl;
+	TheTextureManager::Instance()->load("../Assets/textures/Arrow.png",
+		"arrow", TheGame::Instance()->getRenderer());
 }
 
 void RunningState::Update()

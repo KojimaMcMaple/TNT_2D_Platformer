@@ -163,20 +163,38 @@ void Game::UpdateGameObjects()
 	else {
 		player_ptr_->SetAtkHitBoxActive(false); //force atk hit box to turn off 
 	}
-
 	if (player_ptr_->getAnimState() == AnimState::ATTACK_RANGED) {
-		if (player_ptr_->HasEndedAnimation()) { //anim ended
+		if (player_ptr_->HasEndedAnimation()) { //anim ended and fire an arrow
+			int x, y;
+			if (player_ptr_->getMoveDirection() == 1)
+			{
+				x = player_ptr_->getDst()->x + 29;
+				y = player_ptr_->getDst()->y + 23;
+			}
+			else
+			{
+				x = player_ptr_->getDst()->x + 22;
+				y = player_ptr_->getDst()->y + 23;
+			}
+			m_pArrowVec.push_back(new Arrow(x, y, player_ptr_->getMoveDirection()));
 			player_ptr_->setAnimState(AnimState::IDLE);
 		}
 	}
-
 	//if (!player_ptr_->IsGrounded() && player_ptr_->getVelocityY() > 0) {
 	if (player_ptr_->getVelocityY() > 2) { //natural falling
 		player_ptr_->setAnimState(AnimState::FALL);
 	}
 	player_ptr_->update();
-	player_ptr_->setAccelerationY(0);	
+	player_ptr_->setAccelerationY(0);
 
+	// PLAYER'S ARROWS
+	for (int i = 0; i < (int)m_pArrowVec.size(); i++)
+	{
+		m_pArrowVec[i]->update();
+		// TO UPDATE DEALLOCATE THE ARROWS OUT OF BOUNDS
+
+	}
+	
 	CheckCollision();
 
 	if (player_ptr_->IsGrounded() 
@@ -198,7 +216,6 @@ void Game::UpdateGameObjects()
 	level_ptr_->SetCamPosX(camera_ptr_->GetWorldRect()->x);
 	level_ptr_->SetCamPosY(camera_ptr_->GetWorldRect()->y);
 	level_ptr_->update();
-
 }
 
 void Game::RenderGameObjects()
@@ -208,6 +225,9 @@ void Game::RenderGameObjects()
 		camera_ptr_->draw(enemy_list_[i]);
 	}
 	camera_ptr_->draw(player_ptr_);
+	for (int i = 0; i < (int)m_pArrowVec.size(); i++) {
+		camera_ptr_->draw(m_pArrowVec[i]);
+	}	
 }
 
 bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
