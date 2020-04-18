@@ -196,6 +196,7 @@
     <ClInclude Include="..\src\LevelId.h" />
     <ClInclude Include="..\src\Player.h" />
     <ClInclude Include="..\src\ScoreBoard.h" />
+    <ClInclude Include="..\src\SoundId.h" />
     <ClInclude Include="..\src\SoundManager.h" />
     <ClInclude Include="..\src\StatusBar.h" />
     <ClInclude Include="..\src\TextElement.h" />

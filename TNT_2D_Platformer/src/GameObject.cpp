@@ -20,8 +20,8 @@ void GameObject::Animate()
 	int animationRate = round(anim_db->GetNumFrames() / 2 / anim_db->GetAnimSpeed());
 	if (TheGame::Instance()->getFrames() % animationRate == 0)
 	{
-		if (checking_anim_state_ != anim_state_) { //Just changed state
-			checking_anim_state_ = anim_state_;
+		if (HasChangedState()) { //Just changed state
+			//checking_anim_state_ = anim_state_;
 			curr_frame_ = 0;
 		}
 		// PROCESS VISUAL ANIM
@@ -328,14 +328,26 @@ int GameObject::getCurrCol()
 	return curr_col_;
 }
 
-bool GameObject::HasEndedAnimation()
+bool GameObject::HasChangedState()
 {
-	if (getCurrFrame() == GetAnimList()[getAnimState()]->GetNumFrames()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
+	if (checking_anim_state_ != anim_state_) { //Just changed state
+		checking_anim_state_ = anim_state_;
+		//curr_frame_ = 0;
+		has_played_anim_sfx_ = false;
 		return true;
 	}
-	else {
-		return false;
+	return false;
+}
+
+bool GameObject::HasEndedAnimation()
+{
+	if (checking_anim_state_ == anim_state_) {
+		if (getCurrFrame() == GetAnimList()[getAnimState()]->GetNumFrames()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
+			return true;
+		}
 	}
+	
+	return false;
 	//return animationEnded;
 }
 
@@ -387,6 +399,11 @@ AnimState GameObject::getAnimState()
 std::vector<AnimSprite*>& GameObject::GetAnimList()
 {
 	return anim_list_;
+}
+
+bool GameObject::HasPlayedAnimSfx()
+{
+	return has_played_anim_sfx_;
 }
 
 GameObjectType GameObject::getType()
@@ -575,11 +592,6 @@ void GameObject::setTextureId(std::string id)
 	texture_id_ = id;
 }
 
-void GameObject::addSfxId(std::string id)
-{
-	sfx_id_list_.push_back(id);
-}
-
 void GameObject::setCustomPivotX(int coord)
 {
 	custom_pivot_x_ = coord;
@@ -696,11 +708,24 @@ void GameObject::setAnimState(AnimState newState)
 	animationEnded = false;
 }
 
+void GameObject::PlayAnimSfx(SoundId sfx)
+{
+	if (HasChangedState()) {
+		TheSoundManager::Instance()->playSound(sfx, 0); //sound
+		SetPlayedAnimSfx(true);
+	}
+}
+
 void GameObject::InitAnimList()
 {
 	for (int i = 0; i < NUM_OF_ANIM_STATES; i++) {
 		anim_list_.push_back(new AnimSprite());
 	}
+}
+
+void GameObject::SetPlayedAnimSfx(bool toggle)
+{
+	has_played_anim_sfx_ = toggle;
 }
 
 void GameObject::setAcceleration(glm::vec2 newAcceleration)

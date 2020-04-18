@@ -13,6 +13,7 @@
 #include "TextureManager.h"
 #include "CollisionManager.h"
 #include "FSM.h"
+#include "SoundId.h"
 
 // Game Objects
 #include "UI.h"

@@ -1,10 +1,10 @@
 #pragma once
-//#ifndef __ANIM_STATES__
-//#define __ANIM_STATES__
+#ifndef __ENEMY_TYPE__
+#define __ENEMY_TYPE__
 
 enum EnemyType {
 	SKELETON_SWORD,
 	NUM_OF_ENEMY_TYPES
 };
 
-//#endif /* defined (__STEERING_STATE__) */
+#endif

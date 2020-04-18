@@ -12,7 +12,7 @@ SoundManager::~SoundManager()
 	Mix_CloseAudio();
 }
 
-bool SoundManager::load(std::string fileName, std::string id, sound_type type)
+bool SoundManager::load(std::string fileName, SoundId id, SoundType type)
 {
 	if (type == SOUND_MUSIC)
 	{
@@ -43,25 +43,25 @@ bool SoundManager::load(std::string fileName, std::string id, sound_type type)
 
 void SoundManager::freeAllSounds()
 {
-	std::map<std::string, Mix_Chunk*>::iterator it_sfx = s_pInstance->m_sfxs.begin();
-	for (std::pair<std::string, Mix_Chunk*> elem_sfx : s_pInstance->m_sfxs)
+	std::map<SoundId, Mix_Chunk*>::iterator it_sfx = s_pInstance->m_sfxs.begin();
+	for (std::pair<SoundId, Mix_Chunk*> elem_sfx : s_pInstance->m_sfxs)
 	{
 		Mix_FreeChunk(elem_sfx.second);
 	}
 
-	std::map<std::string, Mix_Music*>::iterator it_music = s_pInstance->m_music.begin();
-	for (std::pair<std::string, Mix_Music*> elem_music : s_pInstance->m_music)
+	std::map<SoundId, Mix_Music*>::iterator it_music = s_pInstance->m_music.begin();
+	for (std::pair<SoundId, Mix_Music*> elem_music : s_pInstance->m_music)
 	{
 		Mix_FreeMusic(elem_music.second);
 	}
 }
 
-void SoundManager::playMusic(std::string id, int loop)
+void SoundManager::playMusic(SoundId id, int loop)
 {
 	Mix_PlayMusic(m_music[id], loop);
 }
 
-void SoundManager::playSound(std::string id, int loop)
+void SoundManager::playSound(SoundId id, int loop)
 {
 	Mix_PlayChannel(-1, m_sfxs[id], loop);
 }

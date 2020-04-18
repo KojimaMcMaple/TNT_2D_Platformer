@@ -106,18 +106,16 @@ void Game::CheckCollision()
 		level_ptr_->CheckLevelCollision(enemy);
 		//if player still attacking + enemy not dead + SDL_HasIntersection
 		if (player_ptr_->IsAtkHitBoxActive() && enemy->getAnimState() != AnimState::DEATH && SDL_HasIntersection(player_ptr_->GetAtkHitBox(), enemy->getHitBox())) {
-			if (enemy->getAnimState() != AnimState::ASSAULTED) {
-				enemy->SetHP(enemy->GetHP() - player_ptr_->GetAtkPower());
-				enemy->getStatusBar()->changeHealth(- player_ptr_->GetAtkPower());
-			}
+			enemy->SetHP(enemy->GetHP() - player_ptr_->GetAtkPower());
+			enemy->getStatusBar()->changeHealth(-player_ptr_->GetAtkPower());
 			enemy->setAnimState(AnimState::ASSAULTED);
+			player_ptr_->SetAtkHitBoxActive(false);
 		}
 
 		for (int j = 0; j < m_pArrowVec.size(); j++) {
 			if (enemy->getAnimState() != AnimState::DEATH && SDL_HasIntersection(m_pArrowVec[j]->GetWorldRect(), enemy->getHitBox())) {
-				if (enemy->getAnimState() != AnimState::ASSAULTED) {
-					enemy->SetHP(enemy->GetHP() - player_ptr_->GetAtkPower());
-				}
+				enemy->SetHP(enemy->GetHP() - player_ptr_->GetAtkPower());
+				enemy->getStatusBar()->changeHealth(-player_ptr_->GetAtkPower());
 				enemy->setAnimState(AnimState::ASSAULTED);
 			}
 		}
@@ -133,8 +131,9 @@ void Game::CheckCollision()
 		}
 
 		if (enemy->IsAtkHitBoxActive() && SDL_HasIntersection(enemy->GetAtkHitBox(), player_ptr_->getHitBox())) {
-			player_ptr_->setAnimState(AnimState::ASSAULTED);
+			player_ptr_->PlayAnimSfx(SFX_PLAYER_ASSAULTED);
 			player_ptr_->SetHP(player_ptr_->GetHP() - enemy->GetAtkPower());
+			player_ptr_->setAnimState(AnimState::ASSAULTED);
 			enemy->SetAtkHitBoxActive(false); //don't allow enemy atk hitbox to last & hit multiple times
 		}
 	}
@@ -173,6 +172,7 @@ void Game::UpdateGameObjects()
 	// POST PROCESSING
 	// PLAYER
 	if (player_ptr_->getAnimState() == AnimState::ATTACK) {
+		player_ptr_->PlayAnimSfx(SFX_PLAYER_ATK);
 		player_ptr_->StopX();
 		if (player_ptr_->IsAtkHitBoxActive()) {
 			if (player_ptr_->getMoveDirection() == 1) { //facing right
@@ -191,7 +191,9 @@ void Game::UpdateGameObjects()
 	else {
 		player_ptr_->SetAtkHitBoxActive(false); //force atk hit box to turn off 
 	}
+
 	if (player_ptr_->getAnimState() == AnimState::ATTACK_RANGED) {
+		player_ptr_->PlayAnimSfx(SFX_PLAYER_ATKRANGED);
 		if (player_ptr_->HasEndedAnimation()) { //anim ended and fire an arrow
 			int x, y;
 			if (player_ptr_->getMoveDirection() == 1)
@@ -208,6 +210,7 @@ void Game::UpdateGameObjects()
 			player_ptr_->setAnimState(AnimState::IDLE);
 		}
 	}
+
 	//if (!player_ptr_->IsGrounded() && player_ptr_->getVelocityY() > 0) {
 	if (player_ptr_->getVelocityY() > 2) { //natural falling
 		player_ptr_->setAnimState(AnimState::FALL);
@@ -225,6 +228,12 @@ void Game::UpdateGameObjects()
 	
 	CheckCollision();
 
+	if (player_ptr_->getAnimState() == AnimState::ASSAULTED) {
+		if (player_ptr_->HasEndedAnimation()) {
+			//player_ptr_->setAnimState(AnimState::IDLE);
+		}
+	}
+
 	//if (player_ptr_->IsGrounded() 
 	//	&& player_ptr_->getAnimState() != AnimState::RUN 
 	//	&& player_ptr_->getAnimState() != AnimState::ATTACK
@@ -241,15 +250,12 @@ void Game::UpdateGameObjects()
 		{
 			enemy->SetTarget(player_ptr_->GetWorldRectCenterX(), player_ptr_->GetWorldRectCenterY());
 		}
-
 		// PLAYER HP<50%, SEEK
 		if (enemy->getAnimState() == AnimState::ENEMY_FLEE) {
 			if (player_ptr_->GetHP() <= player_ptr_->GetMaxHP() / 2) {
 				enemy->setAnimState(AnimState::ENEMY_SEEK);
 			}
 		}
-		
-
 		enemy->update(); //implement enemy behaviors in Enemy class, since there is no control input handling
 	}
 
