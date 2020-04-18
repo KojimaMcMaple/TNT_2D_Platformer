@@ -12,6 +12,7 @@
 #include "GameObjectType.h"
 #include "AnimState.h"
 #include "AnimSprite.h"
+#include "SoundId.h"
 
 class GameObject {
 private:
@@ -27,9 +28,6 @@ private:
 	SDL_Rect src_, dst_;
 	std::string texture_id_ = "";
 	bool animationEnded = false;
-
-	// SOUND
-	std::vector<std::string> sfx_id_list_;
 
 	// PHYSICS
 	float velocity_x_ = 0.0f;
@@ -86,6 +84,7 @@ private:
 	int checking_anim_state_ = -1; //checking var to reset curr_frame_
 	AnimState anim_state_;
 	std::vector<AnimSprite*> anim_list_;
+	bool has_played_anim_sfx_ = false;
 
 public:
 	GameObject();
@@ -155,9 +154,11 @@ public:
 	int getCurrFrame();
 	int getCurrRow();
 	int getCurrCol();
+	bool HasChangedState();
 	bool HasEndedAnimation();
 	AnimState getAnimState();
 	std::vector<AnimSprite*>& GetAnimList();
+	bool HasPlayedAnimSfx();
 	GameObjectType getType();
 	glm::vec2 getPosition();
 	glm::vec2 getRotation();
@@ -203,7 +204,6 @@ public:
 	void SetGrounded(bool toggle);
 	void SetCollidable(bool toggle);
 	void setTextureId(std::string id); //cleanup is done by manager
-	void addSfxId(std::string id); //cleanup is done by manager
 	void setCustomPivotX(int coord);
 	void setCustomPivotY(int coord);
 	void setVelocityX(float value);
@@ -222,7 +222,9 @@ public:
 	void setCurrRow(int value);
 	void setCurrCol(int value);
 	void setAnimState(AnimState newState);
+	void PlayAnimSfx(SoundId sfx);
 	void InitAnimList();
+	void SetPlayedAnimSfx(bool toggle);
 	void setAcceleration(glm::vec2 newAcceleration);
 	void setPosition(glm::vec2 newPosition);
 	void setWidth(int newWidth);

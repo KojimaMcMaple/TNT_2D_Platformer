@@ -8,12 +8,7 @@
 #include <map> 
 
 #include <SDL_mixer.h>
-
-enum sound_type
-{
-	SOUND_MUSIC = 0,
-	SOUND_SFX = 1
-};
+#include "SoundId.h"
 
 class SoundManager {
 public:
@@ -27,11 +22,11 @@ public:
 		return s_pInstance;
 	}
 
-	bool load(std::string fileName, std::string id, sound_type type);
+	bool load(std::string fileName, SoundId id, SoundType type);
 	void freeAllSounds();
 
-	void playSound(std::string id, int loop);
-	void playMusic(std::string id, int loop);
+	void playSound(SoundId id, int loop);
+	void playMusic(SoundId id, int loop);
 private:
 	SoundManager();
 	~SoundManager();
@@ -39,8 +34,8 @@ private:
 
 	static SoundManager* s_pInstance;
 
-	std::map<std::string, Mix_Chunk*> m_sfxs;
-	std::map<std::string, Mix_Music*> m_music;
+	std::map<SoundId, Mix_Chunk*> m_sfxs;
+	std::map<SoundId, Mix_Music*> m_music;
 };
 
 typedef SoundManager TheSoundManager;

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __ANIM_STATES__
-#define __ANIM_STATES__
+#ifndef __ANIM_STATE__
+#define __ANIM_STATE__
 
 enum AnimState {
 	IDLE,
@@ -18,4 +18,4 @@ enum AnimState {
 	NUM_OF_ANIM_STATES
 };
 
-#endif /* defined (__STEERING_STATE__) */
+#endif

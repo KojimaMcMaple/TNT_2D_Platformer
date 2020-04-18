@@ -161,5 +161,8 @@
     <ClInclude Include="..\src\StatusBar.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SoundId.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
