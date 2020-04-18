@@ -15,7 +15,6 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	SetSpawnPointY(world_y);
 	SetWorldXAndHitBox(world_x);
 	SetWorldYAndHitBox(world_y);
-	SetLineOfSight(50);
 	SetPatrolRadius(300);
 	//setHitBoxOffsetX(-4);
 	//setHitBoxOffsetY(10);
@@ -29,7 +28,7 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	setGravity(Globals::sGravity);
 	setMaxAccelerationX(2.0);
 	setMaxAccelerationY(2.0);
-	setMaxVelocityX(0.7);
+	setMaxVelocityX(0.0); //not used
 	setMaxVelocityY(10.0);
 	setDrag(1.0);
 	setMoveDirection(-1);
@@ -37,6 +36,7 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	setAnimState(AnimState::ENEMY_PATROL);
 	SetHP(40);
 	SetAtkPower(20);
+	SetSightRect(world_x, world_y, 200, 150);
 
 	// ANIM INIT
 	InitAnimList();
@@ -67,6 +67,36 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	GetAnimList()[DEATH]->SetLooping(false);
 	GetAnimList()[DEATH]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
 	GetAnimList()[DEATH]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
+
+	GetAnimList()[ENEMY_SEEK]->SetAnimId(ENEMY_SEEK);
+	GetAnimList()[ENEMY_SEEK]->SetStartRow(6);
+	GetAnimList()[ENEMY_SEEK]->SetStartCol(4);
+	GetAnimList()[ENEMY_SEEK]->SetNumFrames(6);
+	GetAnimList()[ENEMY_SEEK]->SetAnimSpeed(0.6f);
+	GetAnimList()[ENEMY_SEEK]->SetLooping(true);
+	GetAnimList()[ENEMY_SEEK]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
+	GetAnimList()[ENEMY_SEEK]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
+
+	GetAnimList()[ENEMY_ARRIVE]->SetAnimId(ENEMY_ARRIVE);
+	GetAnimList()[ENEMY_ARRIVE]->SetStartRow(5);
+	GetAnimList()[ENEMY_ARRIVE]->SetStartCol(4);
+	GetAnimList()[ENEMY_ARRIVE]->SetNumFrames(3);
+	GetAnimList()[ENEMY_ARRIVE]->SetAnimSpeed(0.3f);
+	GetAnimList()[ENEMY_ARRIVE]->SetLooping(true);
+	GetAnimList()[ENEMY_ARRIVE]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
+	GetAnimList()[ENEMY_ARRIVE]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
+
+	GetAnimList()[ATTACK]->SetAnimId(ATTACK);
+	GetAnimList()[ATTACK]->SetStartRow(1);
+	GetAnimList()[ATTACK]->SetStartCol(0);
+	GetAnimList()[ATTACK]->SetNumFrames(6);
+	GetAnimList()[ATTACK]->SetAnimSpeed(0.5f);
+	GetAnimList()[ATTACK]->SetLooping(false);
+	GetAnimList()[ATTACK]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
+	GetAnimList()[ATTACK]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet'
+	GetAnimList()[ATTACK]->SetAtkStartFrame(2);
+	GetAnimList()[ATTACK]->SetAtkNumFrames(3);
+	SetAtkHitBox(0, 0, 85, 85);
 }
 
 void Enemy::RenderSkeletonSword()
@@ -95,6 +125,9 @@ void Enemy::update()
 {
 	switch (enemy_type_) {
 	default:
+		int strike_distance = GetAtkHitBox()->w;
+		int lose_sight_distance = getHitBox()->h * 3;
+
 		// STATE UPDATE
 		switch (getAnimState()) {
 		case ENEMY_PATROL:
@@ -114,16 +147,63 @@ void Enemy::update()
 			}
 			UpdatePosition();
 			break;
+
+		case ENEMY_SEEK:
+			// continue moving if not past patrol distance, else change direction
+			if (IsGrounded()) {
+				if (target_x_ < GetWorldRectCenterX()) {
+					setMoveDirection(-1);
+				}
+				else {
+					setMoveDirection(1);
+				}
+				MoveX();
+			}
+			UpdatePosition();
+			//if target within strike distance
+			if (target_x_ > GetWorldRectCenterX() - strike_distance && target_x_ < GetWorldRectCenterX() + strike_distance) {
+				setAnimState(AnimState::ENEMY_ARRIVE);
+			}
+			//if target gets too far away
+			if (target_y_ < GetWorldRectCenterY() - lose_sight_distance || target_y_ > GetWorldRectCenterY() + lose_sight_distance) {
+				setAnimState(AnimState::ENEMY_PATROL);
+			}
+			break;
+
+		case ENEMY_ARRIVE:
+			StopX();
+			//if target within strike distance
+			if (target_x_ < GetWorldRectCenterX() - strike_distance || target_x_ > GetWorldRectCenterX() + strike_distance) {
+				setAnimState(AnimState::ENEMY_SEEK);
+			}
+			//if target gets too far away
+			if (target_y_ < GetWorldRectCenterY() - lose_sight_distance || target_y_ > GetWorldRectCenterY() + lose_sight_distance) {
+				setAnimState(AnimState::ENEMY_PATROL);
+			}
+			if (HasEndedAnimation()) {
+				setAnimState(AnimState::ATTACK);
+			}
+			break;
+
+		case ATTACK:
+			StopX();
+			if (IsAtkHitBoxActive()) {
+				if (getMoveDirection() == 1) { //facing right
+					SetAtkHitBoxX(getHitBoxRightmostX());
+					SetAtkHitBoxY(getHitBoxY());
+				}
+				else { //facing left
+					SetAtkHitBoxX(getHitBoxX() - GetAtkHitBox()->w);
+					SetAtkHitBoxY(getHitBoxY());
+				}
+			}
+			if (HasEndedAnimation()) {
+				setAnimState(AnimState::ENEMY_ARRIVE);
+			}
+			break;
+
 		case ASSAULTED:
 			StopX();
-			break;
-		case DEATH:
-			StopX();
-			break;
-		}
-		
-		// STATE SWITCHING
-		if (getAnimState() == AnimState::ASSAULTED) {
 			if (HasEndedAnimation()) {
 				if (GetHP() == 0) {
 					setAnimState(AnimState::DEATH);
@@ -132,6 +212,11 @@ void Enemy::update()
 					setAnimState(AnimState::ENEMY_PATROL);
 				}
 			}
+			break;
+
+		case DEATH:
+			StopX();
+			break;
 		}
 		
 		break;
@@ -182,6 +267,16 @@ void Enemy::UpdatePosition()
 	setVelocityY(getVelocityY() + getAccelerationY() + (getGravity() / 5));
 	setVelocityY(std::min(std::max(getVelocityY(), -getMaxVelocityY() * 10), getMaxVelocityY()));
 	SetWorldYAndHitBox(GetWorldRect()->y + (int)getVelocityY());
+
+	// UPDATE SIGHT RECT
+	if (getMoveDirection() == 1) { // MOVE RIGHT
+		SetSightRectX(getHitBoxCenterX());
+		SetSightRectY(getHitBoxCenterY() - GetSightRect()->h / 2);
+	}
+	else { // MOVE LEFT
+		SetSightRectX(getHitBoxCenterX() - GetSightRect()->w);
+		SetSightRectY(getHitBoxCenterY() - GetSightRect()->h / 2);
+	}
 }
 
 int Enemy::GetSpawnPointX()
@@ -192,11 +287,6 @@ int Enemy::GetSpawnPointX()
 int Enemy::GetSpawnPointY()
 {
 	return spawn_point_y_;
-}
-
-int Enemy::GetLineOfSight()
-{
-	return line_of_sight_;
 }
 
 int Enemy::GetPatrolRadius()
@@ -214,6 +304,16 @@ int Enemy::GetPatrolMaxX()
 	return (spawn_point_x_ + patrol_radius_);
 }
 
+int Enemy::GetTargetX()
+{
+	return target_x_;
+}
+
+int Enemy::GetTargetY()
+{
+	return target_y_;
+}
+
 void Enemy::SetSpawnPointX(int value)
 {
 	spawn_point_x_ = value;
@@ -224,12 +324,13 @@ void Enemy::SetSpawnPointY(int value)
 	spawn_point_y_ = value;
 }
 
-void Enemy::SetLineOfSight(int value)
-{
-	line_of_sight_ = value;
-}
-
 void Enemy::SetPatrolRadius(int value)
 {
 	patrol_radius_ = value;
+}
+
+void Enemy::SetTarget(int x, int y)
+{
+	target_x_ = x;
+	target_y_ = y;
 }

@@ -229,6 +229,11 @@ int GameObject::GetIFrames()
 	return i_frames_;
 }
 
+SDL_Rect* GameObject::GetSightRect()
+{
+	return &sight_rect_;
+}
+
 bool GameObject::IsGrounded()
 {
 	return is_grounded_;
@@ -526,6 +531,24 @@ void GameObject::SetAtkHitBoxActive(bool toggle)
 void GameObject::SetIFrames(int value)
 {
 	i_frames_ = value;
+}
+
+void GameObject::SetSightRect(int x, int y, int w, int h)
+{
+	sight_rect_.x = x;
+	sight_rect_.y = y;
+	sight_rect_.w = w;
+	sight_rect_.h = h;
+}
+
+void GameObject::SetSightRectX(int value)
+{
+	sight_rect_.x = value;
+}
+
+void GameObject::SetSightRectY(int value)
+{
+	sight_rect_.y = value;
 }
 
 void GameObject::SetGrounded(bool toggle)

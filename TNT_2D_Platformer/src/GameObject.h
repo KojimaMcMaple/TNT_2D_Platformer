@@ -47,13 +47,15 @@ private:
 	SDL_Rect hit_box_;
 	int hit_box_manual_offset_x_ = 0;
 	int hit_box_manual_offset_y_ = 0;
-	bool is_hit_box_visible_ = false;
+	bool is_hit_box_visible_ = true;
 	bool is_grounded_ = false;
 	bool is_collidable_;
 
 	SDL_Rect atk_hit_box_;
 	bool is_atk_hit_box_active_ = false;
 	int i_frames_ = 0;
+
+	SDL_Rect sight_rect_;
 
 	GameObjectType m_type; //redundant ?
 
@@ -130,6 +132,7 @@ public:
 	SDL_Rect* GetAtkHitBox();
 	bool IsAtkHitBoxActive();
 	int GetIFrames();
+	SDL_Rect* GetSightRect();
 	bool IsGrounded();
 	bool IsCollidable();
 	std::string getTextureId();
@@ -180,7 +183,7 @@ public:
 	void SetHitBoxYAndWorld(int coord);
 	void setHitBox(int x, int y, int w, int h);
 	void setHitBoxX(int coord);
-	void setHitBoxY(int coord);	
+	void setHitBoxY(int coord);
 	void setHitBoxOffsetX(int coord);
 	void setHitBoxOffsetY(int coord);
 	void SetHitBoxVisibility(bool toggle);
@@ -189,6 +192,9 @@ public:
 	void SetAtkHitBoxY(int value);
 	void SetAtkHitBoxActive(bool toggle);
 	void SetIFrames(int value);
+	void SetSightRect(int x, int y, int w, int h);
+	void SetSightRectX(int value);
+	void SetSightRectY(int value);
 	void SetGrounded(bool toggle);
 	void SetCollidable(bool toggle);
 	void setTextureId(std::string id); //cleanup is done by manager

@@ -56,6 +56,12 @@ void Camera::draw(GameObject* obj_ptr)
 			SDL_Rect atk_temp_rect = { obj_ptr->GetAtkHitBox()->x - cam_x,obj_ptr->GetAtkHitBox()->y - cam_y, obj_ptr->GetAtkHitBox()->w, obj_ptr->GetAtkHitBox()->h };
 			SDL_RenderFillRect(TheGame::Instance()->getRenderer(), &atk_temp_rect);
 		}
+		if (obj_ptr->getType() == ENEMY) {
+			SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), 150, 150, 0, 50);
+
+			SDL_Rect sight_temp_rect = { obj_ptr->GetSightRect()->x - cam_x,obj_ptr->GetSightRect()->y - cam_y, obj_ptr->GetSightRect()->w, obj_ptr->GetSightRect()->h };
+			SDL_RenderFillRect(TheGame::Instance()->getRenderer(), &sight_temp_rect);
+		}
 
 		SDL_SetRenderDrawColor(TheGame::Instance()->getRenderer(), original_bkg_color.r, original_bkg_color.g, original_bkg_color.b, original_bkg_color.a);
 	}

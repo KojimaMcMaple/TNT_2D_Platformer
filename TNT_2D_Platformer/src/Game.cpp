@@ -109,6 +109,15 @@ void Game::CheckCollision()
 			}
 			enemy->setAnimState(AnimState::ASSAULTED);
 		}
+
+		if (enemy->getAnimState() != AnimState::DEATH 
+			&& enemy->getAnimState() != AnimState::ASSAULTED 
+			&& enemy->getAnimState() != AnimState::ENEMY_ARRIVE 
+			&& enemy->getAnimState() != AnimState::ATTACK 
+			&& SDL_HasIntersection(player_ptr_->getHitBox(), enemy->GetSightRect())) 
+		{
+			enemy->setAnimState(AnimState::ENEMY_SEEK);
+		}
 	}
 }
 
@@ -179,16 +188,21 @@ void Game::UpdateGameObjects()
 
 	CheckCollision();
 
-	if (player_ptr_->IsGrounded() 
-		&& player_ptr_->getAnimState() != AnimState::RUN 
-		&& player_ptr_->getAnimState() != AnimState::ATTACK
-		&& player_ptr_->getAnimState() != AnimState::ATTACK_RANGED) {
-		player_ptr_->setAnimState(AnimState::IDLE);
-	}
+	//if (player_ptr_->IsGrounded() 
+	//	&& player_ptr_->getAnimState() != AnimState::RUN 
+	//	&& player_ptr_->getAnimState() != AnimState::ATTACK
+	//	&& player_ptr_->getAnimState() != AnimState::ATTACK_RANGED) {
+	//	player_ptr_->setAnimState(AnimState::IDLE);
+	//}
 
 	// ENEMIES
 	for (int i = 0; i < enemy_list_.size(); i++) {
-		enemy_list_[i]->update(); //implement enemy behaviors in Enemy class, since there is no control input handling
+		Enemy* enemy = enemy_list_[i];
+		if (enemy->getAnimState()==AnimState::ENEMY_SEEK || enemy->getAnimState() == AnimState::ENEMY_ARRIVE) {
+			enemy->SetTarget(player_ptr_->GetWorldRectCenterX(), player_ptr_->GetWorldRectCenterY());
+		}
+		
+		enemy->update(); //implement enemy behaviors in Enemy class, since there is no control input handling
 	}
 
 	// CAMERA
