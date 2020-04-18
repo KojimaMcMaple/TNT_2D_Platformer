@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __ANIM_STATES__
-#define __ANIM_STATES__
+#ifndef __ANIM_STATE__
+#define __ANIM_STATE__
 
 enum AnimState {
 	IDLE,
@@ -8,11 +8,14 @@ enum AnimState {
 	JUMP,
 	FALL,
 	ATTACK,
+	ASSAULTED,
+	DEATH,
 	ENEMY_PATROL,
-	ENEMY_HIT,
-	ENEMY_DEAD,
+	ENEMY_SEEK,
+	ENEMY_ARRIVE,
+	ENEMY_FLEE,
 	ATTACK_RANGED,
 	NUM_OF_ANIM_STATES
 };
 
-#endif /* defined (__STEERING_STATE__) */
+#endif

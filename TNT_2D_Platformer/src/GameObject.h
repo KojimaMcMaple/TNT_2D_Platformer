@@ -12,18 +12,22 @@
 #include "GameObjectType.h"
 #include "AnimState.h"
 #include "AnimSprite.h"
+#include "SoundId.h"
 
 class GameObject {
 private:
+	// GAME ATTR
+	int hp_;
+	int max_hp_;
+	int atk_power_;
+
 	// POSITIONING
 	SDL_Rect world_rect_; //"real" rect
 	
 	// RENDERING
 	SDL_Rect src_, dst_;
 	std::string texture_id_ = "";
-
-	// SOUND
-	std::vector<std::string> sfx_id_list_;
+	bool animationEnded = false;
 
 	// PHYSICS
 	float velocity_x_ = 0.0f;
@@ -42,13 +46,17 @@ private:
 	SDL_Rect hit_box_;
 	int hit_box_manual_offset_x_ = 0;
 	int hit_box_manual_offset_y_ = 0;
-	bool is_hit_box_visible_ = false;
+	bool is_hit_box_visible_ = true;
 	bool is_grounded_ = false;
 	bool is_collidable_;
 
 	SDL_Rect atk_hit_box_;
 	bool is_atk_hit_box_active_ = false;
-	GameObjectType m_type;
+	int i_frames_ = 0;
+
+	SDL_Rect sight_rect_;
+
+	GameObjectType m_type; //redundant ?
 
 	// TRANSFORM
 	int custom_pivot_x_;
@@ -67,7 +75,8 @@ private:
 	// size variables
 	int m_width;
 	int m_height;
-
+	
+	
 	// animation variables
 	int curr_frame_;
 	int curr_row_;
@@ -75,6 +84,7 @@ private:
 	int checking_anim_state_ = -1; //checking var to reset curr_frame_
 	AnimState anim_state_;
 	std::vector<AnimSprite*> anim_list_;
+	bool has_played_anim_sfx_ = false;
 
 public:
 	GameObject();
@@ -91,6 +101,9 @@ public:
 	virtual void clean() = 0;
 
 	// getters for common variables
+	int GetHP();
+	int GetMaxHP();
+	int GetAtkPower();
 	SDL_Rect* GetWorldRect();
 	int GetWorldRectRightmostX();
 	int GetWorldRectLowermostY();
@@ -120,6 +133,8 @@ public:
 	bool IsHitBoxVisible();
 	SDL_Rect* GetAtkHitBox();
 	bool IsAtkHitBoxActive();
+	int GetIFrames();
+	SDL_Rect* GetSightRect();
 	bool IsGrounded();
 	bool IsCollidable();
 	std::string getTextureId();
@@ -139,9 +154,11 @@ public:
 	int getCurrFrame();
 	int getCurrRow();
 	int getCurrCol();
+	bool HasChangedState();
 	bool HasEndedAnimation();
 	AnimState getAnimState();
 	std::vector<AnimSprite*>& GetAnimList();
+	bool HasPlayedAnimSfx();
 	GameObjectType getType();
 	glm::vec2 getPosition();
 	glm::vec2 getRotation();
@@ -152,6 +169,9 @@ public:
 	int getHeight();
 
 	// setters for common variables
+	void SetHP(int value);
+	void SetMaxHP(int value);
+	void SetAtkPower(int value);
 	void SetWorldRect(int x, int y, int w, int h);
 	void SetWorldRectX(int coord);
 	void SetWorldRectY(int coord);
@@ -159,6 +179,7 @@ public:
 	void setSrc(int x, int y, int w, int h);
 	void setSrcX(int coord);
 	void setSrcY(int coord);
+	void setDst(SDL_Rect dst_ptr);
 	void setDst(int x, int y, int w, int h);
 	void setDstX(int coord);
 	void setDstY(int coord);
@@ -168,7 +189,7 @@ public:
 	void SetHitBoxYAndWorld(int coord);
 	void setHitBox(int x, int y, int w, int h);
 	void setHitBoxX(int coord);
-	void setHitBoxY(int coord);	
+	void setHitBoxY(int coord);
 	void setHitBoxOffsetX(int coord);
 	void setHitBoxOffsetY(int coord);
 	void SetHitBoxVisibility(bool toggle);
@@ -176,10 +197,13 @@ public:
 	void SetAtkHitBoxX(int value);
 	void SetAtkHitBoxY(int value);
 	void SetAtkHitBoxActive(bool toggle);
+	void SetIFrames(int value);
+	void SetSightRect(int x, int y, int w, int h);
+	void SetSightRectX(int value);
+	void SetSightRectY(int value);
 	void SetGrounded(bool toggle);
 	void SetCollidable(bool toggle);
 	void setTextureId(std::string id); //cleanup is done by manager
-	void addSfxId(std::string id); //cleanup is done by manager
 	void setCustomPivotX(int coord);
 	void setCustomPivotY(int coord);
 	void setVelocityX(float value);
@@ -198,7 +222,9 @@ public:
 	void setCurrRow(int value);
 	void setCurrCol(int value);
 	void setAnimState(AnimState newState);
+	void PlayAnimSfx(SoundId sfx);
 	void InitAnimList();
+	void SetPlayedAnimSfx(bool toggle);
 	void setAcceleration(glm::vec2 newAcceleration);
 	void setPosition(glm::vec2 newPosition);
 	void setWidth(int newWidth);

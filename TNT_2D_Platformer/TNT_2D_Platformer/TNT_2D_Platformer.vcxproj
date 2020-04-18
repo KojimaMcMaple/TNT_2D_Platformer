@@ -94,12 +94,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FREEGLUT_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)include\;$(SolutionDir)include\GLM\;$(SolutionDir)include\SDL\include\;$(SolutionDir)include\SDL_Image\include\;$(SolutionDir)include\SDL_Mixer\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include\;$(SolutionDir)include\GLM\;$(SolutionDir)include\SDL\include\;$(SolutionDir)include\SDL_Image\include\;$(SolutionDir)include\SDL2_ttf\include\;$(SolutionDir)include\SDL_Mixer\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut_static.lib;DevIL.lib;ILU.lib;glew32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeglut_static.lib;DevIL.lib;SDL2_ttf.lib;ILU.lib;glew32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>
@@ -159,10 +159,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AnimSprite.cpp" />
+    <ClCompile Include="..\src\Arrow.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
     <ClCompile Include="..\src\Controller.cpp" />
     <ClCompile Include="..\src\Enemy.cpp" />
+    <ClCompile Include="..\src\EnemyRanged.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GameObject.cpp" />
     <ClCompile Include="..\src\FSM.cpp" />
@@ -170,11 +172,14 @@
     <ClCompile Include="..\src\Level.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Player.cpp" />
+    <ClCompile Include="..\src\ScoreBoard.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
     <ClCompile Include="..\src\StatusBar.cpp" />
     <ClCompile Include="..\src\ui\Config.cpp" />
     <ClCompile Include="..\src\ui\Title.cpp" />
     <ClCompile Include="..\src\ui\UI.cpp" />
+    <ClCompile Include="..\src\TextElement.cpp" />
+    <ClCompile Include="..\src\UI.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
     <ClCompile Include="..\src\ui\UIManager.cpp" />
@@ -184,10 +189,12 @@
   <ItemGroup>
     <ClInclude Include="..\src\AnimSprite.h" />
     <ClInclude Include="..\src\AnimState.h" />
+    <ClInclude Include="..\src\Arrow.h" />
     <ClInclude Include="..\src\Camera.h" />
     <ClInclude Include="..\src\CollisionManager.h" />
     <ClInclude Include="..\src\Controller.h" />
     <ClInclude Include="..\src\Enemy.h" />
+    <ClInclude Include="..\src\EnemyRanged.h" />
     <ClInclude Include="..\src\EnemyType.h" />
     <ClInclude Include="..\src\Game.h" />
     <ClInclude Include="..\src\GameObject.h" />
@@ -197,8 +204,11 @@
     <ClInclude Include="..\src\Level.h" />
     <ClInclude Include="..\src\LevelId.h" />
     <ClInclude Include="..\src\Player.h" />
+    <ClInclude Include="..\src\ScoreBoard.h" />
+    <ClInclude Include="..\src\SoundId.h" />
     <ClInclude Include="..\src\SoundManager.h" />
     <ClInclude Include="..\src\StatusBar.h" />
+    <ClInclude Include="..\src\TextElement.h" />
     <ClInclude Include="..\src\TextureManager.h" />
     <ClInclude Include="..\src\Tile.h" />
     <ClInclude Include="..\src\TileNeighbour.h" />

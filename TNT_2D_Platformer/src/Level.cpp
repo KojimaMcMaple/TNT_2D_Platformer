@@ -121,6 +121,10 @@ int Level::CheckLevelCollision(GameObject* obj_ptr)
 					obj_ptr->SetGrounded(true);
 					obj_ptr->setVelocityY(0.0); // Stop the player from moving vertically. We aren't modifying gravity.
 					obj_ptr->SetHitBoxYAndWorld(tile->GetWorldRect()->y - obj_ptr->getHitBox()->h);
+					if (obj_ptr->getAnimState() == FALL)
+					{
+						obj_ptr->setAnimState(IDLE);
+					}
 					result = DOWN;
 				}
 				else if (obj_ptr->getHitBox()->y - obj_ptr->getVelocityY() >= tile->GetWorldRect()->y + tile->GetWorldRect()->h)
@@ -170,6 +174,10 @@ void Level::BuildTileTextureDatabase()
 	tileset_texture_list_[CHURCH_TILESET_01]->setTextureId("church_tileset_01");
 	TheTextureManager::Instance()->load("../Assets/textures/church_tileset_01.png", tileset_texture_list_[CHURCH_TILESET_01]->getTextureId(), TheGame::Instance()->getRenderer());
 
+	tile_texture_list_[CHURCH_BKG_00] = new Tile();
+	tile_texture_list_[CHURCH_BKG_00]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
+	tile_texture_list_[CHURCH_BKG_00]->setSrc(16, 80, 15, 15);
+	
 	tile_texture_list_[CHURCH_BKG_01] = new Tile();
 	tile_texture_list_[CHURCH_BKG_01]->setTextureId(tileset_texture_list_[CHURCH_TILESET_01]->getTextureId());
 	tile_texture_list_[CHURCH_BKG_01]->setSrc(128, 16, 15, 15);
@@ -230,13 +238,17 @@ void Level::MapAllTileTextureIdAndCollision() //determine which char is responsi
 				tile->SetTileTextureId(CHURCH_BLOCK_00);
 				tile->SetCollidable(true);
 				break;
-			case 'B':
+			case '&':
 				tile->SetTileTextureId(CHURCH_BLOCK_01);
 				tile->SetCollidable(true);
 				break;
-			case '&':
+			case 'B':
 				tile->SetTileTextureId(CHURCH_BLOCK_02);
 				tile->SetCollidable(true);
+				break;
+			case '-':
+				tile->SetTileTextureId(CHURCH_BKG_00);
+				tile->SetCollidable(false);
 				break;
 			default:
 				tile->SetTileTextureId(CHURCH_BKG_01);
@@ -267,20 +279,37 @@ void Level::LoadLevel(LevelId level_id)
 	case CHURCH:
 		SetBkgColor(22, 22, 51, 255);
 
-		
-		level_raw_str += "CCCCCCCCCB..BCCCCCCCCCCCC";
-		level_raw_str += "...........BB...........B";
-		level_raw_str += "........................B";
-		level_raw_str += "........................B";
-		level_raw_str += ".........BB.............B";
-		level_raw_str += ".....BBBB...............B";
-		level_raw_str += "...B....................B";
-		level_raw_str += "@.......................B";
-		level_raw_str += "&B.....................BB";
-		level_raw_str += "GGGGGGGGGGGGGGGGGGGGGGGGG";
+		level_raw_str += "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
+		level_raw_str += "BB................................B";
+		level_raw_str += "BB................................B";
+		level_raw_str += "BB................................B";
+		level_raw_str += "BB................................B";
+		level_raw_str += "BB.........E.................E....B";
+		level_raw_str += "BB................................B";
+		level_raw_str += "BB&..GGGGGGGGGGGGG......GGGGGGGGGG@";
+		level_raw_str += "BB..G----&--------G.....@---------&";
+		level_raw_str += "BB..@-----@-------G.....&---------@";
+		level_raw_str += "BB@.CCCCCCCCCCCCCCC@@@..&CCCCCCCCCB";
+		level_raw_str += "BB............B........&..........B";
+		level_raw_str += "BB................................B";
+		level_raw_str += "BB.@@...........@@&@&@............B";
+		level_raw_str += "BB......E......@......B...........B";
+		level_raw_str += "BBG...................B...........B";
+		level_raw_str += "B--GGGGGGGGGG.........BGGG........B";
+		level_raw_str += "B---&--------GGGGGGG..B--&........B";
+		level_raw_str += "B-----&--BCCCCCCCCCC..CCCCCCCCCCCCB";
+		level_raw_str += "BB-------&...........@B...........B";
+		level_raw_str += "B--@---&-B........................B";
+		level_raw_str += "B----@---@........................B";
+		level_raw_str += "CCCCCCCCCC.........&&.............B";
+		level_raw_str += "..........P....@@@@...............B";
+		level_raw_str += ".............@....................B";
+		level_raw_str += "GGGGGGGGGG@............E..........B";
+		level_raw_str += "B---&-----B&.....................BB";
+		level_raw_str += "B----@------GGGGGGGGGGGGGGGGGGGGG@@";
 
 		SetLevelRawStr(level_raw_str);
-		SetLevelNumOfRows(10);
+		SetLevelNumOfRows(28);
 		SetLevelNumOfColumns(level_raw_str.size() / GetLevelNumOfRows());
 		break;
 

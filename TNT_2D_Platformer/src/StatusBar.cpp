@@ -39,4 +39,21 @@ void StatusBar::changeHealth(int change)
 	{
 		m_health = m_maxHealth;
 	}
+	if (m_health < 0)
+	{
+		m_health = 0;
+	}
+}
+
+void StatusBar::SetHealth(int value)
+{
+	m_health = value;
+	if (m_health > m_maxHealth)
+	{
+		m_health = m_maxHealth;
+	}
+	if (m_health < 0)
+	{
+		m_health = 0;
+	}
 }

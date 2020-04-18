@@ -15,6 +15,7 @@
 #include "CollisionManager.h"
 #include "Controller.h"
 #include "FSM.h"
+#include "SoundId.h"
 
 // Game Objects
 #include "ui/UI.h"
@@ -22,6 +23,8 @@
 #include "Camera.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Arrow.h"
+#include "ScoreBoard.h"
 
 class Game
 {
@@ -46,8 +49,15 @@ private:
 	Level* level_ptr_;
 	Camera* camera_ptr_;
 	Player* player_ptr_;
+	std::vector<Arrow*> m_pArrowVec;
 	std::vector<Enemy*> enemy_list_;
 	std::vector<Enemy*> dead_enemy_list_;
+
+	// UI
+	TextElement* m_scoreBoard;
+
+	// Movement offset
+	bool is_jump_key_pressable_ = true;
 
 	// REDUNDANT
 	glm::vec2 m_mousePosition;

@@ -13,5 +13,6 @@ public:
 
 	// Pass negative value to take damage, otherwise to heal
 	void changeHealth(int change);
+	void SetHealth(int value);
 };
 

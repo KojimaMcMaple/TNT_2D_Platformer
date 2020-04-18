@@ -57,6 +57,15 @@ RunningState::RunningState()
 void RunningState::Enter()
 {
 	std::cout << "Entering Game..." << std::endl;
+	TheTextureManager::Instance()->load("../Assets/textures/Arrow.png",
+		"arrow", TheGame::Instance()->getRenderer());
+
+	TheSoundManager::Instance()->load("../assets/audio/SFX_PLAYER_ATK.mp3", SFX_PLAYER_ATK, SOUND_SFX);
+	TheSoundManager::Instance()->load("../assets/audio/SFX_PLAYER_ASSAULTED.mp3", SFX_PLAYER_ASSAULTED, SOUND_SFX);
+	TheSoundManager::Instance()->load("../assets/audio/SFX_SKELETON_ATK.mp3", SFX_SKELETON_ATK, SOUND_SFX);
+	TheSoundManager::Instance()->load("../assets/audio/SFX_PLAYER_ATKRANGED.mp3", SFX_PLAYER_ATKRANGED, SOUND_SFX);
+	TheSoundManager::Instance()->load("../assets/audio/SFX_SKELETON_ASSAULTED.mp3", SFX_SKELETON_ASSAULTED, SOUND_SFX);
+
 }
 
 void RunningState::Update()

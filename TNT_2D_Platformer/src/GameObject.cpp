@@ -20,11 +20,10 @@ void GameObject::Animate()
 	int animationRate = round(anim_db->GetNumFrames() / 2 / anim_db->GetAnimSpeed());
 	if (TheGame::Instance()->getFrames() % animationRate == 0)
 	{
-		if (checking_anim_state_ != anim_state_) {
-			checking_anim_state_ = anim_state_;
+		if (HasChangedState()) { //Just changed state
+			//checking_anim_state_ = anim_state_;
 			curr_frame_ = 0;
 		}
-
 		// PROCESS VISUAL ANIM
 		if (curr_frame_ > anim_db->GetNumFrames() - 1) {
 			if (anim_db->IsLooping()) {
@@ -36,7 +35,8 @@ void GameObject::Animate()
 		}
 		curr_col_ = anim_db->GetStartCol() + curr_frame_;
 		if (curr_col_ > anim_db->GetMaxSheetCol() - 1) {
-			curr_col_ -= anim_db->GetMaxSheetCol();
+			//curr_col_ -= anim_db->GetMaxSheetCol();
+			curr_col_ %= anim_db->GetMaxSheetCol();
 		}
 		// if frame exceeds GetMaxSheetCol, go to the next row
 		curr_row_ = anim_db->GetStartRow() + (int)((curr_frame_+ anim_db->GetStartCol()) / anim_db->GetMaxSheetCol()); //bug fixed: must add anim_db->GetStartCol() to curr_frame_ because GetStartCol is an offset
@@ -66,6 +66,21 @@ void GameObject::Animate()
 
 		curr_frame_++;
 	}
+}
+
+int GameObject::GetHP()
+{
+	return hp_;
+}
+
+int GameObject::GetMaxHP()
+{
+	return max_hp_;
+}
+
+int GameObject::GetAtkPower()
+{
+	return atk_power_;
 }
 
 SDL_Rect* GameObject::GetWorldRect()
@@ -213,6 +228,16 @@ bool GameObject::IsAtkHitBoxActive()
 	return is_atk_hit_box_active_;
 }
 
+int GameObject::GetIFrames()
+{
+	return i_frames_;
+}
+
+SDL_Rect* GameObject::GetSightRect()
+{
+	return &sight_rect_;
+}
+
 bool GameObject::IsGrounded()
 {
 	return is_grounded_;
@@ -303,14 +328,27 @@ int GameObject::getCurrCol()
 	return curr_col_;
 }
 
-bool GameObject::HasEndedAnimation()
+bool GameObject::HasChangedState()
 {
-	if (getCurrFrame() == GetAnimList()[getAnimState()]->GetNumFrames()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
+	if (checking_anim_state_ != anim_state_) { //Just changed state
+		checking_anim_state_ = anim_state_;
+		//curr_frame_ = 0;
+		has_played_anim_sfx_ = false;
 		return true;
 	}
-	else {
-		return false;
+	return false;
+}
+
+bool GameObject::HasEndedAnimation()
+{
+	if (checking_anim_state_ == anim_state_) {
+		if (getCurrFrame() == GetAnimList()[getAnimState()]->GetNumFrames()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
+			return true;
+		}
 	}
+	
+	return false;
+	//return animationEnded;
 }
 
 glm::vec2 GameObject::getPosition()
@@ -363,9 +401,33 @@ std::vector<AnimSprite*>& GameObject::GetAnimList()
 	return anim_list_;
 }
 
+bool GameObject::HasPlayedAnimSfx()
+{
+	return has_played_anim_sfx_;
+}
+
 GameObjectType GameObject::getType()
 {
 	return m_type;
+}
+
+void GameObject::SetHP(int value)
+{
+	hp_ = value;
+
+	if (hp_ < 0) {
+		hp_ = 0;
+	}
+}
+
+void GameObject::SetMaxHP(int value)
+{
+	max_hp_ = value;
+}
+
+void GameObject::SetAtkPower(int value)
+{
+	atk_power_ = value;
 }
 
 void GameObject::SetWorldRect(int x, int y, int w, int h)
@@ -401,6 +463,11 @@ void GameObject::setSrcX(int coord)
 void GameObject::setSrcY(int coord)
 {
 	src_.y = coord;
+}
+
+void GameObject::setDst(SDL_Rect dst_ptr)
+{
+	dst_ = dst_ptr;
 }
 
 void GameObject::setDst(int x, int y, int w, int h)
@@ -492,6 +559,29 @@ void GameObject::SetAtkHitBoxActive(bool toggle)
 	is_atk_hit_box_active_ = toggle;
 }
 
+void GameObject::SetIFrames(int value)
+{
+	i_frames_ = value;
+}
+
+void GameObject::SetSightRect(int x, int y, int w, int h)
+{
+	sight_rect_.x = x;
+	sight_rect_.y = y;
+	sight_rect_.w = w;
+	sight_rect_.h = h;
+}
+
+void GameObject::SetSightRectX(int value)
+{
+	sight_rect_.x = value;
+}
+
+void GameObject::SetSightRectY(int value)
+{
+	sight_rect_.y = value;
+}
+
 void GameObject::SetGrounded(bool toggle)
 {
 	is_grounded_ = toggle;
@@ -500,11 +590,6 @@ void GameObject::SetGrounded(bool toggle)
 void GameObject::setTextureId(std::string id)
 {
 	texture_id_ = id;
-}
-
-void GameObject::addSfxId(std::string id)
-{
-	sfx_id_list_.push_back(id);
 }
 
 void GameObject::setCustomPivotX(int coord)
@@ -620,6 +705,15 @@ void GameObject::setCurrCol(int value)
 void GameObject::setAnimState(AnimState newState)
 {
 	anim_state_ = newState;
+	animationEnded = false;
+}
+
+void GameObject::PlayAnimSfx(SoundId sfx)
+{
+	if (HasChangedState()) {
+		TheSoundManager::Instance()->playSound(sfx, 0); //sound
+		SetPlayedAnimSfx(true);
+	}
 }
 
 void GameObject::InitAnimList()
@@ -627,6 +721,11 @@ void GameObject::InitAnimList()
 	for (int i = 0; i < NUM_OF_ANIM_STATES; i++) {
 		anim_list_.push_back(new AnimSprite());
 	}
+}
+
+void GameObject::SetPlayedAnimSfx(bool toggle)
+{
+	has_played_anim_sfx_ = toggle;
 }
 
 void GameObject::setAcceleration(glm::vec2 newAcceleration)
