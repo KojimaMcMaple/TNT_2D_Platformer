@@ -5,16 +5,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Objects">
-      <UniqueIdentifier>{4cc583ad-9d18-4942-8d27-5cb5642dd304}</UniqueIdentifier>
     </Filter>
     <Filter Include="Managers">
       <UniqueIdentifier>{5b739336-bbaa-4da6-b590-4819b33fde38}</UniqueIdentifier>
@@ -25,22 +18,22 @@
     <Filter Include="UI">
       <UniqueIdentifier>{c5af523c-998f-4ff0-98ae-4c3dcbb6903c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{a8c48cd6-4c08-4dba-a17f-eb41824a422c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{6d0dd301-014a-487d-9368-fe3ad5f21c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Objects">
+      <UniqueIdentifier>{4cc583ad-9d18-4942-8d27-5cb5642dd304}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Player.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TextureManager.cpp">
       <Filter>Managers</Filter>
@@ -52,28 +45,22 @@
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Camera.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Globals.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Tile.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FSM.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Level.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\AnimSprite.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Enemy.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Arrow.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\UI.cpp">
       <Filter>UI</Filter>
@@ -87,19 +74,28 @@
     <ClCompile Include="..\src\StatusBar.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\FSM.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Game.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Globals.cpp">
+      <Filter>Enums</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Util.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameObject.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\EnemyRanged.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Player.h">
-      <Filter>Objects</Filter>
+      <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CollisionManager.h">
       <Filter>Managers</Filter>
@@ -114,19 +110,13 @@
       <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Camera.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Globals.h">
-      <Filter>Header Files</Filter>
+      <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Tile.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\FSM.h">
-      <Filter>Header Files</Filter>
+      <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Level.h">
-      <Filter>Objects</Filter>
+      <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TileNeighbour.h">
       <Filter>Enums</Filter>
@@ -135,10 +125,10 @@
       <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\AnimSprite.h">
-      <Filter>Objects</Filter>
+      <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Enemy.h">
-      <Filter>Objects</Filter>
+      <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\EnemyType.h">
       <Filter>Enums</Filter>
@@ -147,7 +137,7 @@
       <Filter>Enums</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Arrow.h">
-      <Filter>Objects</Filter>
+      <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\UI.h">
       <Filter>UI</Filter>
@@ -161,5 +151,21 @@
     <ClInclude Include="..\src\StatusBar.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\FSM.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Game.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Globals.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Util.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameObject.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EnemyRanged.h" />
   </ItemGroup>
 </Project>
