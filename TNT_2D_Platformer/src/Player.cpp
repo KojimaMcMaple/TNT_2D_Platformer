@@ -156,6 +156,11 @@ void Player::clean()
 	//m_statusBar = nullptr;
 }
 
+StatusBar* Player::getStatusBar()
+{
+	return m_statusBar;
+}
+
 void Player::MoveX()
 {
 	setAccelerationX(getAccelerationX() + 0.1 * getMoveDirection());

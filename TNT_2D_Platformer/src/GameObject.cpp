@@ -31,7 +31,6 @@ void GameObject::Animate()
 			}
 			else {
 				curr_frame_ = anim_db->GetNumFrames() - 1;
-				animationEnded = true;
 			}
 		}
 		curr_col_ = anim_db->GetStartCol() + curr_frame_;

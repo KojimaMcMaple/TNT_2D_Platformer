@@ -106,6 +106,7 @@ void Game::CheckCollision()
 		if (player_ptr_->IsAtkHitBoxActive() && enemy->getAnimState() != AnimState::DEATH && SDL_HasIntersection(player_ptr_->GetAtkHitBox(), enemy->getHitBox())) {
 			if (enemy->getAnimState() != AnimState::ASSAULTED) {
 				enemy->SetHP(enemy->GetHP() - player_ptr_->GetAtkPower());
+				enemy->getStatusBar()->changeHealth(- player_ptr_->GetAtkPower());
 			}
 			enemy->setAnimState(AnimState::ASSAULTED);
 		}
