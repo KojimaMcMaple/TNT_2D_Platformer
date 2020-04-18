@@ -107,6 +107,9 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	GetAnimList()[ATTACK]->SetAtkStartFrame(3);
 	GetAnimList()[ATTACK]->SetAtkNumFrames(2);
 	SetAtkHitBox(0, 0, 85, 85);
+
+	// Status bar
+	m_statusBar = new StatusBar(getDst(), 40);
 }
 
 void Enemy::RenderSkeletonSword()
@@ -129,6 +132,8 @@ Enemy::Enemy(EnemyType type, int world_x, int world_y)
 
 Enemy::~Enemy()
 {
+	delete m_statusBar;
+	m_statusBar = nullptr;
 }
 
 void Enemy::update()
@@ -261,6 +266,9 @@ void Enemy::update()
 
 		break;
 	}
+
+	// UPDATE ENEMY STATUS HUD
+	m_statusBar->update(getDst());
 }
 
 void Enemy::draw()
@@ -278,6 +286,9 @@ void Enemy::draw()
 		}
 		break;
 	}
+
+	// Draw enemy HUD
+	m_statusBar->draw();
 }
 
 void Enemy::clean()
@@ -373,4 +384,9 @@ void Enemy::SetTarget(int x, int y)
 {
 	target_x_ = x;
 	target_y_ = y;
+}
+
+StatusBar* Enemy::getStatusBar()
+{
+	return m_statusBar;
 }

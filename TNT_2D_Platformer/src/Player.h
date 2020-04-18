@@ -19,6 +19,8 @@ public:
 	void draw() override;
 	void clean() override;
 
+	StatusBar* getStatusBar();
+
 	void MoveX();
 	void StopX();
 
