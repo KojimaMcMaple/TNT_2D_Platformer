@@ -20,6 +20,7 @@
 #include "Camera.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Arrow.h"
 
 class Game
 {
@@ -42,6 +43,7 @@ private:
 	Level* level_ptr_;
 	Camera* camera_ptr_;
 	Player* player_ptr_;
+	std::vector<Arrow*> m_pArrowVec;
 	std::vector<Enemy*> enemy_list_;
 	std::vector<Enemy*> dead_enemy_list_;
 

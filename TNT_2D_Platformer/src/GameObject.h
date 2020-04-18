@@ -174,6 +174,7 @@ public:
 	void setSrc(int x, int y, int w, int h);
 	void setSrcX(int coord);
 	void setSrcY(int coord);
+	void setDst(SDL_Rect dst_ptr);
 	void setDst(int x, int y, int w, int h);
 	void setDstX(int coord);
 	void setDstY(int coord);
