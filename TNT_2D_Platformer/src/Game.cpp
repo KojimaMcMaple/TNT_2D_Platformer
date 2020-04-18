@@ -73,7 +73,7 @@ void Game::createGameObjects()
 	level_ptr_->LoadLevel(LevelId::CHURCH);
 
 	player_ptr_ = new Player();
-	player_ptr_->SetWorldXAndHitBox(11 * level_ptr_->GetLevelTileWidth());
+	player_ptr_->SetWorldXAndHitBox(10 * level_ptr_->GetLevelTileWidth());
 	player_ptr_->SetWorldYAndHitBox(18 * level_ptr_->GetLevelTileHeight());
 
 	m_scoreBoard = new ScoreBoard(20, 20, "Score: 0", 20, { 255, 0, 0, 255 });
@@ -113,13 +113,29 @@ void Game::CheckCollision()
 			enemy->setAnimState(AnimState::ASSAULTED);
 		}
 
+		for (int j = 0; j < m_pArrowVec.size(); j++) {
+			if (enemy->getAnimState() != AnimState::DEATH && SDL_HasIntersection(m_pArrowVec[j]->GetWorldRect(), enemy->getHitBox())) {
+				if (enemy->getAnimState() != AnimState::ASSAULTED) {
+					enemy->SetHP(enemy->GetHP() - player_ptr_->GetAtkPower());
+				}
+				enemy->setAnimState(AnimState::ASSAULTED);
+			}
+		}
+
 		if (enemy->getAnimState() != AnimState::DEATH 
 			&& enemy->getAnimState() != AnimState::ASSAULTED 
 			&& enemy->getAnimState() != AnimState::ENEMY_ARRIVE 
+			&& enemy->getAnimState() != AnimState::ENEMY_FLEE 
 			&& enemy->getAnimState() != AnimState::ATTACK 
 			&& SDL_HasIntersection(player_ptr_->getHitBox(), enemy->GetSightRect())) 
 		{
 			enemy->setAnimState(AnimState::ENEMY_SEEK);
+		}
+
+		if (enemy->IsAtkHitBoxActive() && SDL_HasIntersection(enemy->GetAtkHitBox(), player_ptr_->getHitBox())) {
+			player_ptr_->setAnimState(AnimState::ASSAULTED);
+			player_ptr_->SetHP(player_ptr_->GetHP() - enemy->GetAtkPower());
+			enemy->SetAtkHitBoxActive(false); //don't allow enemy atk hitbox to last & hit multiple times
 		}
 	}
 }
@@ -219,10 +235,21 @@ void Game::UpdateGameObjects()
 	// ENEMIES
 	for (int i = 0; i < enemy_list_.size(); i++) {
 		Enemy* enemy = enemy_list_[i];
-		if (enemy->getAnimState()==AnimState::ENEMY_SEEK || enemy->getAnimState() == AnimState::ENEMY_ARRIVE) {
+		if (enemy->getAnimState()==AnimState::ENEMY_SEEK 
+			|| enemy->getAnimState() == AnimState::ENEMY_ARRIVE 
+			|| enemy->getAnimState() == AnimState::ENEMY_FLEE) 
+		{
 			enemy->SetTarget(player_ptr_->GetWorldRectCenterX(), player_ptr_->GetWorldRectCenterY());
 		}
+
+		// PLAYER HP<50%, SEEK
+		if (enemy->getAnimState() == AnimState::ENEMY_FLEE) {
+			if (player_ptr_->GetHP() <= player_ptr_->GetMaxHP() / 2) {
+				enemy->setAnimState(AnimState::ENEMY_SEEK);
+			}
+		}
 		
+
 		enemy->update(); //implement enemy behaviors in Enemy class, since there is no control input handling
 	}
 

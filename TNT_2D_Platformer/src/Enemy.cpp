@@ -26,7 +26,7 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	setVelocityX(0);
 	setVelocityY(0);
 	setGravity(Globals::sGravity);
-	setMaxAccelerationX(2.0);
+	setMaxAccelerationX(4.0);
 	setMaxAccelerationY(2.0);
 	setMaxVelocityX(0.0); //not used
 	setMaxVelocityY(10.0);
@@ -34,7 +34,8 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	setMoveDirection(-1);
 	setType(GameObjectType::ENEMY);
 	setAnimState(AnimState::ENEMY_PATROL);
-	SetHP(40);
+	SetMaxHP(40);
+	SetHP(GetMaxHP());
 	SetAtkPower(20);
 	SetSightRect(world_x, world_y, 200, 150);
 
@@ -77,6 +78,15 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	GetAnimList()[ENEMY_SEEK]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
 	GetAnimList()[ENEMY_SEEK]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
 
+	GetAnimList()[ENEMY_FLEE]->SetAnimId(ENEMY_FLEE);
+	GetAnimList()[ENEMY_FLEE]->SetStartRow(6);
+	GetAnimList()[ENEMY_FLEE]->SetStartCol(4);
+	GetAnimList()[ENEMY_FLEE]->SetNumFrames(6);
+	GetAnimList()[ENEMY_FLEE]->SetAnimSpeed(0.6f);
+	GetAnimList()[ENEMY_FLEE]->SetLooping(true);
+	GetAnimList()[ENEMY_FLEE]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
+	GetAnimList()[ENEMY_FLEE]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
+
 	GetAnimList()[ENEMY_ARRIVE]->SetAnimId(ENEMY_ARRIVE);
 	GetAnimList()[ENEMY_ARRIVE]->SetStartRow(5);
 	GetAnimList()[ENEMY_ARRIVE]->SetStartCol(4);
@@ -94,8 +104,8 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	GetAnimList()[ATTACK]->SetLooping(false);
 	GetAnimList()[ATTACK]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
 	GetAnimList()[ATTACK]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet'
-	GetAnimList()[ATTACK]->SetAtkStartFrame(2);
-	GetAnimList()[ATTACK]->SetAtkNumFrames(3);
+	GetAnimList()[ATTACK]->SetAtkStartFrame(3);
+	GetAnimList()[ATTACK]->SetAtkNumFrames(2);
 	SetAtkHitBox(0, 0, 85, 85);
 
 	// Status bar
@@ -148,6 +158,7 @@ void Enemy::update()
 						setMoveDirection(1);
 					}
 				}
+				setAccelerationX(2.0);
 				MoveX();
 			}
 			UpdatePosition();
@@ -162,6 +173,7 @@ void Enemy::update()
 				else {
 					setMoveDirection(1);
 				}
+				setAccelerationX(3.0);
 				MoveX();
 			}
 			UpdatePosition();
@@ -174,9 +186,31 @@ void Enemy::update()
 				setAnimState(AnimState::ENEMY_PATROL);
 			}
 			break;
+			
+		case ENEMY_FLEE:
+			// continue moving if not past patrol distance, else change direction
+			if (IsGrounded()) {
+				if (target_x_ < GetWorldRectCenterX()) {
+					setMoveDirection(1);
+				}
+				else {
+					setMoveDirection(-1);
+				}
+				setAccelerationX(2.50);
+				MoveX();
+			}
+			UpdatePosition();
+			//if target gets too far away
+			if (target_y_ < GetWorldRectCenterY() - lose_sight_distance || target_y_ > GetWorldRectCenterY() + lose_sight_distance) {
+				setAnimState(AnimState::ENEMY_PATROL);
+			}
+			break;
 
 		case ENEMY_ARRIVE:
 			StopX();
+			if (HasEndedAnimation()) {
+				setAnimState(AnimState::ATTACK);
+			}
 			//if target within strike distance
 			if (target_x_ < GetWorldRectCenterX() - strike_distance || target_x_ > GetWorldRectCenterX() + strike_distance) {
 				setAnimState(AnimState::ENEMY_SEEK);
@@ -184,9 +218,6 @@ void Enemy::update()
 			//if target gets too far away
 			if (target_y_ < GetWorldRectCenterY() - lose_sight_distance || target_y_ > GetWorldRectCenterY() + lose_sight_distance) {
 				setAnimState(AnimState::ENEMY_PATROL);
-			}
-			if (HasEndedAnimation()) {
-				setAnimState(AnimState::ATTACK);
 			}
 			break;
 
@@ -213,6 +244,10 @@ void Enemy::update()
 				if (GetHP() == 0) {
 					setAnimState(AnimState::DEATH);
 				}
+				// HP<50%, FLEE
+				else if (GetHP() <= GetMaxHP() / 2) {
+					setAnimState(AnimState::ENEMY_FLEE);
+				}
 				else {
 					setAnimState(AnimState::ENEMY_PATROL);
 				}
@@ -224,6 +259,11 @@ void Enemy::update()
 			break;
 		}
 		
+		// FORCE ATK HIT BOX TO TURN OFF
+		if (getAnimState() != AnimState::ATTACK) {
+			SetAtkHitBoxActive(false);
+		}
+
 		break;
 	}
 
@@ -258,7 +298,7 @@ void Enemy::clean()
 void Enemy::MoveX()
 {
 	//setAccelerationX(getAccelerationX() + 0.1 * getMoveDirection());
-	setVelocityX(getMaxAccelerationX() * getMoveDirection());
+	setVelocityX(getAccelerationX() * getMoveDirection());
 }
 
 void Enemy::StopX()

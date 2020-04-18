@@ -17,6 +17,7 @@ class GameObject {
 private:
 	// GAME ATTR
 	int hp_;
+	int max_hp_;
 	int atk_power_;
 
 	// POSITIONING
@@ -102,6 +103,7 @@ public:
 
 	// getters for common variables
 	int GetHP();
+	int GetMaxHP();
 	int GetAtkPower();
 	SDL_Rect* GetWorldRect();
 	int GetWorldRectRightmostX();
@@ -167,6 +169,7 @@ public:
 
 	// setters for common variables
 	void SetHP(int value);
+	void SetMaxHP(int value);
 	void SetAtkPower(int value);
 	void SetWorldRect(int x, int y, int w, int h);
 	void SetWorldRectX(int coord);
