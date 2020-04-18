@@ -5,15 +5,6 @@
 #include "GLM/vec2.hpp"
 #include <SDL.h>
 
-
-enum class TweenType
-{
-	LINEAR,
-	INOUT_BACK,	IN_BACK, OUT_BACK,
-	COUNT
-};
-
-
 class Util
 {
 public:
@@ -48,8 +39,6 @@ public:
 
 	static int XCenterRect(SDL_Rect* rect);
 	static int YCenterRect(SDL_Rect* rect);
-	
-	// For Animating Caculation
-	static float tween(TweenType type, float start, float end, float amout, float bounce = 1.5);
+
 };
 #endif /* defined (__Util__) */

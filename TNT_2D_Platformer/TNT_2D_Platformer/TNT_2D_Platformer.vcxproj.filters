@@ -1,56 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\src\AnimSprite.cpp" />
-    <ClCompile Include="..\src\Camera.cpp" />
-    <ClCompile Include="..\src\CollisionManager.cpp" />
-    <ClCompile Include="..\src\Enemy.cpp" />
-    <ClCompile Include="..\src\Game.cpp" />
-    <ClCompile Include="..\src\GameObject.cpp" />
-    <ClCompile Include="..\src\FSM.cpp" />
-    <ClCompile Include="..\src\Globals.cpp" />
-    <ClCompile Include="..\src\Level.cpp" />
-    <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\Player.cpp" />
-    <ClCompile Include="..\src\SoundManager.cpp" />
-    <ClCompile Include="..\src\ui\Title.cpp" />
-    <ClCompile Include="..\src\ui\UI.cpp" />
-    <ClCompile Include="..\src\TextureManager.cpp" />
-    <ClCompile Include="..\src\Tile.cpp" />
-    <ClCompile Include="..\src\ui\UIManager.cpp" />
-    <ClCompile Include="..\src\ui\WindowManager.cpp" />
-    <ClCompile Include="..\src\Util.cpp" />
-    <ClCompile Include="..\src\StatusBar.cpp" />
-    <ClCompile Include="..\src\Controller.cpp" />
-    <ClCompile Include="..\src\ui\Config.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\AnimSprite.h" />
-    <ClInclude Include="..\src\AnimState.h" />
-    <ClInclude Include="..\src\Camera.h" />
-    <ClInclude Include="..\src\CollisionManager.h" />
-    <ClInclude Include="..\src\Enemy.h" />
-    <ClInclude Include="..\src\EnemyType.h" />
-    <ClInclude Include="..\src\Game.h" />
-    <ClInclude Include="..\src\GameObject.h" />
-    <ClInclude Include="..\src\GameObjectType.h" />
-    <ClInclude Include="..\src\FSM.h" />
-    <ClInclude Include="..\src\Globals.h" />
-    <ClInclude Include="..\src\Level.h" />
-    <ClInclude Include="..\src\LevelId.h" />
-    <ClInclude Include="..\src\Player.h" />
-    <ClInclude Include="..\src\SoundManager.h" />
-    <ClInclude Include="..\src\TextureManager.h" />
-    <ClInclude Include="..\src\Tile.h" />
-    <ClInclude Include="..\src\TileNeighbour.h" />
-    <ClInclude Include="..\src\ui\Title.h" />
-    <ClInclude Include="..\src\ui\UI.h" />
-    <ClInclude Include="..\src\ui\UIManager.h" />
-    <ClInclude Include="..\src\ui\WindowManager.h" />
-    <ClInclude Include="..\src\Util.h" />
-    <ClInclude Include="..\src\StatusBar.h" />
-    <ClInclude Include="..\src\Controller.h" />
-    <ClInclude Include="..\src\ui\Config.h" />
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
