@@ -4,10 +4,10 @@
 Player::Player()
 {
 	setTextureId("player");
-	TheTextureManager::Instance()->load("../Assets/textures/adventurer-v1.5-Sheet.png", getTextureId(), TheGame::Instance()->getRenderer());
+	TheTextureManager::Instance()->load("../assets/textures/adventurer-v1.5-Sheet.png", getTextureId(), TheGame::Instance()->getRenderer());
 
 	// TO UPDATE TEXTURE PACK
-	TheTextureManager::Instance()->load("../Assets/textures/adventurer-bow-Sheet.png", "attack_ranged", TheGame::Instance()->getRenderer());
+	TheTextureManager::Instance()->load("../assets/textures/adventurer-bow-Sheet.png", "attack_ranged", TheGame::Instance()->getRenderer());
 
 	setSrc(0, 0, 50, 37);
 	SetWorldRect(0, 0, 50 * 3, 37 * 3);

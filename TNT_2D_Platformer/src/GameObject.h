@@ -76,7 +76,8 @@ private:
 	// size variables
 	int m_width;
 	int m_height;
-
+	
+	
 	// animation variables
 	int curr_frame_;
 	int curr_row_;

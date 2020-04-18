@@ -22,6 +22,9 @@
     <Filter Include="Enums">
       <UniqueIdentifier>{b54f0419-9444-444d-adff-33a4ada0589e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{c5af523c-998f-4ff0-98ae-4c3dcbb6903c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -60,9 +63,6 @@
     <ClCompile Include="..\src\FSM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\UI.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Level.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -72,11 +72,20 @@
     <ClCompile Include="..\src\Enemy.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\StatusBar.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Arrow.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\UI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextElement.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ScoreBoard.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\StatusBar.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +125,6 @@
     <ClInclude Include="..\src\FSM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\UI.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Level.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -140,11 +146,20 @@
     <ClInclude Include="..\src\LevelId.h">
       <Filter>Enums</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\StatusBar.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Arrow.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\UI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TextElement.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ScoreBoard.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\StatusBar.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

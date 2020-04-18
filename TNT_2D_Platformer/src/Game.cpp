@@ -76,6 +76,8 @@ void Game::createGameObjects()
 	player_ptr_->SetWorldXAndHitBox(11 * level_ptr_->GetLevelTileWidth());
 	player_ptr_->SetWorldYAndHitBox(18 * level_ptr_->GetLevelTileHeight());
 
+	m_scoreBoard = new ScoreBoard(20, 20, "Score: 0", 20, { 255, 0, 0, 255 });
+
 	enemy_list_.clear();
 	enemy_list_.resize(0);
 	enemy_list_.shrink_to_fit();
@@ -243,6 +245,9 @@ void Game::RenderGameObjects()
 	for (int i = 0; i < (int)m_pArrowVec.size(); i++) {
 		camera_ptr_->draw(m_pArrowVec[i]);
 	}	
+
+	// UI
+	m_scoreBoard->Render();
 }
 
 bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
@@ -268,13 +273,30 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 			std::cout << "window creation success" << std::endl;
 			m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, 0);
 
-			if (m_pRenderer != 0) // render init success
+			if (m_pRenderer != nullptr) // render init success
 			{
 				std::cout << "renderer creation success" << std::endl;
 				SDL_SetRenderDrawColor(m_pRenderer, 255, 255, 255, 255);
 
 				// ENABLE ALPHA BLENDING
 				SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
+
+				if (IMG_Init(IMG_INIT_PNG) != 0)
+				{
+					if (TTF_Init() == 0)
+					{
+						cout << "Font init success!" << endl;
+					}
+					else return false;
+
+					if (Mix_Init(MIX_INIT_MP3) != 0) // Mixer init success.
+					{
+						Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 2048); // Good for most games.
+						Mix_AllocateChannels(16);
+					}
+					else return false;
+				}
+				else return false;
 			}
 			else
 			{

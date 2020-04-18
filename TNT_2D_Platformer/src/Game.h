@@ -21,6 +21,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Arrow.h"
+#include "ScoreBoard.h"
 
 class Game
 {
@@ -46,6 +47,9 @@ private:
 	std::vector<Arrow*> m_pArrowVec;
 	std::vector<Enemy*> enemy_list_;
 	std::vector<Enemy*> dead_enemy_list_;
+
+	// UI
+	TextElement* m_scoreBoard;
 
 	// Movement offset
 	bool is_jump_key_pressable_ = true;
