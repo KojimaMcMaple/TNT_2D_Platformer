@@ -5,7 +5,7 @@ Game* Game::s_pInstance = 0;
 
 Game::Game()
 {
-	SetJumpKeyPressable(true);
+	this->m_bRunning = true;
 }
 
 Game::~Game()
@@ -32,9 +32,14 @@ FSM& Game::GetFSM()
 	return *fsm_;
 }
 
-bool Game::IsJumpKeyPressable()
+WindowManager* Game::GetWindowManager()
 {
-	return is_jump_key_pressable_;
+	return m_wm;
+}
+
+Controller* Game::GetController()
+{
+	return this->m_controller;
 }
 
 UI& Game::GetTitleScreen()
@@ -49,14 +54,20 @@ UI& Game::GetPauseScreen()
 	return *pause_screen_ptr_;
 }
 
+Camera* Game::GetCamera()
+{
+	// TODO: insert return statement here
+	return camera_ptr_;
+}
+
+Level* Game::GetLevel()
+{
+	return level_ptr_;
+}
+
 void Game::setFrames(Uint32 frames)
 {
 	m_frames = frames;
-}
-
-void Game::SetJumpKeyPressable(bool toggle)
-{
-	is_jump_key_pressable_ = toggle;
 }
 
 glm::vec2 Game::getMousePosition()
@@ -66,7 +77,7 @@ glm::vec2 Game::getMousePosition()
 
 void Game::createGameObjects()
 {
-	title_screen_ptr_ = new UI("title", "../Assets/textures/Title_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
+	title_screen_ptr_ = new UI("title", "../Assets/textures/bg_4x3.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
 	pause_screen_ptr_ = new UI("pause", "../Assets/textures/Pause_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
 
 	level_ptr_ = new Level();
@@ -142,26 +153,26 @@ void Game::CheckCollision()
 void Game::UpdateGameObjects()
 {
 	// INPUT HANDLE
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
+	if (s_pInstance->GetController()->isHold(SDL_SCANCODE_A) || s_pInstance->GetController()->isHold(SDL_SCANCODE_LEFT)) {
 		player_ptr_->setMoveDirection(-1);
 		player_ptr_->MoveX();
 		if (player_ptr_->IsGrounded()) {
 			player_ptr_->setAnimState(AnimState::RUN);
 		}
 	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
+	if (s_pInstance->GetController()->isHold(SDL_SCANCODE_D) || s_pInstance->GetController()->isHold(SDL_SCANCODE_RIGHT)) {
 		player_ptr_->setMoveDirection(1);
 		player_ptr_->MoveX();
 		if (player_ptr_->IsGrounded()) {
 			player_ptr_->setAnimState(AnimState::RUN);
 		}
 	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
-		SetJumpKeyPressable(false);
+	if (s_pInstance->GetController()->isPressed(SDL_SCANCODE_SPACE) && player_ptr_->IsGrounded()) {
 		player_ptr_->setAccelerationY(-Globals::sJumpForce);
 		player_ptr_->SetGrounded(false);
 		player_ptr_->setAnimState(AnimState::JUMP);
 	}
+	//if (s_pInstance->GetController()->isHold(SDL_SCANCODE_RSHIFT) && player_ptr_->IsGrounded()) {
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_K) && player_ptr_->IsGrounded()) {
 		player_ptr_->setAnimState(AnimState::ATTACK);
 	}
@@ -285,20 +296,15 @@ void Game::RenderGameObjects()
 
 bool Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
-	int flags = 0;
-
-	if (fullscreen)
-	{
-		flags = SDL_WINDOW_FULLSCREEN;
-	}
-
 	// initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) >= 0)
 	{
 		std::cout << "SDL Init success" << std::endl;
-
+		
+		m_wm = new WindowManager(title, xpos, ypos, width, height, fullscreen);
+		m_controller = new Controller();
 		// if succeeded create our window
-		m_pWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+		m_pWindow = m_wm->GetMainWindow();
 
 		// if window creation successful create our renderer
 		if (m_pWindow != 0)
@@ -405,9 +411,7 @@ void Game::handleEvents()
 					player_ptr_->setAnimState(AnimState::IDLE);
 				}
 			}
-			if (event.key.keysym.sym == SDLK_SPACE) {
-				SetJumpKeyPressable(true);
-			}
+			m_controller->handleKeyboardEvent(event);
 			break;
 		default:
 			break;
@@ -447,6 +451,8 @@ void Game::clean()
 	std::cout << "cleaning game" << std::endl;
 	//fsm_->Clean();
 	GetFSM().Clean();
+	delete m_controller;
+	delete m_wm;
 	delete fsm_;
 	//fsm_ = nullptr;
 

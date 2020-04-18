@@ -40,7 +40,6 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -77,6 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(ProjectName)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>
@@ -113,9 +113,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Nghia_Lam\_Project\TNT_2D_Platformer\TNT_2D_Platformer\include\SDL_Mixer\include;E:\Nghia_Lam\_Project\TNT_2D_Platformer\TNT_2D_Platformer\include\SDL_Image\include;E:\Nghia_Lam\_Project\TNT_2D_Platformer\TNT_2D_Platformer\include\SDL\include;E:\Nghia_Lam\_Project\TNT_2D_Platformer\TNT_2D_Platformer\include\IL;E:\Nghia_Lam\_Project\TNT_2D_Platformer\TNT_2D_Platformer\include\GLUT;E:\Nghia_Lam\_Project\TNT_2D_Platformer\TNT_2D_Platformer\include\GLM;E:\Nghia_Lam\_Project\TNT_2D_Platformer\TNT_2D_Platformer\include\GLEW;E:\Nghia_Lam\_Project\TNT_2D_Platformer\TNT_2D_Platformer\include\GL;E:\Nghia_Lam\_Project\TNT_2D_Platformer\TNT_2D_Platformer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>E:\Nghia_Lam\_Project\TNT_2D_Platformer\TNT_2D_Platformer\TNT_2D_Platformer;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -160,6 +162,7 @@
     <ClCompile Include="..\src\Arrow.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
+    <ClCompile Include="..\src\Controller.cpp" />
     <ClCompile Include="..\src\Enemy.cpp" />
     <ClCompile Include="..\src\EnemyRanged.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
@@ -172,10 +175,15 @@
     <ClCompile Include="..\src\ScoreBoard.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
     <ClCompile Include="..\src\StatusBar.cpp" />
+    <ClCompile Include="..\src\ui\Config.cpp" />
+    <ClCompile Include="..\src\ui\Title.cpp" />
+    <ClCompile Include="..\src\ui\UI.cpp" />
     <ClCompile Include="..\src\TextElement.cpp" />
     <ClCompile Include="..\src\UI.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
+    <ClCompile Include="..\src\ui\UIManager.cpp" />
+    <ClCompile Include="..\src\ui\WindowManager.cpp" />
     <ClCompile Include="..\src\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +192,7 @@
     <ClInclude Include="..\src\Arrow.h" />
     <ClInclude Include="..\src\Camera.h" />
     <ClInclude Include="..\src\CollisionManager.h" />
+    <ClInclude Include="..\src\Controller.h" />
     <ClInclude Include="..\src\Enemy.h" />
     <ClInclude Include="..\src\EnemyRanged.h" />
     <ClInclude Include="..\src\EnemyType.h" />
@@ -203,7 +212,11 @@
     <ClInclude Include="..\src\TextureManager.h" />
     <ClInclude Include="..\src\Tile.h" />
     <ClInclude Include="..\src\TileNeighbour.h" />
-    <ClInclude Include="..\src\UI.h" />
+    <ClInclude Include="..\src\ui\Config.h" />
+    <ClInclude Include="..\src\ui\Title.h" />
+    <ClInclude Include="..\src\ui\UI.h" />
+    <ClInclude Include="..\src\ui\UIManager.h" />
+    <ClInclude Include="..\src\ui\WindowManager.h" />
     <ClInclude Include="..\src\Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include "ui/Title.h"
+#include "ui/Config.h"
 
 class GameState
 {
@@ -33,6 +35,11 @@ public:
 };
 
 class TitleState :public GameState {
+private:
+	TitleMenu* _t_menu;
+	ConfigMenu* _t_config;
+	bool _is_config;
+
 public:
 	TitleState();
 	void Enter();
@@ -40,6 +47,7 @@ public:
 	void Render();
 	void Exit();
 };
+
 
 class FSM {
 private:

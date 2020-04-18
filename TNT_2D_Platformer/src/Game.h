@@ -10,13 +10,15 @@
 #include <SDL_image.h>
 
 // Game Managers
+#include "ui/WindowManager.h"
 #include "TextureManager.h"
 #include "CollisionManager.h"
+#include "Controller.h"
 #include "FSM.h"
 #include "SoundId.h"
 
 // Game Objects
-#include "UI.h"
+#include "ui/UI.h"
 #include "Level.h"
 #include "Camera.h"
 #include "Player.h"
@@ -32,6 +34,8 @@ private:
 
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
+	WindowManager* m_wm;
+	Controller* m_controller;
 	FSM* fsm_;
 
 	static Game* s_pInstance;
@@ -70,7 +74,7 @@ public:
 	}
 
 	// simply set the running variable to true
-	void init() { m_bRunning = true; }
+	void init() {}
 
 	bool init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
@@ -83,6 +87,7 @@ public:
 
 	// a function to access the private running variable
 	bool running() { return m_bRunning; }
+	void setRunning(bool toggle) { this->m_bRunning = toggle; }
 
 	void createGameObjects();
 	void CheckCollision();
@@ -93,13 +98,15 @@ public:
 	Uint32 getFrames() const;
 	SDL_Renderer* getRenderer();
 	FSM& GetFSM();
-	bool IsJumpKeyPressable();
+	WindowManager* GetWindowManager();
+	Controller* GetController();
 	UI& GetTitleScreen();
 	UI& GetPauseScreen();
+	Camera* GetCamera();
+	Level* GetLevel();
 
 	// setters
 	void setFrames(Uint32 frames);
-	void SetJumpKeyPressable(bool toggle);
 
 	// REDUNDANT
 	glm::vec2 getMousePosition();
