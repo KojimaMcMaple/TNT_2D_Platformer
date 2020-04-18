@@ -31,7 +31,8 @@ Player::Player()
 	setMoveDirection(1);
 	setType(GameObjectType::PLAYER);
 	setAnimState(AnimState::IDLE); //default anim state
-	SetHP(100);
+	SetMaxHP(100);
+	SetHP(GetMaxHP());
 	SetAtkPower(20);
 
 	// ANIM INIT
@@ -89,13 +90,22 @@ Player::Player()
 	GetAnimList()[ATTACK_RANGED]->SetStartRow(0); 
 	GetAnimList()[ATTACK_RANGED]->SetStartCol(0);
 	GetAnimList()[ATTACK_RANGED]->SetNumFrames(9);
-	GetAnimList()[ATTACK_RANGED]->SetAnimSpeed(0.7f);
+	GetAnimList()[ATTACK_RANGED]->SetAnimSpeed(0.9f);
 	GetAnimList()[ATTACK_RANGED]->SetLooping(false);
 	GetAnimList()[ATTACK_RANGED]->SetMaxSheetRow(4); //same for all anim states since there's only one sheet
 	GetAnimList()[ATTACK_RANGED]->SetMaxSheetCol(4); //same for all anim states since there's only one sheet
 
+	GetAnimList()[ASSAULTED]->SetAnimId(ASSAULTED);
+	GetAnimList()[ASSAULTED]->SetStartRow(8);
+	GetAnimList()[ASSAULTED]->SetStartCol(3);
+	GetAnimList()[ASSAULTED]->SetNumFrames(3);
+	GetAnimList()[ASSAULTED]->SetAnimSpeed(0.3f);
+	GetAnimList()[ASSAULTED]->SetLooping(false);
+	GetAnimList()[ASSAULTED]->SetMaxSheetRow(16); //same for all anim states since there's only one sheet
+	GetAnimList()[ASSAULTED]->SetMaxSheetCol(7); //same for all anim states since there's only one sheet
+
 	// Player HUD
-	m_statusBar = new StatusBar(getDst(), 100);
+	m_statusBar = new StatusBar(getDst(), GetHP());
 }
 
 Player::~Player()
@@ -115,6 +125,7 @@ void Player::update()
 	SetWorldYAndHitBox(GetWorldRect()->y + (int)getVelocityY());
 
 	// UPDATE PLAYER HUD
+	m_statusBar->SetHealth(GetHP());
 	m_statusBar->update(getDst());
 }
 

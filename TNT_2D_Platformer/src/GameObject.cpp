@@ -74,6 +74,11 @@ int GameObject::GetHP()
 	return hp_;
 }
 
+int GameObject::GetMaxHP()
+{
+	return max_hp_;
+}
+
 int GameObject::GetAtkPower()
 {
 	return atk_power_;
@@ -397,6 +402,11 @@ void GameObject::SetHP(int value)
 	if (hp_ < 0) {
 		hp_ = 0;
 	}
+}
+
+void GameObject::SetMaxHP(int value)
+{
+	max_hp_ = value;
 }
 
 void GameObject::SetAtkPower(int value)
