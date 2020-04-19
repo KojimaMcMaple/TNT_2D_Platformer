@@ -91,7 +91,7 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	GetAnimList()[ENEMY_ARRIVE]->SetStartRow(5);
 	GetAnimList()[ENEMY_ARRIVE]->SetStartCol(4);
 	GetAnimList()[ENEMY_ARRIVE]->SetNumFrames(3);
-	GetAnimList()[ENEMY_ARRIVE]->SetAnimSpeed(0.2f);
+	GetAnimList()[ENEMY_ARRIVE]->SetAnimSpeed(0.1f);
 	GetAnimList()[ENEMY_ARRIVE]->SetLooping(true);
 	GetAnimList()[ENEMY_ARRIVE]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
 	GetAnimList()[ENEMY_ARRIVE]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet
@@ -100,7 +100,7 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	GetAnimList()[ATTACK]->SetStartRow(1);
 	GetAnimList()[ATTACK]->SetStartCol(0);
 	GetAnimList()[ATTACK]->SetNumFrames(6);
-	GetAnimList()[ATTACK]->SetAnimSpeed(0.2f);
+	GetAnimList()[ATTACK]->SetAnimSpeed(0.4f);
 	GetAnimList()[ATTACK]->SetLooping(false);
 	GetAnimList()[ATTACK]->SetMaxSheetRow(9); //same for all anim states since there's only one sheet
 	GetAnimList()[ATTACK]->SetMaxSheetCol(6); //same for all anim states since there's only one sheet'

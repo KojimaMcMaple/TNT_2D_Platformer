@@ -20,9 +20,10 @@ void GameObject::Animate()
 	int animationRate = round(anim_db->GetNumFrames() / 2 / anim_db->GetAnimSpeed());
 	if (TheGame::Instance()->getFrames() % animationRate == 0)
 	{
-		if (HasChangedState()) { //Just changed state
-			//checking_anim_state_ = anim_state_;
+		if (checking_anim_state_ != anim_state_) { //Just changed state
+			checking_anim_state_ = anim_state_;
 			curr_frame_ = 0;
+			SetPlayedAnimSfx(false); // sound
 		}
 		// PROCESS VISUAL ANIM
 		if (curr_frame_ > anim_db->GetNumFrames() - 1) {
@@ -710,7 +711,7 @@ void GameObject::setAnimState(AnimState newState)
 
 void GameObject::PlayAnimSfx(SoundId sfx)
 {
-	if (HasChangedState()) {
+	if (!HasPlayedAnimSfx()) {
 		TheSoundManager::Instance()->playSound(sfx, 0); //sound
 		SetPlayedAnimSfx(true);
 	}
