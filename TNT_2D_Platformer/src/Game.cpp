@@ -73,19 +73,40 @@ void Game::createGameObjects()
 	level_ptr_->LoadLevel(LevelId::CHURCH);
 
 	player_ptr_ = new Player();
-	player_ptr_->SetWorldXAndHitBox(10 * level_ptr_->GetLevelTileWidth());
-	player_ptr_->SetWorldYAndHitBox(18 * level_ptr_->GetLevelTileHeight());
 
 	m_scoreBoard = new ScoreBoard(20, 20, "Score: 0", 20, { 255, 0, 0, 255 });
 
 	enemy_list_.clear();
 	enemy_list_.resize(0);
 	enemy_list_.shrink_to_fit();
-	enemy_list_.push_back(new Enemy(SKELETON_SWORD, 24 * level_ptr_->GetLevelTileWidth(), 25 * level_ptr_->GetLevelTileHeight()));
-	enemy_list_.push_back(new Enemy(RANGER_BOW, 8 * level_ptr_->GetLevelTileWidth(), 12 * level_ptr_->GetLevelTileHeight()));
-	enemy_list_.push_back(new Enemy(SKELETON_SWORD, 11 * level_ptr_->GetLevelTileWidth(), 5 * level_ptr_->GetLevelTileHeight()));
-	enemy_list_.push_back(new Enemy(SKELETON_SWORD, 30 * level_ptr_->GetLevelTileWidth(), 5 * level_ptr_->GetLevelTileHeight()));
-	//std::cout << enemy_list_.back()->GetWorldRect()->x << std::endl;
+
+	//enemy_list_.push_back(new Enemy(SKELETON_SWORD, 24 * level_ptr_->GetLevelTileWidth(), 25 * level_ptr_->GetLevelTileHeight()));
+	//enemy_list_.push_back(new Enemy(SKELETON_SWORD, 8 * level_ptr_->GetLevelTileWidth(), 14 * level_ptr_->GetLevelTileHeight()));
+	//enemy_list_.push_back(new Enemy(SKELETON_SWORD, 11 * level_ptr_->GetLevelTileWidth(), 5 * level_ptr_->GetLevelTileHeight()));
+	//enemy_list_.push_back(new Enemy(SKELETON_SWORD, 30 * level_ptr_->GetLevelTileWidth(), 5 * level_ptr_->GetLevelTileHeight()));
+	////std::cout << enemy_list_.back()->GetWorldRect()->x << std::endl;
+
+	prop_list_.clear();
+	prop_list_.resize(0);
+	prop_list_.shrink_to_fit();
+
+	// OBJ PLACEMENT
+	std::string level_raw_str = level_ptr_->GetLevelRawStr();
+	for (int i = 0; i < level_raw_str.size(); i++) {
+		int row = (int)(i / level_ptr_->GetLevelNumOfColumns());
+		int col = i - row * level_ptr_->GetLevelNumOfColumns();
+
+		if (level_raw_str[i] == 'P') {
+			player_ptr_->SetWorldXAndHitBox(col * level_ptr_->GetLevelTileWidth());
+			player_ptr_->SetWorldYAndHitBox(row * level_ptr_->GetLevelTileHeight());
+		}
+		if (level_raw_str[i] == 'E') {
+			enemy_list_.push_back(new Enemy(SKELETON_SWORD, col * level_ptr_->GetLevelTileWidth(), row * level_ptr_->GetLevelTileHeight()));
+		}
+		if (level_raw_str[i] == 'R') {
+			prop_list_.push_back(new Prop(BARREL, col * level_ptr_->GetLevelTileWidth(), row * level_ptr_->GetLevelTileHeight()));
+		}
+	}
 
 	// CENTER CAM TO PLAYER
 	camera_ptr_ = new Camera();
@@ -160,6 +181,8 @@ void Game::UpdateGameObjects()
 		SetJumpKeyPressable(false);
 		player_ptr_->setAccelerationY(-Globals::sJumpForce);
 		player_ptr_->SetGrounded(false);
+		player_ptr_->setAnimState(AnimState::JUMP);
+		
 		player_ptr_->setAnimState(Player::JUMP);
 	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_K) && player_ptr_->IsGrounded()) {
@@ -171,6 +194,11 @@ void Game::UpdateGameObjects()
 
 	// POST PROCESSING
 	// PLAYER
+	if (player_ptr_->getAnimState() == AnimState::JUMP) {
+		player_ptr_->PlayAnimSfx(SFX_PLAYER_JUMP);
+	}
+
+	if (player_ptr_->getAnimState() == AnimState::ATTACK) {
 	if (player_ptr_->getAnimState() == Player::ATTACK) {
 		player_ptr_->PlayAnimSfx(SFX_PLAYER_ATK);
 		player_ptr_->StopX();
@@ -271,6 +299,9 @@ void Game::UpdateGameObjects()
 void Game::RenderGameObjects()
 {
 	level_ptr_->draw();
+	for (int i = 0; i < prop_list_.size(); i++) {
+		camera_ptr_->draw(prop_list_[i]);
+	}
 	for (int i = 0; i < enemy_list_.size(); i++) {
 		camera_ptr_->draw(enemy_list_[i]);
 	}

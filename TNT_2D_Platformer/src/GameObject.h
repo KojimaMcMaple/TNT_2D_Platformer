@@ -45,7 +45,7 @@ private:
 	SDL_Rect hit_box_;
 	int hit_box_manual_offset_x_ = 0;
 	int hit_box_manual_offset_y_ = 0;
-	bool is_hit_box_visible_ = true;
+	bool is_hit_box_visible_ = false;
 	bool is_grounded_ = false;
 	bool is_collidable_;
 
@@ -81,6 +81,8 @@ private:
 	int curr_row_;
 	int curr_col_;
 	int checking_anim_state_ = -1; //checking var to reset curr_frame_
+	int checking_sfx_state_ = -1; //checking var to play sfx only once
+	AnimState anim_state_;
 	int anim_state_;
 	std::vector<AnimSprite*> anim_list_;
 	bool has_played_anim_sfx_ = false;

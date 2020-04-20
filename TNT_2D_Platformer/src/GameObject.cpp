@@ -23,7 +23,10 @@ void GameObject::Animate()
 		if (checking_anim_state_ != anim_state_) { //Just changed state
 			checking_anim_state_ = anim_state_;
 			curr_frame_ = 0;
-			SetPlayedAnimSfx(false); // sound
+			SetPlayedAnimSfx(false);
+			//if (anim_state_ == ATTACK) {
+			//	std::cout << "RESET SOUND\n";
+			//}
 		}
 		// PROCESS VISUAL ANIM
 		if (curr_frame_ > anim_db->GetNumFrames() - 1) {
@@ -711,9 +714,11 @@ void GameObject::setAnimState(int newState)
 
 void GameObject::PlayAnimSfx(SoundId sfx)
 {
-	if (!HasPlayedAnimSfx()) {
-		TheSoundManager::Instance()->playSound(sfx, 0); //sound
-		SetPlayedAnimSfx(true);
+	if (HasPlayedAnimSfx() == false) {
+		if (checking_anim_state_ == anim_state_) {
+			TheSoundManager::Instance()->playSound(sfx, 0); //sound
+			SetPlayedAnimSfx(true);
+		}
 	}
 }
 

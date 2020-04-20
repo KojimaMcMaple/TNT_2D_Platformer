@@ -8,6 +8,7 @@ enum GameObjectType {
 	TILE,
 	PLAYER,
 	ENEMY,
+	PROP,
 	ARROW,
 	SCREEN,
 	NUM_OF_TYPES

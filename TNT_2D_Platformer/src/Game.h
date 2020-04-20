@@ -23,6 +23,7 @@
 #include "Enemy.h"
 #include "Arrow.h"
 #include "ScoreBoard.h"
+#include "Prop.h"
 
 class Game
 {
@@ -47,7 +48,7 @@ private:
 	Player* player_ptr_;
 	std::vector<Arrow*> m_pArrowVec;
 	std::vector<Enemy*> enemy_list_;
-	std::vector<Enemy*> dead_enemy_list_;
+	std::vector<Prop*> prop_list_;
 
 	// UI
 	TextElement* m_scoreBoard;

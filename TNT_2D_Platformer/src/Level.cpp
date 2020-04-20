@@ -299,14 +299,14 @@ void Level::LoadLevel(LevelId level_id)
 		level_raw_str += "BB......E......@......B...........B";
 		level_raw_str += "BBG...................B...........B";
 		level_raw_str += "B--GGGGGGGGGG.........BGGG........B";
-		level_raw_str += "B---&--------GGGGGGG..B--&........B";
+		level_raw_str += "B---&--------GGGGGGG..B--&....R...B";
 		level_raw_str += "B-----&--BCCCCCCCCCC..CCCCCCCCCCCCB";
-		level_raw_str += "BB-------&...........@B...........B";
+		level_raw_str += "BB-------&P..........@B...........B";
 		level_raw_str += "B--@---&-B........................B";
 		level_raw_str += "B----@---@........................B";
 		level_raw_str += "CCCCCCCCCC.........&&.............B";
-		level_raw_str += "..........P....@@@@...............B";
-		level_raw_str += ".............@....................B";
+		level_raw_str += "...............@@@@...............B";
+		level_raw_str += "R............@....................B";
 		level_raw_str += "GGGGGGGGGG@............E..........B";
 		level_raw_str += "B---&-----B&.....................BB";
 		level_raw_str += "B----@------GGGGGGGGGGGGGGGGGGGGG@@";
@@ -381,6 +381,11 @@ void Level::LoadLevel(LevelId level_id)
 			visible_tile_list_[row][col] = new Tile(col * GetLevelTileWidth(), row * GetLevelTileHeight(), GetLevelTileWidth(), GetLevelTileHeight(), DST_RECT);
 		}
 	}
+}
+
+std::string Level::GetLevelRawStr()
+{
+	return level_raw_str_;
 }
 
 int Level::GetLevelNumOfColumns()
