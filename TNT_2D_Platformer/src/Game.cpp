@@ -274,17 +274,19 @@ void Game::UpdateGameObjects()
 	player_ptr_->setAccelerationY(0);
 
 	// ARROWS
-	if (!m_pArrowVec.empty())
+	bool needShrinking = false;
+	for (int i = 0; i < m_pArrowVec.size(); ++i)
 	{
-		for (auto arrow : m_pArrowVec)
+		m_pArrowVec[i]->update();
+		if (m_pArrowVec[i]->getDst()->x < -16 || m_pArrowVec[i]->getDst()->x > 1024)
 		{
-			arrow->update();
-			if (arrow->getDst()->x < 50 || arrow->getDst()->x > 500)
-			{
-				delete arrow;
-				arrow = nullptr;
-			}
+			delete m_pArrowVec[i];
+			m_pArrowVec[i] = nullptr;
+			needShrinking = true;
 		}
+	}
+	if (needShrinking)
+	{
 		m_pArrowVec.erase(remove(m_pArrowVec.begin(), m_pArrowVec.end(), nullptr), m_pArrowVec.end());
 		m_pArrowVec.shrink_to_fit();
 	}	
