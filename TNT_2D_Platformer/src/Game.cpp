@@ -139,12 +139,21 @@ void Game::CheckCollision()
 	
 	// ARROWS x PLAYER
 	int arrow_damage = 10;
+	bool arrowsNeedShrinking = false;
 	for (int j = 0; j < m_pArrowVec.size(); j++) {
 		if (SDL_HasIntersection(m_pArrowVec[j]->GetWorldRect(), player_ptr_->getHitBox())) {
 			player_ptr_->SetHP(player_ptr_->GetHP() - arrow_damage);
 			player_ptr_->getStatusBar()->changeHealth(-arrow_damage);
 			TheSoundManager::Instance()->playSound(SFX_PLAYER_ASSAULTED, 0); //sound
+			delete m_pArrowVec[j];
+			m_pArrowVec[j] = nullptr;
+			arrowsNeedShrinking = true;
 		}
+	}
+	if (arrowsNeedShrinking)
+	{
+		m_pArrowVec.erase(remove(m_pArrowVec.begin(), m_pArrowVec.end(), nullptr), m_pArrowVec.end());
+		m_pArrowVec.shrink_to_fit();
 	}
 
 	// ENEMY COLLI
@@ -302,12 +311,12 @@ void Game::UpdateGameObjects()
 			int x, y;
 			if (player_ptr_->getMoveDirection() == 1)
 			{
-				x = player_ptr_->GetWorldRect()->x + 29 * 3;
+				x = player_ptr_->GetWorldRect()->x + 29 * 3 + 10;
 				y = player_ptr_->GetWorldRect()->y + 22 * 3;
 			}
 			else
 			{
-				x = player_ptr_->GetWorldRect()->x + 22 * 3;
+				x = player_ptr_->GetWorldRect()->x + 22 * 3 - 10;
 				y = player_ptr_->GetWorldRect()->y + 22 * 3;
 			}
 			m_pArrowVec.push_back(new Arrow(x, y, player_ptr_->getMoveDirection()));
