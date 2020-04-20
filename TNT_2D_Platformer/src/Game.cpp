@@ -135,8 +135,12 @@ void Game::CheckCollision()
 	// PLAYER COLLI
 	level_ptr_->CheckLevelCollision(player_ptr_);
 	
+	bool make_player_atk_hit_box_inactive = false;
+	
+
 	// ENEMY COLLI
 	for (int i = 0; i < enemy_list_.size(); i++) {
+		bool make_enemy_atk_hit_box_inactive = false;
 		Enemy* enemy = enemy_list_[i];
 		level_ptr_->CheckLevelCollision(enemy);
 		//if player still attacking + enemy not dead + SDL_HasIntersection
@@ -144,7 +148,7 @@ void Game::CheckCollision()
 			enemy->SetHP(enemy->GetHP() - player_ptr_->GetAtkPower());
 			enemy->getStatusBar()->changeHealth(-player_ptr_->GetAtkPower());
 			enemy->setAnimState(Enemy::ASSAULTED);
-			player_ptr_->SetAtkHitBoxActive(false);
+			make_player_atk_hit_box_inactive = true;
 		}
 
 		bool arrowsNeedShrinking = false;
@@ -178,7 +182,24 @@ void Game::CheckCollision()
 			player_ptr_->PlayAnimSfx(SFX_PLAYER_ASSAULTED);
 			player_ptr_->SetHP(player_ptr_->GetHP() - enemy->GetAtkPower());
 			player_ptr_->setAnimState(Player::ASSAULTED);
-			enemy->SetAtkHitBoxActive(false); //don't allow enemy atk hitbox to last & hit multiple times
+			make_enemy_atk_hit_box_inactive = true; //don't allow enemy atk hitbox to last & hit multiple times
+		}
+
+		if (enemy->IsAtkHitBoxActive()) {
+			for (int i = 0; i < prop_list_.size(); i++) {
+				Prop* prop = prop_list_[i];
+				if (prop->GetPropType() == BARREL) {
+					if (SDL_HasIntersection(enemy->GetAtkHitBox(), prop->getHitBox())) {
+						prop->SetHP(prop->GetHP() - enemy->GetAtkPower());
+						make_enemy_atk_hit_box_inactive = true; //don't allow enemy atk hitbox to last & hit multiple times
+						TheSoundManager::Instance()->playSound(SFX_BARREL_ASSAULTED, 0); //sound
+					}
+				}
+			}
+		}
+
+		if (make_enemy_atk_hit_box_inactive) {
+			enemy->SetAtkHitBoxActive(false);
 		}
 	}
 
@@ -189,7 +210,7 @@ void Game::CheckCollision()
 		if (player_ptr_->IsAtkHitBoxActive() && SDL_HasIntersection(player_ptr_->GetAtkHitBox(), prop->getHitBox())) {
 			if (prop->GetPropType() == BARREL) {
 				prop->SetHP(prop->GetHP() - player_ptr_->GetAtkPower());
-				player_ptr_->SetAtkHitBoxActive(false);
+				make_player_atk_hit_box_inactive = true;
 				TheSoundManager::Instance()->playSound(SFX_BARREL_ASSAULTED, 0); //sound
 			}
 		}
@@ -202,6 +223,11 @@ void Game::CheckCollision()
 			}
 		}
 	}
+
+	if (make_player_atk_hit_box_inactive) {
+		player_ptr_->SetAtkHitBoxActive(false);
+	}
+	
 }
 
 void Game::UpdateGameObjects()
