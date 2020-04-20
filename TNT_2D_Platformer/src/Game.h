@@ -51,7 +51,7 @@ private:
 	std::vector<Prop*> prop_list_;
 
 	// UI
-	TextElement* m_scoreBoard;
+	ScoreBoard* m_scoreBoard;
 
 	// Movement offset
 	bool is_jump_key_pressable_ = true;
@@ -97,6 +97,7 @@ public:
 	bool IsJumpKeyPressable();
 	UI& GetTitleScreen();
 	UI& GetPauseScreen();
+	ScoreBoard* GetScoreBoard();
 
 	// setters
 	void setFrames(Uint32 frames);

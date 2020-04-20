@@ -11,6 +11,7 @@ ScoreBoard::~ScoreBoard()
 
 void ScoreBoard::setScore(int score)
 {
+	m_score = score;
 	string temp = "Score: " + to_string(score);
 	SetText(temp.c_str());
 }
