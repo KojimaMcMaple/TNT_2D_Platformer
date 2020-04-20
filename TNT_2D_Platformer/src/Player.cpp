@@ -36,7 +36,7 @@ Player::Player()
 	SetAtkPower(20);
 
 	// ANIM INIT
-	InitAnimList();
+	InitAnimList(NUM_OF_ANIM_STATES);
 	GetAnimList()[IDLE]->SetAnimId(IDLE);
 	GetAnimList()[IDLE]->SetStartRow(0);
 	GetAnimList()[IDLE]->SetStartCol(0);

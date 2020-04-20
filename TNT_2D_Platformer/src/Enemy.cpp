@@ -40,7 +40,7 @@ void Enemy::InitSkeletonSword(int world_x, int world_y)
 	SetSightRect(world_x, world_y, 200, 150);
 
 	// ANIM INIT
-	InitAnimList();
+	InitAnimList(NUM_OF_ANIM_STATES);
 	GetAnimList()[ENEMY_PATROL]->SetAnimId(ENEMY_PATROL);
 	GetAnimList()[ENEMY_PATROL]->SetStartRow(7);
 	GetAnimList()[ENEMY_PATROL]->SetStartCol(4);
@@ -117,6 +117,118 @@ void Enemy::RenderSkeletonSword()
 	
 }
 
+void Enemy::InitRangerBow(int world_x, int world_y)
+{
+	enemy_type_ = RANGER_BOW;
+
+	setTextureId("ranger_bow");
+	TheTextureManager::Instance()->load("../Assets/textures/ranger_bow.png", getTextureId(), TheGame::Instance()->getRenderer());
+	setSrc(0, 0, 128, 128);
+	SetWorldRect(0, 0, getSrc()->w * 3, getSrc()->h * 3);
+	setDst(0, 0, GetWorldRect()->w, GetWorldRect()->h);
+	setHitBox(0, 0, 27, 39);
+	SetSpawnPointX(world_x);
+	SetSpawnPointY(world_y);
+	SetWorldXAndHitBox(world_x);
+	SetWorldYAndHitBox(world_y);
+	SetPatrolRadius(300);
+	//setHitBoxOffsetX(-4);
+	//setHitBoxOffsetY(10);
+	//SetHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
+	SetCollidable(true);
+	SetGrounded(false);
+	setAccelerationX(0);
+	setAccelerationY(0);
+	setVelocityX(0);
+	setVelocityY(0);
+	setGravity(Globals::sGravity);
+	setMaxAccelerationX(4.0);
+	setMaxAccelerationY(2.0);
+	setMaxVelocityX(0.0); //not used
+	setMaxVelocityY(10.0);
+	setDrag(1.0);
+	setMoveDirection(-1);
+	setType(GameObjectType::ENEMY);
+	setAnimState(AnimState::ENEMY_PATROL);
+	SetMaxHP(40);
+	SetHP(GetMaxHP());
+	SetAtkPower(20);
+	SetSightRect(world_x, world_y, 300, 150);
+
+	// ANIM INIT
+	InitAnimList(NUM_OF_ANIM_STATES);
+	GetAnimList()[ENEMY_PATROL]->SetAnimId(ENEMY_PATROL);
+	GetAnimList()[ENEMY_PATROL]->SetStartRow(9);
+	GetAnimList()[ENEMY_PATROL]->SetStartCol(1);
+	GetAnimList()[ENEMY_PATROL]->SetNumFrames(8);
+	GetAnimList()[ENEMY_PATROL]->SetAnimSpeed(0.2f);
+	GetAnimList()[ENEMY_PATROL]->SetLooping(true);
+	GetAnimList()[ENEMY_PATROL]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
+	GetAnimList()[ENEMY_PATROL]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
+
+	GetAnimList()[ASSAULTED]->SetAnimId(ASSAULTED);
+	GetAnimList()[ASSAULTED]->SetStartRow(3);
+	GetAnimList()[ASSAULTED]->SetStartCol(0);
+	GetAnimList()[ASSAULTED]->SetNumFrames(3);
+	SetIFrames(3); //NOT YET IMPLEMENTED, IS USING SIMPLER SOLUTION
+	GetAnimList()[ASSAULTED]->SetAnimSpeed(0.3f);
+	GetAnimList()[ASSAULTED]->SetLooping(false);
+	GetAnimList()[ASSAULTED]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
+	GetAnimList()[ASSAULTED]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
+
+	GetAnimList()[DEATH]->SetAnimId(DEATH);
+	GetAnimList()[DEATH]->SetStartRow(2);
+	GetAnimList()[DEATH]->SetStartCol(9);
+	GetAnimList()[DEATH]->SetNumFrames(21);
+	GetAnimList()[DEATH]->SetAnimSpeed(0.5f);
+	GetAnimList()[DEATH]->SetLooping(false);
+	GetAnimList()[DEATH]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
+	GetAnimList()[DEATH]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
+
+	GetAnimList()[ENEMY_SEEK]->SetAnimId(ENEMY_SEEK);
+	GetAnimList()[ENEMY_SEEK]->SetStartRow(9);
+	GetAnimList()[ENEMY_SEEK]->SetStartCol(1);
+	GetAnimList()[ENEMY_SEEK]->SetNumFrames(8);
+	GetAnimList()[ENEMY_SEEK]->SetAnimSpeed(0.6f);
+	GetAnimList()[ENEMY_SEEK]->SetLooping(true);
+	GetAnimList()[ENEMY_SEEK]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
+	GetAnimList()[ENEMY_SEEK]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
+
+	GetAnimList()[ENEMY_FLEE]->SetAnimId(ENEMY_FLEE);
+	GetAnimList()[ENEMY_FLEE]->SetStartRow(9);
+	GetAnimList()[ENEMY_FLEE]->SetStartCol(1);
+	GetAnimList()[ENEMY_FLEE]->SetNumFrames(8);
+	GetAnimList()[ENEMY_FLEE]->SetAnimSpeed(0.6f);
+	GetAnimList()[ENEMY_FLEE]->SetLooping(true);
+	GetAnimList()[ENEMY_FLEE]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
+	GetAnimList()[ENEMY_FLEE]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
+
+	GetAnimList()[ENEMY_ARRIVE]->SetAnimId(ENEMY_ARRIVE);
+	GetAnimList()[ENEMY_ARRIVE]->SetStartRow(9);
+	GetAnimList()[ENEMY_ARRIVE]->SetStartCol(1);
+	GetAnimList()[ENEMY_ARRIVE]->SetNumFrames(8);
+	GetAnimList()[ENEMY_ARRIVE]->SetAnimSpeed(0.2f);
+	GetAnimList()[ENEMY_ARRIVE]->SetLooping(true);
+	GetAnimList()[ENEMY_ARRIVE]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
+	GetAnimList()[ENEMY_ARRIVE]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
+
+	GetAnimList()[ATTACK]->SetAnimId(ATTACK);
+	GetAnimList()[ATTACK]->SetStartRow(0);
+	GetAnimList()[ATTACK]->SetStartCol(0);
+	GetAnimList()[ATTACK]->SetNumFrames(14);
+	GetAnimList()[ATTACK]->SetAnimSpeed(0.2f);
+	GetAnimList()[ATTACK]->SetLooping(false);
+	GetAnimList()[ATTACK]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
+	GetAnimList()[ATTACK]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet'
+
+	// Status bar
+	m_statusBar = new StatusBar(getDst(), 40);
+}
+
+void Enemy::RenderRangerBow()
+{
+}
+
 Enemy::Enemy()
 {
 }
@@ -126,6 +238,9 @@ Enemy::Enemy(EnemyType type, int world_x, int world_y)
 	switch (type) {
 	case SKELETON_SWORD:
 		InitSkeletonSword(world_x, world_y);
+		break;
+	case RANGER_BOW:
+		InitRangerBow(world_x, world_y);
 		break;
 	}
 }
@@ -138,10 +253,11 @@ Enemy::~Enemy()
 
 void Enemy::update()
 {
+	int strike_distance, lose_sight_distance;
 	switch (enemy_type_) {
-	default:
-		int strike_distance = GetAtkHitBox()->w;
-		int lose_sight_distance = getHitBox()->h * 3;
+	case SKELETON_SWORD:
+		strike_distance = GetAtkHitBox()->w;
+		lose_sight_distance = getHitBox()->h * 3;
 
 		// STATE UPDATE
 		switch (getAnimState()) {
@@ -271,11 +387,125 @@ void Enemy::update()
 		if (getAnimState() == AnimState::ASSAULTED) {
 			PlayAnimSfx(SFX_SKELETON_ASSAULTED);
 		}
-
 		break;
-	}
+	case RANGER_BOW:
+		strike_distance = 200;
+		lose_sight_distance = 300;
 
-	
+		// STATE UPDATE
+		switch (getAnimState()) {
+		case ENEMY_PATROL:
+			// continue moving if not past patrol distance, else change direction
+			if (IsGrounded()) {
+				if (getMoveDirection() == 1) { // MOVE RIGHT
+					if (GetWorldRectRightmostX() + getVelocityX() > GetPatrolMaxX()) {
+						setMoveDirection(-1);
+					}
+				}
+				else { // MOVE LEFT
+					if (GetWorldRect()->x + getVelocityX() < GetPatrolMinX()) {
+						setMoveDirection(1);
+					}
+				}
+				setAccelerationX(2.0);
+				MoveX();
+			}
+			UpdatePosition();
+			break;
+
+		case ENEMY_SEEK:
+			// continue moving if not past patrol distance, else change direction
+			if (IsGrounded()) {
+				if (target_x_ < GetWorldRectCenterX()) {
+					setMoveDirection(-1);
+				}
+				else {
+					setMoveDirection(1);
+				}
+				setAccelerationX(3.0);
+				MoveX();
+			}
+			UpdatePosition();
+			//if target within strike distance
+			if (target_x_ > GetWorldRectCenterX() - strike_distance && target_x_ < GetWorldRectCenterX() + strike_distance) {
+				setAnimState(AnimState::ENEMY_ARRIVE);
+			}
+			//if target gets too far away
+			if (target_y_ < GetWorldRectCenterY() - lose_sight_distance || target_y_ > GetWorldRectCenterY() + lose_sight_distance) {
+				setAnimState(AnimState::ENEMY_PATROL);
+			}
+			break;
+		case ATTACK:
+			StopX();
+			if (IsAtkHitBoxActive()) {
+				if (getMoveDirection() == 1) { //facing right
+					SetAtkHitBoxX(getHitBoxRightmostX());
+					SetAtkHitBoxY(getHitBoxY());
+				}
+				else { //facing left
+					SetAtkHitBoxX(getHitBoxX() - GetAtkHitBox()->w);
+					SetAtkHitBoxY(getHitBoxY());
+				}
+			}
+			if (HasEndedAnimation()) {
+				setAnimState(AnimState::ENEMY_ARRIVE);
+			}
+			break;
+		case ENEMY_FLEE:
+			// continue moving if not past patrol distance, else change direction
+			if (IsGrounded()) {
+				if (target_x_ < GetWorldRectCenterX()) {
+					setMoveDirection(1);
+				}
+				else {
+					setMoveDirection(-1);
+				}
+				setAccelerationX(2.50);
+				MoveX();
+			}
+			UpdatePosition();
+			//if target gets too far away
+			if (target_y_ < GetWorldRectCenterY() - lose_sight_distance || target_y_ > GetWorldRectCenterY() + lose_sight_distance) {
+				setAnimState(AnimState::ENEMY_PATROL);
+			}
+			break;
+
+		case ENEMY_ARRIVE:
+			StopX();
+			if (HasEndedAnimation()) {
+				setAnimState(AnimState::ATTACK);
+			}
+			//if target within strike distance
+			if (target_x_ < GetWorldRectCenterX() - strike_distance || target_x_ > GetWorldRectCenterX() + strike_distance) {
+				setAnimState(AnimState::ENEMY_SEEK);
+			}
+			//if target gets too far away
+			if (target_y_ < GetWorldRectCenterY() - lose_sight_distance || target_y_ > GetWorldRectCenterY() + lose_sight_distance) {
+				setAnimState(AnimState::ENEMY_PATROL);
+			}
+			break;
+		case ASSAULTED:
+			StopX();
+			if (HasEndedAnimation()) {
+				if (GetHP() == 0) {
+					setAnimState(AnimState::DEATH);
+				}
+				// HP<50%, FLEE
+				else if (GetHP() <= GetMaxHP() / 2) {
+					setAnimState(AnimState::ENEMY_FLEE);
+				}
+				else {
+					setAnimState(AnimState::ENEMY_PATROL);
+				}
+			}
+			break;
+
+		case DEATH:
+			StopX();
+			break;
+		}
+		break;
+	}	
 
 	// UPDATE ENEMY STATUS HUD
 	m_statusBar->update(getDst());

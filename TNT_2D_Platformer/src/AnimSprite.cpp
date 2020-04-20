@@ -13,7 +13,7 @@ std::string AnimSprite::GetSpriteTextureId()
 	return texture_id_;
 }
 
-AnimState AnimSprite::GetAnimId()
+int AnimSprite::GetAnimId()
 {
 	return anim_id_;
 }
@@ -83,7 +83,7 @@ void AnimSprite::SetSpriteTextureId(std::string value)
 	texture_id_ = value;
 }
 
-void AnimSprite::SetAnimId(AnimState value)
+void AnimSprite::SetAnimId(int value)
 {
 	anim_id_ = value;
 }

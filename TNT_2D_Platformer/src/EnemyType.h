@@ -4,6 +4,7 @@
 
 enum EnemyType {
 	SKELETON_SWORD,
+	RANGER_BOW,
 	NUM_OF_ENEMY_TYPES
 };
 

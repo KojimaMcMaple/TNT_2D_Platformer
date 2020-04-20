@@ -22,7 +22,19 @@ private:
 
 	void InitSkeletonSword(int world_x = 0, int world_y = 0);
 	void RenderSkeletonSword();
+	void InitRangerBow(int world_x = 0, int world_y = 0);
+	void RenderRangerBow();
 public:
+	enum AnimState {
+		ATTACK,
+		ASSAULTED,
+		DEATH,
+		ENEMY_PATROL,
+		ENEMY_SEEK,
+		ENEMY_ARRIVE,
+		ENEMY_FLEE,
+		NUM_OF_ANIM_STATES
+	};
 	Enemy();
 	Enemy(EnemyType type, int world_x, int world_y);
 	~Enemy();
@@ -54,4 +66,4 @@ public:
 };
 
 
-#endif /* defined (__Player__) */
+#endif

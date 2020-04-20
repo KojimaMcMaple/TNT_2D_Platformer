@@ -13,6 +13,16 @@ class Player : public GameObject {
 private:
 	StatusBar* m_statusBar;
 public:
+	enum AnimState {
+		IDLE,
+		RUN,
+		JUMP,
+		FALL,
+		ATTACK,
+		ATTACK_RANGED,
+		ASSAULTED,
+		NUM_OF_ANIM_STATES
+	};
 	Player();
 	~Player();
 	void update() override;
