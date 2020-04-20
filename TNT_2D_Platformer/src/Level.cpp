@@ -287,7 +287,7 @@ void Level::LoadLevel(LevelId level_id)
 		level_raw_str += "BB................................B";
 		level_raw_str += "BB................................B";
 		level_raw_str += "BB................................B";
-		level_raw_str += "BB.........E.................E....B";
+		level_raw_str += "BB.........R.................E....B";
 		level_raw_str += "BB................................B";
 		level_raw_str += "BB&..GGGGGGGGGGGGG......GGGGGGGGGG@";
 		level_raw_str += "BB..G----&--------G.....@---------&";
@@ -299,14 +299,14 @@ void Level::LoadLevel(LevelId level_id)
 		level_raw_str += "BB......E......@......B...........B";
 		level_raw_str += "BBG...................B...........B";
 		level_raw_str += "B--GGGGGGGGGG.........BGGG........B";
-		level_raw_str += "B---&--------GGGGGGG..B--&....R...B";
+		level_raw_str += "B---&--------GGGGGGG..B--&....L...B";
 		level_raw_str += "B-----&--BCCCCCCCCCC..CCCCCCCCCCCCB";
 		level_raw_str += "BB-------&P..........@B...........B";
 		level_raw_str += "B--@---&-B........................B";
 		level_raw_str += "B----@---@........................B";
 		level_raw_str += "CCCCCCCCCC.........&&.............B";
 		level_raw_str += "...............@@@@...............B";
-		level_raw_str += "R............@....................B";
+		level_raw_str += "L............@....................B";
 		level_raw_str += "GGGGGGGGGG@............E..........B";
 		level_raw_str += "B---&-----B&.....................BB";
 		level_raw_str += "B----@------GGGGGGGGGGGGGGGGGGGGG@@";

@@ -16,6 +16,12 @@ private:
 	void UpdateBarrel();
 	void RenderBarrel();
 public:
+	enum AnimState {
+		IDLE,
+		ASSAULTED,
+		DEATH,
+		NUM_OF_ANIM_STATES
+	};
 	Prop();
 	Prop(PropType type, int world_x, int world_y);
 	~Prop();

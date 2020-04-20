@@ -103,6 +103,9 @@ void Game::createGameObjects()
 			enemy_list_.push_back(new Enemy(SKELETON_SWORD, col * level_ptr_->GetLevelTileWidth(), row * level_ptr_->GetLevelTileHeight()));
 		}
 		if (level_raw_str[i] == 'R') {
+			enemy_list_.push_back(new Enemy(RANGER_BOW, col * level_ptr_->GetLevelTileWidth(), row * level_ptr_->GetLevelTileHeight()));
+		}
+		if (level_raw_str[i] == 'L') {
 			prop_list_.push_back(new Prop(BARREL, col * level_ptr_->GetLevelTileWidth(), row * level_ptr_->GetLevelTileHeight()));
 		}
 	}
@@ -180,8 +183,6 @@ void Game::UpdateGameObjects()
 		SetJumpKeyPressable(false);
 		player_ptr_->setAccelerationY(-Globals::sJumpForce);
 		player_ptr_->SetGrounded(false);
-		player_ptr_->setAnimState(AnimState::JUMP);
-		
 		player_ptr_->setAnimState(Player::JUMP);
 	}
 	if (s_pInstance->isKeyDown(SDL_SCANCODE_K) && player_ptr_->IsGrounded()) {
@@ -193,11 +194,10 @@ void Game::UpdateGameObjects()
 
 	// POST PROCESSING
 	// PLAYER
-	if (player_ptr_->getAnimState() == AnimState::JUMP) {
+	if (player_ptr_->getAnimState() == Player::JUMP) {
 		player_ptr_->PlayAnimSfx(SFX_PLAYER_JUMP);
 	}
 
-	if (player_ptr_->getAnimState() == AnimState::ATTACK) {
 	if (player_ptr_->getAnimState() == Player::ATTACK) {
 		player_ptr_->PlayAnimSfx(SFX_PLAYER_ATK);
 		player_ptr_->StopX();

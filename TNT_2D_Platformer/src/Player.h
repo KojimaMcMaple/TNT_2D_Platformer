@@ -21,6 +21,7 @@ public:
 		ATTACK,
 		ATTACK_RANGED,
 		ASSAULTED,
+		DEATH,
 		NUM_OF_ANIM_STATES
 	};
 	Player();
