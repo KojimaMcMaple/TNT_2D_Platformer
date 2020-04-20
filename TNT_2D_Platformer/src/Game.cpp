@@ -109,6 +109,12 @@ void Game::createGameObjects()
 		if (level_raw_str[i] == 'L') {
 			prop_list_.push_back(new Prop(BARREL, col * level_ptr_->GetLevelTileWidth(), row * level_ptr_->GetLevelTileHeight()));
 		}
+		if (level_raw_str[i] == 'S') {
+			prop_list_.push_back(new Prop(SPIKE_TRAP, col * level_ptr_->GetLevelTileWidth(), row * level_ptr_->GetLevelTileHeight()));
+		}
+		if (level_raw_str[i] == 'F') {
+			prop_list_.push_back(new Prop(FIRE_TRAP, col * level_ptr_->GetLevelTileWidth(), row * level_ptr_->GetLevelTileHeight()));
+		}
 	}
 
 	// CENTER CAM TO PLAYER
@@ -171,6 +177,14 @@ void Game::CheckCollision()
 				prop->SetHP(prop->GetHP() - player_ptr_->GetAtkPower());
 				player_ptr_->SetAtkHitBoxActive(false);
 				TheSoundManager::Instance()->playSound(SFX_BARREL_ASSAULTED, 0); //sound
+			}
+		}
+
+		if (prop->IsAtkHitBoxActive() && SDL_HasIntersection(prop->GetAtkHitBox(), player_ptr_->getHitBox())) {
+			if (prop->GetPropType() == SPIKE_TRAP || prop->GetPropType() == FIRE_TRAP) {
+				player_ptr_->SetHP(player_ptr_->GetHP() - prop->GetAtkPower());
+				TheSoundManager::Instance()->playSound(SFX_PLAYER_ASSAULTED, 0); //sound
+				prop->SetAtkHitBoxActive(false);
 			}
 		}
 	}

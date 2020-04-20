@@ -13,8 +13,12 @@ private:
 	PropType prop_type_;
 
 	void InitBarrel(int world_x = 0, int world_y = 0);
+	void InitSpikeTrap(int world_x = 0, int world_y = 0);
+	void InitFireTrap(int world_x = 0, int world_y = 0);
 	void UpdateBarrel();
+	void UpdateSpikeTrap();
 	void RenderBarrel();
+	void RenderSpikeTrap();
 public:
 	enum AnimState {
 		IDLE,
