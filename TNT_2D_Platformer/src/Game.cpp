@@ -49,6 +49,11 @@ UI& Game::GetPauseScreen()
 	return *pause_screen_ptr_;
 }
 
+ScoreBoard* Game::GetScoreBoard()
+{
+	return m_scoreBoard;
+}
+
 void Game::setFrames(Uint32 frames)
 {
 	m_frames = frames;
@@ -155,12 +160,21 @@ void Game::CheckCollision()
 			make_player_atk_hit_box_inactive = true;
 		}
 
+		bool arrowsNeedShrinking = false;
 		for (int j = 0; j < m_pArrowVec.size(); j++) {
 			if (enemy->getAnimState() != Enemy::DEATH && SDL_HasIntersection(m_pArrowVec[j]->GetWorldRect(), enemy->getHitBox())) {
 				enemy->SetHP(enemy->GetHP() - player_ptr_->GetAtkPower());
 				enemy->getStatusBar()->changeHealth(-player_ptr_->GetAtkPower());
 				enemy->setAnimState(Enemy::ASSAULTED);
-			}
+				delete m_pArrowVec[j];
+				m_pArrowVec[j] = nullptr;
+				arrowsNeedShrinking = true;
+			}			
+		}
+		if (arrowsNeedShrinking)
+		{
+			m_pArrowVec.erase(remove(m_pArrowVec.begin(), m_pArrowVec.end(), nullptr), m_pArrowVec.end());
+			m_pArrowVec.shrink_to_fit();
 		}
 
 		if (enemy->getAnimState() != Enemy::DEATH

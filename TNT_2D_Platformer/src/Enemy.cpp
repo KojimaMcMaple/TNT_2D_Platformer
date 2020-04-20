@@ -359,6 +359,8 @@ void Enemy::update()
 			if (HasEndedAnimation()) {
 				if (GetHP() == 0) {
 					setAnimState(AnimState::DEATH);
+					int score = TheGame::Instance()->GetScoreBoard()->getScore();
+					TheGame::Instance()->GetScoreBoard()->setScore(score + 10);
 				}
 				// HP<50%, FLEE
 				else if (GetHP() <= GetMaxHP() / 2) {
@@ -489,6 +491,8 @@ void Enemy::update()
 			if (HasEndedAnimation()) {
 				if (GetHP() == 0) {
 					setAnimState(AnimState::DEATH);
+					int score = TheGame::Instance()->GetScoreBoard()->getScore();
+					TheGame::Instance()->GetScoreBoard()->setScore(score + 10);
 				}
 				// HP<50%, FLEE
 				else if (GetHP() <= GetMaxHP() / 2) {
