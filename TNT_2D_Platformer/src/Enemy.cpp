@@ -133,7 +133,7 @@ void Enemy::InitRangerBow(int world_x, int world_y)
 	SetWorldYAndHitBox(world_y);
 	SetPatrolRadius(300);
 	//setHitBoxOffsetX(-4);
-	setHitBoxOffsetY(-10);
+	setHitBoxOffsetY(-15);
 	//SetHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
 	SetCollidable(true);
 	SetGrounded(false);
@@ -215,7 +215,7 @@ void Enemy::InitRangerBow(int world_x, int world_y)
 	GetAnimList()[ATTACK]->SetAnimId(ATTACK);
 	GetAnimList()[ATTACK]->SetStartRow(0);
 	GetAnimList()[ATTACK]->SetStartCol(0);
-	GetAnimList()[ATTACK]->SetNumFrames(14);
+	GetAnimList()[ATTACK]->SetNumFrames(11);
 	GetAnimList()[ATTACK]->SetAnimSpeed(1.2f);
 	GetAnimList()[ATTACK]->SetLooping(false);
 	GetAnimList()[ATTACK]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
@@ -603,6 +603,11 @@ int Enemy::GetTargetX()
 int Enemy::GetTargetY()
 {
 	return target_y_;
+}
+
+EnemyType Enemy::GetEnemyType()
+{
+	return enemy_type_;
 }
 
 void Enemy::SetSpawnPointX(int value)

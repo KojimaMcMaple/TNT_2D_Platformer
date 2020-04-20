@@ -54,6 +54,7 @@ public:
 	int GetPatrolMaxX();
 	int GetTargetX();
 	int GetTargetY();
+	EnemyType GetEnemyType();
 
 	void SetSpawnPointX(int value);
 	void SetSpawnPointY(int value);
