@@ -246,13 +246,21 @@ void Game::UpdateGameObjects()
 	player_ptr_->update();
 	player_ptr_->setAccelerationY(0);
 
-	// PLAYER'S ARROWS
-	for (int i = 0; i < (int)m_pArrowVec.size(); i++)
+	// ARROWS
+	if (!m_pArrowVec.empty())
 	{
-		m_pArrowVec[i]->update();
-		// TO UPDATE DEALLOCATE THE ARROWS OUT OF BOUNDS
-
-	}
+		for (auto arrow : m_pArrowVec)
+		{
+			arrow->update();
+			if (arrow->getDst()->x < 50 || arrow->getDst()->x > 500)
+			{
+				delete arrow;
+				arrow = nullptr;
+			}
+		}
+		m_pArrowVec.erase(remove(m_pArrowVec.begin(), m_pArrowVec.end(), nullptr), m_pArrowVec.end());
+		m_pArrowVec.shrink_to_fit();
+	}	
 	
 	CheckCollision();
 
@@ -282,6 +290,27 @@ void Game::UpdateGameObjects()
 		if (enemy->getAnimState() == Enemy::ENEMY_FLEE) {
 			if (player_ptr_->GetHP() <= player_ptr_->GetMaxHP() / 2) {
 				enemy->setAnimState(Enemy::ENEMY_SEEK);
+			}
+		}
+		// Ranger enemy shoots arrows
+		if (enemy->GetEnemyType() == EnemyType::RANGER_BOW)
+		{
+			if (enemy->getAnimState() == Enemy::ATTACK)
+			{
+				if (enemy->HasEndedAnimation()) { //anim ended and fire an arrow
+					int x, y;
+					if (enemy->getMoveDirection() == 1)
+					{
+						x = enemy->GetWorldRect()->x + 180;
+						y = enemy->GetWorldRect()->y + 135;
+					}
+					else
+					{
+						x = enemy->GetWorldRect()->x + 70;
+						y = enemy->GetWorldRect()->y + 135;
+					}
+					m_pArrowVec.push_back(new Arrow(x, y, enemy->getMoveDirection()));
+				}
 			}
 		}
 		enemy->update(); //implement enemy behaviors in Enemy class, since there is no control input handling

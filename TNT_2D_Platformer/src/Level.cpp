@@ -302,7 +302,7 @@ void Level::LoadLevel(LevelId level_id)
 		level_raw_str += "B---&--------GGGGGGG..B--&....L...B";
 		level_raw_str += "B-----&--BCCCCCCCCCC..CCCCCCCCCCCCB";
 		level_raw_str += "BB-------&P..........@B...........B";
-		level_raw_str += "B--@---&-B........................B";
+		level_raw_str += "B--@---&-B......R.................B";
 		level_raw_str += "B----@---@........................B";
 		level_raw_str += "CCCCCCCCCC.........&&.............B";
 		level_raw_str += "...............@@@@...............B";
