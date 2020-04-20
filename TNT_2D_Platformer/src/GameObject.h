@@ -10,7 +10,6 @@
 #include "Globals.h"
 #include "Util.h"
 #include "GameObjectType.h"
-#include "AnimState.h"
 #include "AnimSprite.h"
 #include "SoundId.h"
 
@@ -84,6 +83,7 @@ private:
 	int checking_anim_state_ = -1; //checking var to reset curr_frame_
 	int checking_sfx_state_ = -1; //checking var to play sfx only once
 	AnimState anim_state_;
+	int anim_state_;
 	std::vector<AnimSprite*> anim_list_;
 	bool has_played_anim_sfx_ = false;
 
@@ -157,7 +157,7 @@ public:
 	int getCurrCol();
 	bool HasChangedState();
 	bool HasEndedAnimation();
-	AnimState getAnimState();
+	int getAnimState();
 	std::vector<AnimSprite*>& GetAnimList();
 	bool HasPlayedAnimSfx();
 	GameObjectType getType();
@@ -222,9 +222,9 @@ public:
 	void setCurrFrame(int value);
 	void setCurrRow(int value);
 	void setCurrCol(int value);
-	void setAnimState(AnimState newState);
+	void setAnimState(int newState);
 	void PlayAnimSfx(SoundId sfx);
-	void InitAnimList();
+	void InitAnimList(int numOfStates);
 	void SetPlayedAnimSfx(bool toggle);
 	void setAcceleration(glm::vec2 newAcceleration);
 	void setPosition(glm::vec2 newPosition);

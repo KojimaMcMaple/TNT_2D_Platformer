@@ -121,10 +121,13 @@ int Level::CheckLevelCollision(GameObject* obj_ptr)
 					obj_ptr->SetGrounded(true);
 					obj_ptr->setVelocityY(0.0); // Stop the player from moving vertically. We aren't modifying gravity.
 					obj_ptr->SetHitBoxYAndWorld(tile->GetWorldRect()->y - obj_ptr->getHitBox()->h);
-					if (obj_ptr->getAnimState() == FALL)
+					if (dynamic_cast<Player*>(obj_ptr) != nullptr)
 					{
-						obj_ptr->setAnimState(IDLE);
-					}
+						if (obj_ptr->getAnimState() == Player::FALL)
+						{
+							obj_ptr->setAnimState(Player::IDLE);
+						}
+					}					
 					result = DOWN;
 				}
 				else if (obj_ptr->getHitBox()->y - obj_ptr->getVelocityY() >= tile->GetWorldRect()->y + tile->GetWorldRect()->h)

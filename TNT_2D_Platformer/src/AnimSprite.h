@@ -1,13 +1,12 @@
 #pragma once
 
-#include "AnimState.h"
 #include <string>
 
 class AnimSprite
 {
 private:
 	std::string texture_id_ = ""; //texture_id_ from GameObject
-	AnimState anim_id_;
+	int anim_id_;
 	int start_row_; 
 	int start_col_;
 	int frame_width_ = -1; //src->w for entity w/ multi sheets, -1 will not modify src rect w
@@ -25,7 +24,7 @@ public:
 	~AnimSprite();
 
 	std::string GetSpriteTextureId();
-	AnimState GetAnimId();
+	int GetAnimId();
 	int GetStartRow(); 
 	int GetStartCol();
 	int GetFrameW(); 
@@ -40,7 +39,7 @@ public:
 	int GetAtkNumFrames();
 
 	void SetSpriteTextureId(std::string value);
-	void SetAnimId(AnimState value);
+	void SetAnimId(int value);
 	void SetStartRow(int value);
 	void SetStartCol(int value);
 	void SetFrameW(int value);

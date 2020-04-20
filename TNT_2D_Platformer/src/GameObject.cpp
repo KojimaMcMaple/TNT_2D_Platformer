@@ -395,7 +395,7 @@ bool GameObject::IsCollidable()
 	return is_collidable_;
 }
 
-AnimState GameObject::getAnimState()
+int GameObject::getAnimState()
 {
 	return anim_state_;
 }
@@ -706,7 +706,7 @@ void GameObject::setCurrCol(int value)
 	curr_col_ = value;
 }
 
-void GameObject::setAnimState(AnimState newState)
+void GameObject::setAnimState(int newState)
 {
 	anim_state_ = newState;
 	animationEnded = false;
@@ -722,9 +722,9 @@ void GameObject::PlayAnimSfx(SoundId sfx)
 	}
 }
 
-void GameObject::InitAnimList()
+void GameObject::InitAnimList(int numOfStates)
 {
-	for (int i = 0; i < NUM_OF_ANIM_STATES; i++) {
+	for (int i = 0; i < numOfStates; i++) {
 		anim_list_.push_back(new AnimSprite());
 	}
 }

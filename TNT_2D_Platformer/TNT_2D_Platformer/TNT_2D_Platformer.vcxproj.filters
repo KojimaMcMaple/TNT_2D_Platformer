@@ -124,9 +124,6 @@
     <ClInclude Include="..\src\TileNeighbour.h">
       <Filter>Enums</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\AnimState.h">
-      <Filter>Enums</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\AnimSprite.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
