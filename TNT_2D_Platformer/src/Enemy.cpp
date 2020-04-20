@@ -124,16 +124,16 @@ void Enemy::InitRangerBow(int world_x, int world_y)
 	setTextureId("ranger_bow");
 	TheTextureManager::Instance()->load("../Assets/textures/ranger_bow.png", getTextureId(), TheGame::Instance()->getRenderer());
 	setSrc(0, 0, 128, 128);
-	SetWorldRect(0, 0, getSrc()->w * 3, getSrc()->h * 3);
+	SetWorldRect(0, 0, (int)(getSrc()->w * 2.5), (int)(getSrc()->h * 2.5));
 	setDst(0, 0, GetWorldRect()->w, GetWorldRect()->h);
-	setHitBox(0, 0, 27, 39);
+	setHitBox(0, 0, 60, 80);
 	SetSpawnPointX(world_x);
 	SetSpawnPointY(world_y);
 	SetWorldXAndHitBox(world_x);
 	SetWorldYAndHitBox(world_y);
 	SetPatrolRadius(300);
 	//setHitBoxOffsetX(-4);
-	//setHitBoxOffsetY(10);
+	setHitBoxOffsetY(-10);
 	//SetHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects
 	SetCollidable(true);
 	SetGrounded(false);
@@ -161,7 +161,7 @@ void Enemy::InitRangerBow(int world_x, int world_y)
 	GetAnimList()[ENEMY_PATROL]->SetStartRow(9);
 	GetAnimList()[ENEMY_PATROL]->SetStartCol(1);
 	GetAnimList()[ENEMY_PATROL]->SetNumFrames(8);
-	GetAnimList()[ENEMY_PATROL]->SetAnimSpeed(0.2f);
+	GetAnimList()[ENEMY_PATROL]->SetAnimSpeed(0.5f);
 	GetAnimList()[ENEMY_PATROL]->SetLooping(true);
 	GetAnimList()[ENEMY_PATROL]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
 	GetAnimList()[ENEMY_PATROL]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
@@ -171,16 +171,16 @@ void Enemy::InitRangerBow(int world_x, int world_y)
 	GetAnimList()[ASSAULTED]->SetStartCol(0);
 	GetAnimList()[ASSAULTED]->SetNumFrames(3);
 	SetIFrames(3); //NOT YET IMPLEMENTED, IS USING SIMPLER SOLUTION
-	GetAnimList()[ASSAULTED]->SetAnimSpeed(0.3f);
+	GetAnimList()[ASSAULTED]->SetAnimSpeed(0.8f);
 	GetAnimList()[ASSAULTED]->SetLooping(false);
 	GetAnimList()[ASSAULTED]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
 	GetAnimList()[ASSAULTED]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
 
 	GetAnimList()[DEATH]->SetAnimId(DEATH);
 	GetAnimList()[DEATH]->SetStartRow(2);
-	GetAnimList()[DEATH]->SetStartCol(9);
-	GetAnimList()[DEATH]->SetNumFrames(21);
-	GetAnimList()[DEATH]->SetAnimSpeed(0.5f);
+	GetAnimList()[DEATH]->SetStartCol(6);
+	GetAnimList()[DEATH]->SetNumFrames(24);
+	GetAnimList()[DEATH]->SetAnimSpeed(2.0f);
 	GetAnimList()[DEATH]->SetLooping(false);
 	GetAnimList()[DEATH]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
 	GetAnimList()[DEATH]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
@@ -189,7 +189,7 @@ void Enemy::InitRangerBow(int world_x, int world_y)
 	GetAnimList()[ENEMY_SEEK]->SetStartRow(9);
 	GetAnimList()[ENEMY_SEEK]->SetStartCol(1);
 	GetAnimList()[ENEMY_SEEK]->SetNumFrames(8);
-	GetAnimList()[ENEMY_SEEK]->SetAnimSpeed(0.6f);
+	GetAnimList()[ENEMY_SEEK]->SetAnimSpeed(0.7f);
 	GetAnimList()[ENEMY_SEEK]->SetLooping(true);
 	GetAnimList()[ENEMY_SEEK]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
 	GetAnimList()[ENEMY_SEEK]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
@@ -198,16 +198,16 @@ void Enemy::InitRangerBow(int world_x, int world_y)
 	GetAnimList()[ENEMY_FLEE]->SetStartRow(9);
 	GetAnimList()[ENEMY_FLEE]->SetStartCol(1);
 	GetAnimList()[ENEMY_FLEE]->SetNumFrames(8);
-	GetAnimList()[ENEMY_FLEE]->SetAnimSpeed(0.6f);
+	GetAnimList()[ENEMY_FLEE]->SetAnimSpeed(1.0f);
 	GetAnimList()[ENEMY_FLEE]->SetLooping(true);
 	GetAnimList()[ENEMY_FLEE]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
 	GetAnimList()[ENEMY_FLEE]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
 
 	GetAnimList()[ENEMY_ARRIVE]->SetAnimId(ENEMY_ARRIVE);
-	GetAnimList()[ENEMY_ARRIVE]->SetStartRow(9);
-	GetAnimList()[ENEMY_ARRIVE]->SetStartCol(1);
+	GetAnimList()[ENEMY_ARRIVE]->SetStartRow(4);
+	GetAnimList()[ENEMY_ARRIVE]->SetStartCol(8);
 	GetAnimList()[ENEMY_ARRIVE]->SetNumFrames(8);
-	GetAnimList()[ENEMY_ARRIVE]->SetAnimSpeed(0.2f);
+	GetAnimList()[ENEMY_ARRIVE]->SetAnimSpeed(1.0f);
 	GetAnimList()[ENEMY_ARRIVE]->SetLooping(true);
 	GetAnimList()[ENEMY_ARRIVE]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
 	GetAnimList()[ENEMY_ARRIVE]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet
@@ -216,7 +216,7 @@ void Enemy::InitRangerBow(int world_x, int world_y)
 	GetAnimList()[ATTACK]->SetStartRow(0);
 	GetAnimList()[ATTACK]->SetStartCol(0);
 	GetAnimList()[ATTACK]->SetNumFrames(14);
-	GetAnimList()[ATTACK]->SetAnimSpeed(0.2f);
+	GetAnimList()[ATTACK]->SetAnimSpeed(1.2f);
 	GetAnimList()[ATTACK]->SetLooping(false);
 	GetAnimList()[ATTACK]->SetMaxSheetRow(10); //same for all anim states since there's only one sheet
 	GetAnimList()[ATTACK]->SetMaxSheetCol(11); //same for all anim states since there's only one sheet'
@@ -327,7 +327,7 @@ void Enemy::update()
 			if (HasEndedAnimation()) {
 				setAnimState(AnimState::ATTACK);
 			}
-			//if target within strike distance
+			//if target out of strike distance
 			if (target_x_ < GetWorldRectCenterX() - strike_distance || target_x_ > GetWorldRectCenterX() + strike_distance) {
 				setAnimState(AnimState::ENEMY_SEEK);
 			}
@@ -389,7 +389,7 @@ void Enemy::update()
 		}
 		break;
 	case RANGER_BOW:
-		strike_distance = 200;
+		strike_distance = 300;
 		lose_sight_distance = 300;
 
 		// STATE UPDATE

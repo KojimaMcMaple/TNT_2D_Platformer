@@ -79,6 +79,7 @@ void Game::createGameObjects()
 	enemy_list_.clear();
 	enemy_list_.resize(0);
 	enemy_list_.shrink_to_fit();
+
 	//enemy_list_.push_back(new Enemy(SKELETON_SWORD, 24 * level_ptr_->GetLevelTileWidth(), 25 * level_ptr_->GetLevelTileHeight()));
 	//enemy_list_.push_back(new Enemy(SKELETON_SWORD, 8 * level_ptr_->GetLevelTileWidth(), 14 * level_ptr_->GetLevelTileHeight()));
 	//enemy_list_.push_back(new Enemy(SKELETON_SWORD, 11 * level_ptr_->GetLevelTileWidth(), 5 * level_ptr_->GetLevelTileHeight()));
