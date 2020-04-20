@@ -504,6 +504,14 @@ void Enemy::update()
 			StopX();
 			break;
 		}
+
+		// SFX
+		if (getAnimState() == AnimState::ATTACK) {
+			PlayAnimSfx(SFX_RANGER_ATK);
+		}
+		if (getAnimState() == AnimState::ASSAULTED) {
+			PlayAnimSfx(SFX_RANGER_ASSAULTED);
+		}
 		break;
 	}	
 

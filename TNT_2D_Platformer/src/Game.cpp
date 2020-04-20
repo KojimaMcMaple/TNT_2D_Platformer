@@ -132,6 +132,15 @@ void Game::CheckCollision()
 	
 	bool make_player_atk_hit_box_inactive = false;
 	
+	// ARROWS x PLAYER
+	int arrow_damage = 10;
+	for (int j = 0; j < m_pArrowVec.size(); j++) {
+		if (SDL_HasIntersection(m_pArrowVec[j]->GetWorldRect(), player_ptr_->getHitBox())) {
+			player_ptr_->SetHP(player_ptr_->GetHP() - arrow_damage);
+			player_ptr_->getStatusBar()->changeHealth(-arrow_damage);
+			TheSoundManager::Instance()->playSound(SFX_PLAYER_ASSAULTED, 0); //sound
+		}
+	}
 
 	// ENEMY COLLI
 	for (int i = 0; i < enemy_list_.size(); i++) {
@@ -165,10 +174,10 @@ void Game::CheckCollision()
 		}
 
 		if (enemy->IsAtkHitBoxActive() && SDL_HasIntersection(enemy->GetAtkHitBox(), player_ptr_->getHitBox())) {
-			player_ptr_->PlayAnimSfx(SFX_PLAYER_ASSAULTED);
 			player_ptr_->SetHP(player_ptr_->GetHP() - enemy->GetAtkPower());
 			player_ptr_->setAnimState(Player::ASSAULTED);
 			make_enemy_atk_hit_box_inactive = true; //don't allow enemy atk hitbox to last & hit multiple times
+			TheSoundManager::Instance()->playSound(SFX_PLAYER_ASSAULTED, 0); //sound
 		}
 
 		if (enemy->IsAtkHitBoxActive()) {
