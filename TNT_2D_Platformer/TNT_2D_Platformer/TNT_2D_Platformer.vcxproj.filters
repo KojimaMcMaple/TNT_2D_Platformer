@@ -163,5 +163,8 @@
     <ClInclude Include="..\src\SoundId.h">
       <Filter>Enums</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\EnemyRanged.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

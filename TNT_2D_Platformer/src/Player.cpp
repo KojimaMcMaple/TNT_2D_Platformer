@@ -127,6 +127,12 @@ void Player::update()
 	// UPDATE PLAYER HUD
 	m_statusBar->SetHealth(GetHP());
 	m_statusBar->update(getDst());
+
+	// ADRENALINE
+	if (GetHP() <= GetMaxHP() / 2) {
+		SetAtkPower(40);
+		setMaxAccelerationX(2.5);
+	}
 }
 
 void Player::draw()
