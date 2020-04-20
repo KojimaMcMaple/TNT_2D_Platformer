@@ -283,11 +283,11 @@ void Level::LoadLevel(LevelId level_id)
 		SetBkgColor(22, 22, 51, 255);
 
 		level_raw_str += "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
+		level_raw_str += "BB.........R......................B";
 		level_raw_str += "BB................................B";
 		level_raw_str += "BB................................B";
 		level_raw_str += "BB................................B";
-		level_raw_str += "BB................................B";
-		level_raw_str += "BB.........R.................E....B";
+		level_raw_str += "BB.........E.................E....B";
 		level_raw_str += "BB................................B";
 		level_raw_str += "BB&..GGGGGGGGGGGGG......GGGGGGGGGG@";
 		level_raw_str += "BB..G----&--------G.....@---------&";
