@@ -169,6 +169,7 @@
     <ClCompile Include="..\src\Level.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Player.cpp" />
+    <ClCompile Include="..\src\Prop.cpp" />
     <ClCompile Include="..\src\ScoreBoard.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
     <ClCompile Include="..\src\StatusBar.cpp" />
@@ -195,6 +196,8 @@
     <ClInclude Include="..\src\Level.h" />
     <ClInclude Include="..\src\LevelId.h" />
     <ClInclude Include="..\src\Player.h" />
+    <ClInclude Include="..\src\Prop.h" />
+    <ClInclude Include="..\src\PropType.h" />
     <ClInclude Include="..\src\ScoreBoard.h" />
     <ClInclude Include="..\src\SoundId.h" />
     <ClInclude Include="..\src\SoundManager.h" />

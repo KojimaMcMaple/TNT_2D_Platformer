@@ -267,15 +267,13 @@ void Enemy::update()
 		// SFX
 		if (getAnimState() == AnimState::ATTACK) {
 			PlayAnimSfx(SFX_SKELETON_ATK);
-		}		
+		}
 		if (getAnimState() == AnimState::ASSAULTED) {
 			PlayAnimSfx(SFX_SKELETON_ASSAULTED);
 		}
 
 		break;
 	}
-
-	
 
 	// UPDATE ENEMY STATUS HUD
 	m_statusBar->update(getDst());
