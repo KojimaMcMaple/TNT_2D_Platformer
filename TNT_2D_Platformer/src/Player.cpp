@@ -12,7 +12,7 @@ Player::Player()
 	setSrc(0, 0, 50, 37);
 	SetWorldRect(0, 0, 50 * 3, 37 * 3);
 	setDst(0, 0, 50 * 3, 37 * 3);
-	setHitBox(0, 0, 45, 85);
+	setHitBox(0, 0, 40, 85);
 	//setHitBoxOffsetX(-4);
 	//setHitBoxOffsetY(10);
 	//SetHitBoxVisibility(true); //set this in GameObject.h to toggle collide boxes for ALL objects

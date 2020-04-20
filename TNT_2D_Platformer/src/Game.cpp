@@ -161,6 +161,19 @@ void Game::CheckCollision()
 			enemy->SetAtkHitBoxActive(false); //don't allow enemy atk hitbox to last & hit multiple times
 		}
 	}
+
+	// PROPS COLLI
+	for (int i = 0; i < prop_list_.size(); i++) {
+		Prop* prop = prop_list_[i];
+		level_ptr_->CheckLevelCollision(prop);
+		if (player_ptr_->IsAtkHitBoxActive() && SDL_HasIntersection(player_ptr_->GetAtkHitBox(), prop->getHitBox())) {
+			if (prop->GetPropType() == BARREL) {
+				prop->SetHP(prop->GetHP() - player_ptr_->GetAtkPower());
+				player_ptr_->SetAtkHitBoxActive(false);
+				TheSoundManager::Instance()->playSound(SFX_BARREL_ASSAULTED, 0); //sound
+			}
+		}
+	}
 }
 
 void Game::UpdateGameObjects()
@@ -285,6 +298,12 @@ void Game::UpdateGameObjects()
 			}
 		}
 		enemy->update(); //implement enemy behaviors in Enemy class, since there is no control input handling
+	}
+
+	// PROPS
+	for (int i = 0; i < prop_list_.size(); i++) {
+		Prop* prop = prop_list_[i];
+		prop->update();
 	}
 
 	// CAMERA

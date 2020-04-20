@@ -65,6 +65,7 @@ void RunningState::Enter()
 	TheSoundManager::Instance()->load("../assets/audio/SFX_SKELETON_ATK.mp3", SFX_SKELETON_ATK, SOUND_SFX);
 	TheSoundManager::Instance()->load("../assets/audio/SFX_PLAYER_ATKRANGED.mp3", SFX_PLAYER_ATKRANGED, SOUND_SFX);
 	TheSoundManager::Instance()->load("../assets/audio/SFX_SKELETON_ASSAULTED.mp3", SFX_SKELETON_ASSAULTED, SOUND_SFX);
+	TheSoundManager::Instance()->load("../assets/audio/SFX_BARREL_ASSAULTED.mp3", SFX_BARREL_ASSAULTED, SOUND_SFX);
 
 }
 

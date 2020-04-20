@@ -30,6 +30,8 @@ public:
 	void draw() override;
 	void clean() override;
 
+	PropType GetPropType();
+
 	friend class Camera;
 };
 
