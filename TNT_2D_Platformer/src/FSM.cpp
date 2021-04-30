@@ -122,7 +122,7 @@ void TitleState::Update()
 
 void TitleState::Render()
 {
-	std::cout << "Rendering Title..." << std::endl;
+	//std::cout << "Rendering Title..." << std::endl;
 	SDL_RenderClear(TheGame::Instance()->getRenderer()); // clear the renderer to the draw colour
 	TheGame::Instance()->GetTitleScreen().draw();
 	GameState::Render();
@@ -203,4 +203,35 @@ std::vector<GameState*>& FSM::GetStates()
 {
 	// TODO: insert return statement here
 	return states_;
+}
+
+LossState::LossState()
+{
+}
+
+void LossState::Enter()
+{
+	std::cout << "Entering DEATH..." << std::endl;
+}
+
+void LossState::Update()
+{
+	if (TheGame::Instance()->isKeyDown(SDL_SCANCODE_N)) {
+		TheGame::Instance()->GetFSM().ChangeState(new RunningState());
+	}
+	else if (TheGame::Instance()->isKeyDown(SDL_SCANCODE_X)) {
+		TheGame::Instance()->GetFSM().ChangeState(new TitleState());
+	}
+}
+
+void LossState::Render()
+{
+	std::cout << "Rendering DEATH..." << std::endl;
+	SDL_RenderClear(TheGame::Instance()->getRenderer()); // clear the renderer to the draw colour
+	TheGame::Instance()->GetLossScreen().draw();
+	GameState::Render();
+}
+
+void LossState::Exit()
+{
 }

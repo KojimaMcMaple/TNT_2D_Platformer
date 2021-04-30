@@ -89,9 +89,6 @@
     <ClCompile Include="..\src\GameObject.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\EnemyRanged.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Prop.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
@@ -168,9 +165,6 @@
     </ClInclude>
     <ClInclude Include="..\src\SoundId.h">
       <Filter>Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\EnemyRanged.h">
-      <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Prop.h">
       <Filter>Game Objects</Filter>

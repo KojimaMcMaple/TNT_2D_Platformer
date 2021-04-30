@@ -41,6 +41,16 @@ public:
 	void Exit();
 };
 
+class LossState :public GameState {
+public:
+	LossState();
+	void Enter();
+	void Update();
+	void Render();
+	void Exit();
+};
+
+
 class FSM {
 private:
 	std::vector<GameState*> states_;

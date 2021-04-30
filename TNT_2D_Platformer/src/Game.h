@@ -43,6 +43,7 @@ private:
 	// GameObjects
 	UI* title_screen_ptr_;
 	UI* pause_screen_ptr_;
+	UI* loss_screen_ptr_;
 	Level* level_ptr_;
 	Camera* camera_ptr_;
 	Player* player_ptr_;
@@ -97,11 +98,13 @@ public:
 	bool IsJumpKeyPressable();
 	UI& GetTitleScreen();
 	UI& GetPauseScreen();
+	UI& GetLossScreen();
 	ScoreBoard* GetScoreBoard();
 
 	// setters
 	void setFrames(Uint32 frames);
 	void SetJumpKeyPressable(bool toggle);
+	void ToggleDebugHitBoxesVisibility();
 
 	// REDUNDANT
 	glm::vec2 getMousePosition();

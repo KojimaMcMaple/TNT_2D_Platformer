@@ -49,6 +49,12 @@ UI& Game::GetPauseScreen()
 	return *pause_screen_ptr_;
 }
 
+UI& Game::GetLossScreen()
+{
+	// TODO: insert return statement here
+	return *loss_screen_ptr_;
+}
+
 ScoreBoard* Game::GetScoreBoard()
 {
 	return m_scoreBoard;
@@ -64,6 +70,19 @@ void Game::SetJumpKeyPressable(bool toggle)
 	is_jump_key_pressable_ = toggle;
 }
 
+void Game::ToggleDebugHitBoxesVisibility()
+{
+	bool is_hitbox_visible = !player_ptr_->IsHitBoxVisible();
+
+	for (int i = 0; i < prop_list_.size(); i++) {
+		prop_list_[i]->SetHitBoxVisibility(is_hitbox_visible);
+	}
+	for (int i = 0; i < enemy_list_.size(); i++) {
+		enemy_list_[i]->SetHitBoxVisibility(is_hitbox_visible);
+	}
+	player_ptr_->SetHitBoxVisibility(is_hitbox_visible);
+}
+
 glm::vec2 Game::getMousePosition()
 {
 	return m_mousePosition;
@@ -73,6 +92,7 @@ void Game::createGameObjects()
 {
 	title_screen_ptr_ = new UI("title", "../Assets/textures/Title_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
 	pause_screen_ptr_ = new UI("pause", "../Assets/textures/Pause_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
+	loss_screen_ptr_ = new UI("loss", "../Assets/textures/Loss_Screen.png", 0, 0, Globals::sWindowWidth / 2, Globals::sWindowHeight / 2, 0, 0, Globals::sWindowWidth, Globals::sWindowHeight);
 
 	level_ptr_ = new Level();
 	level_ptr_->LoadLevel(LevelId::CHURCH);
@@ -250,119 +270,129 @@ void Game::CheckCollision()
 
 void Game::UpdateGameObjects()
 {
-	// INPUT HANDLE
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
-		player_ptr_->setMoveDirection(-1);
-		player_ptr_->MoveX();
-		if (player_ptr_->IsGrounded()) {
-			player_ptr_->setAnimState(Player::RUN);
-		}
-	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
-		player_ptr_->setMoveDirection(1);
-		player_ptr_->MoveX();
-		if (player_ptr_->IsGrounded()) {
-			player_ptr_->setAnimState(Player::RUN);
-		}
-	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
-		SetJumpKeyPressable(false);
-		player_ptr_->setAccelerationY(-Globals::sJumpForce);
-		player_ptr_->SetGrounded(false);
-		player_ptr_->setAnimState(Player::JUMP);
-	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_K) && player_ptr_->IsGrounded()) {
-		player_ptr_->setAnimState(Player::ATTACK);
-	}
-	if (s_pInstance->isKeyDown(SDL_SCANCODE_L) && player_ptr_->IsGrounded()) {
-		player_ptr_->setAnimState(Player::ATTACK_RANGED);
-	}
-
-	// POST PROCESSING
-	// PLAYER
-	if (player_ptr_->getAnimState() == Player::JUMP) {
-		player_ptr_->PlayAnimSfx(SFX_PLAYER_JUMP);
-	}
-
-	if (player_ptr_->getAnimState() == Player::ATTACK) {
-		player_ptr_->PlayAnimSfx(SFX_PLAYER_ATK);
-		player_ptr_->StopX();
-		if (player_ptr_->IsAtkHitBoxActive()) {
-			if (player_ptr_->getMoveDirection() == 1) { //facing right
-				player_ptr_->SetAtkHitBoxX(player_ptr_->getHitBoxRightmostX());
-				player_ptr_->SetAtkHitBoxY(player_ptr_->getHitBoxY());
-			}
-			else { //facing left
-				player_ptr_->SetAtkHitBoxX(player_ptr_->getHitBoxX() - player_ptr_->GetAtkHitBox()->w);
-				player_ptr_->SetAtkHitBoxY(player_ptr_->getHitBoxY());
-			}
-		}
-		if (player_ptr_->HasEndedAnimation()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
-			player_ptr_->setAnimState(Player::IDLE);
+	if (player_ptr_->GetHP() == 0) {
+		player_ptr_->setAnimState(Player::DEATH);
+		if (player_ptr_->HasEndedAnimation()) {
+			fsm_->ChangeState(new LossState());
 		}
 	}
 	else {
-		player_ptr_->SetAtkHitBoxActive(false); //force atk hit box to turn off 
-	}
-
-	if (player_ptr_->getAnimState() == Player::ATTACK_RANGED) {
-		player_ptr_->PlayAnimSfx(SFX_PLAYER_ATKRANGED);
-		if (player_ptr_->HasEndedAnimation()) { //anim ended and fire an arrow
-			int x, y;
-			if (player_ptr_->getMoveDirection() == 1)
-			{
-				x = player_ptr_->GetWorldRect()->x + 29 * 3 + 10;
-				y = player_ptr_->GetWorldRect()->y + 22 * 3;
+		// INPUT HANDLE
+		if (s_pInstance->isKeyDown(SDL_SCANCODE_A) || s_pInstance->isKeyDown(SDL_SCANCODE_LEFT)) {
+			player_ptr_->setMoveDirection(-1);
+			player_ptr_->MoveX();
+			if (player_ptr_->IsGrounded()) {
+				player_ptr_->setAnimState(Player::RUN);
 			}
-			else
-			{
-				x = player_ptr_->GetWorldRect()->x + 22 * 3 - 10;
-				y = player_ptr_->GetWorldRect()->y + 22 * 3;
-			}
-			m_pArrowVec.push_back(new Arrow(x, y, player_ptr_->getMoveDirection()));
-			player_ptr_->setAnimState(Player::IDLE);
 		}
-	}
+		if (s_pInstance->isKeyDown(SDL_SCANCODE_D) || s_pInstance->isKeyDown(SDL_SCANCODE_RIGHT)) {
+			player_ptr_->setMoveDirection(1);
+			player_ptr_->MoveX();
+			if (player_ptr_->IsGrounded()) {
+				player_ptr_->setAnimState(Player::RUN);
+			}
+		}
+		if (s_pInstance->isKeyDown(SDL_SCANCODE_SPACE) && IsJumpKeyPressable() && player_ptr_->IsGrounded()) {
+			SetJumpKeyPressable(false);
+			player_ptr_->setAccelerationY(-Globals::sJumpForce);
+			player_ptr_->SetGrounded(false);
+			player_ptr_->setAnimState(Player::JUMP);
+		}
+		if (s_pInstance->isKeyDown(SDL_SCANCODE_K) && player_ptr_->IsGrounded()) {
+			player_ptr_->setAnimState(Player::ATTACK);
+		}
+		if (s_pInstance->isKeyDown(SDL_SCANCODE_L) && player_ptr_->IsGrounded()) {
+			player_ptr_->setAnimState(Player::ATTACK_RANGED);
+		}
 
-	//if (!player_ptr_->IsGrounded() && player_ptr_->getVelocityY() > 0) {
-	if (player_ptr_->getVelocityY() > 2) { //natural falling
-		player_ptr_->setAnimState(Player::FALL);
-	}
-	player_ptr_->update();
-	player_ptr_->setAccelerationY(0);
+		// POST PROCESSING
+		// PLAYER
+		if (player_ptr_->getAnimState() == Player::JUMP) {
+			player_ptr_->PlayAnimSfx(SFX_PLAYER_JUMP);
+		}
 
-	// ARROWS
-	bool needShrinking = false;
-	for (int i = 0; i < m_pArrowVec.size(); ++i)
-	{
-		m_pArrowVec[i]->update();
-		if (m_pArrowVec[i]->getDst()->x < -16 || m_pArrowVec[i]->getDst()->x > 1024)
+		if (player_ptr_->getAnimState() == Player::ATTACK) {
+			player_ptr_->PlayAnimSfx(SFX_PLAYER_ATK);
+			player_ptr_->StopX();
+			if (player_ptr_->IsAtkHitBoxActive()) {
+				if (player_ptr_->getMoveDirection() == 1) { //facing right
+					player_ptr_->SetAtkHitBoxX(player_ptr_->getHitBoxRightmostX());
+					player_ptr_->SetAtkHitBoxY(player_ptr_->getHitBoxY());
+				}
+				else { //facing left
+					player_ptr_->SetAtkHitBoxX(player_ptr_->getHitBoxX() - player_ptr_->GetAtkHitBox()->w);
+					player_ptr_->SetAtkHitBoxY(player_ptr_->getHitBoxY());
+				}
+			}
+			if (player_ptr_->HasEndedAnimation()) { //anim ended, GetNumFrames()-1 WILL SKIP THE LAST FRAME OF ANIM
+				player_ptr_->setAnimState(Player::IDLE);
+			}
+		}
+		else {
+			player_ptr_->SetAtkHitBoxActive(false); //force atk hit box to turn off 
+		}
+
+		if (player_ptr_->getAnimState() == Player::ATTACK_RANGED) {
+			player_ptr_->PlayAnimSfx(SFX_PLAYER_ATKRANGED);
+			if (player_ptr_->HasEndedAnimation()) { //anim ended and fire an arrow
+				int x, y;
+				if (player_ptr_->getMoveDirection() == 1)
+				{
+					x = player_ptr_->GetWorldRect()->x + 29 * 3 + 10;
+					y = player_ptr_->GetWorldRect()->y + 22 * 3;
+				}
+				else
+				{
+					x = player_ptr_->GetWorldRect()->x + 22 * 3 - 10;
+					y = player_ptr_->GetWorldRect()->y + 22 * 3;
+				}
+				m_pArrowVec.push_back(new Arrow(x, y, player_ptr_->getMoveDirection()));
+				player_ptr_->setAnimState(Player::IDLE);
+			}
+		}
+
+		//if (!player_ptr_->IsGrounded() && player_ptr_->getVelocityY() > 0) {
+		if (player_ptr_->getVelocityY() > 2) { //natural falling
+			player_ptr_->setAnimState(Player::FALL);
+		}
+		player_ptr_->update();
+		player_ptr_->setAccelerationY(0);
+
+		// ARROWS
+		bool needShrinking = false;
+		for (int i = 0; i < m_pArrowVec.size(); ++i)
 		{
-			delete m_pArrowVec[i];
-			m_pArrowVec[i] = nullptr;
-			needShrinking = true;
+			m_pArrowVec[i]->update();
+			if (m_pArrowVec[i]->getDst()->x < -16 || m_pArrowVec[i]->getDst()->x > 1024)
+			{
+				delete m_pArrowVec[i];
+				m_pArrowVec[i] = nullptr;
+				needShrinking = true;
+			}
 		}
+		if (needShrinking)
+		{
+			m_pArrowVec.erase(remove(m_pArrowVec.begin(), m_pArrowVec.end(), nullptr), m_pArrowVec.end());
+			m_pArrowVec.shrink_to_fit();
+		}
+
+		CheckCollision();
+
+		if (player_ptr_->getAnimState() == Player::ASSAULTED) {
+			if (player_ptr_->HasEndedAnimation()) {
+				//player_ptr_->setAnimState(AnimState::IDLE);
+			}
+		}
+
+		//if (player_ptr_->IsGrounded() 
+		//	&& player_ptr_->getAnimState() != AnimState::RUN 
+		//	&& player_ptr_->getAnimState() != AnimState::ATTACK
+		//	&& player_ptr_->getAnimState() != AnimState::ATTACK_RANGED) {
+		//	player_ptr_->setAnimState(AnimState::IDLE);
+		//}
 	}
-	if (needShrinking)
-	{
-		m_pArrowVec.erase(remove(m_pArrowVec.begin(), m_pArrowVec.end(), nullptr), m_pArrowVec.end());
-		m_pArrowVec.shrink_to_fit();
-	}	
+
 	
-	CheckCollision();
-
-	if (player_ptr_->getAnimState() == Player::ASSAULTED) {
-		if (player_ptr_->HasEndedAnimation()) {
-			//player_ptr_->setAnimState(AnimState::IDLE);
-		}
-	}
-
-	//if (player_ptr_->IsGrounded() 
-	//	&& player_ptr_->getAnimState() != AnimState::RUN 
-	//	&& player_ptr_->getAnimState() != AnimState::ATTACK
-	//	&& player_ptr_->getAnimState() != AnimState::ATTACK_RANGED) {
-	//	player_ptr_->setAnimState(AnimState::IDLE);
-	//}
 
 	// ENEMIES
 	for (int i = 0; i < enemy_list_.size(); i++) {
@@ -490,8 +520,10 @@ bool Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 				return false; // render int fail
 			}
 
+			std::cout << "Creating game objects..." << std::endl;
 			//TheTextureManager::Instance()->load("../../Assets/textures/animate-alpha.png", "animate", m_pRenderer);
 			createGameObjects();
+			std::cout << "Created game objects." << std::endl;
 		}
 		else 
 		{
@@ -546,6 +578,9 @@ void Game::handleEvents()
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
 				m_bRunning = false;
+				break;
+			case SDLK_v:
+				ToggleDebugHitBoxesVisibility();
 				break;
 			default:
 				break;
